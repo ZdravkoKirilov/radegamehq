@@ -14,11 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from rest_framework.documentation import include_docs_urls
+import debug_toolbar
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^docs/', include_docs_urls(title='Radegast API', description='Radegast RESTful API explorer')),
-    url(r'^api/v1/', include('api.urls')),
-]
+                  url(r'^__debug__/', include(debug_toolbar.urls)),
+                  url(r'^admin/', admin.site.urls),
+                  url(r'^docs/', include_docs_urls(title='Radegast API', description='Radegast RESTful API explorer')),
+                  url(r'^api/v1/', include('api.urls')),
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

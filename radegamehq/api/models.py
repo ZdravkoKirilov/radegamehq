@@ -10,10 +10,22 @@ class Game(models.Model):
         (TYPE_BASIC_GRID, 'BASIC_GRID'),
     )
 
-    title = models.CharField(max_length=255, blank=False, unique=False)
-    boardType = models.CharField(max_length=255, blank=False, unique=False, choices=TYPE_CHOICES)
+    title = models.CharField(max_length=255, blank=False)
+    boardType = models.CharField(max_length=255, blank=False, choices=TYPE_CHOICES)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return "{}".format(self.title)
+
+
+class BoardField(models.Model):
+    name = models.CharField(max_length=255, blank=False)
+    description = models.TextField(blank=True)
+    image = models.ImageField(upload_to='field_images')
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "{}".format(self.name)
