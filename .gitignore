@@ -1,3 +1,10 @@
 /env
 /.idea
 db.sqlite3
+/media
+/migrations
+/__pycache__
+radegamehq/api/__pycache__/
+radegamehq/api/migrations/
+radegamehq/media/
+radegamehq/radegamehq/__pycache__/

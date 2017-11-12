@@ -22,8 +22,9 @@ class Game(models.Model):
 class BoardField(models.Model):
     name = models.CharField(max_length=255, blank=False)
     description = models.TextField(blank=True)
-    image = models.ImageField(upload_to='field_images')
+    image = models.ImageField(upload_to='field_images', blank=True, null=True)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    asMapItem = models.TextField(blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 
