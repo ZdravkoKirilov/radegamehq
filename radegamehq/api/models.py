@@ -2,11 +2,11 @@ from django.db import models
 
 
 class Game(models.Model):
-    TYPE_TERRITORY_MAP = 'TERRITORY_MAP'
+    TYPE_TERRITORY_MAP = 'MAP'
     TYPE_BASIC_GRID = 'BASIC_GRID'
 
     TYPE_CHOICES = (
-        (TYPE_TERRITORY_MAP, 'TERRITORY_MAP'),
+        (TYPE_TERRITORY_MAP, 'MAP'),
         (TYPE_BASIC_GRID, 'BASIC_GRID'),
     )
 
@@ -22,11 +22,35 @@ class Game(models.Model):
 class BoardField(models.Model):
     name = models.CharField(max_length=255, blank=False)
     description = models.TextField(blank=True)
-    image = models.ImageField(upload_to='field_images', blank=True, null=True)
+    image = models.FileField(upload_to='field_images', blank=True, null=True, max_length=200)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    asMapItem = models.TextField(blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return "{}".format(self.name)
+
+
+class MapLocation(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    width = models.IntegerField()
+    height = models.IntegerField()
+    left = models.IntegerField()
+    top = models.IntegerField()
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    field = models.OneToOneField(
+        BoardField,
+        on_delete=models.CASCADE
+    )
+
+
+class Map(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    image = models.FileField(upload_to='maps', blank=True, null=True, max_length=200)
+    game = models.OneToOneField(
+        Game,
+        on_delete=models.CASCADE,
+        primary_key=True
+    )
