@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from .models import Game, BoardField, MapLocation, Map
-from .custom_serializers import Base64ImageField
+from .models import Game, BoardField, MapLocation, Map, MapPath
 
 
 class GameSerializer(serializers.ModelSerializer):
@@ -34,5 +33,12 @@ class MapSerializer(serializers.ModelSerializer):
     # )
     class Meta:
         model = Map
-        fields = ('image', 'game',)
+        fields = ('id', 'image', 'game',)
+        read_only_fields = ('date_created', 'date_modified')
+
+
+class MapPathSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MapPath
+        fields = ('id', 'game', 'fromLoc', 'toLoc')
         read_only_fields = ('date_created', 'date_modified')

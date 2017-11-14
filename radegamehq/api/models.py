@@ -44,6 +44,9 @@ class MapLocation(models.Model):
         on_delete=models.CASCADE
     )
 
+    def __str__(self):
+        return "{}".format(self.field.name)
+
 
 class Map(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
@@ -52,5 +55,26 @@ class Map(models.Model):
     game = models.OneToOneField(
         Game,
         on_delete=models.CASCADE,
-        primary_key=True
     )
+
+    def __str__(self):
+        return "{}".format('Map_') + self.game.title
+
+
+class MapPath(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    fromLoc = models.ForeignKey(
+        MapLocation,
+        related_name='from_loc+',
+        on_delete=models.CASCADE,
+    )
+    toLoc = models.ForeignKey(
+        MapLocation,
+        related_name='to_loc+',
+        on_delete=models.CASCADE,
+    )
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "{}".format('From: ' + self.fromLoc.field.name + ' To: ' + self.toLoc.field.name)

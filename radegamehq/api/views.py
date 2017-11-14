@@ -1,6 +1,6 @@
 from rest_framework import generics
-from .serializers import GameSerializer, BoardFieldSerializer, MapLocationSerializer, MapSerializer
-from .models import Game, BoardField, MapLocation, Map
+from .serializers import GameSerializer, BoardFieldSerializer, MapLocationSerializer, MapSerializer, MapPathSerializer
+from .models import Game, BoardField, MapLocation, Map, MapPath
 
 
 class GameView(generics.ListCreateAPIView):
@@ -65,3 +65,20 @@ class MapDetailsView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Map.objects.all()
+
+
+class MapPathView(generics.ListCreateAPIView):
+    serializer_class = MapPathSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+    def get_queryset(self):
+        return MapPath.objects.all().filter(game=self.kwargs['pk'])
+
+
+class MapPathDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = MapPathSerializer
+
+    def get_queryset(self):
+        return MapPath.objects.all()
