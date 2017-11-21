@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Game, BoardField, MapLocation, Map, MapPath
+from .models import Game, BoardField, MapLocation, Map, MapPath, Resource
 
 
 class GameSerializer(serializers.ModelSerializer):
@@ -41,4 +41,11 @@ class MapPathSerializer(serializers.ModelSerializer):
     class Meta:
         model = MapPath
         fields = ('id', 'game', 'fromLoc', 'toLoc')
+        read_only_fields = ('date_created', 'date_modified')
+
+
+class ResourceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Resource
+        fields = ('id', 'name', 'description', 'image', 'game')
         read_only_fields = ('date_created', 'date_modified')

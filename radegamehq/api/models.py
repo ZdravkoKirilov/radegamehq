@@ -34,10 +34,10 @@ class BoardField(models.Model):
 class MapLocation(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-    width = models.IntegerField()
-    height = models.IntegerField()
-    left = models.IntegerField()
-    top = models.IntegerField()
+    width = models.FloatField()
+    height = models.FloatField()
+    left = models.FloatField()
+    top = models.FloatField()
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     field = models.OneToOneField(
         BoardField,
@@ -78,3 +78,12 @@ class MapPath(models.Model):
 
     def __str__(self):
         return "{}".format('From: ' + self.fromLoc.field.name + ' To: ' + self.toLoc.field.name)
+
+
+class Resource(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    name = models.CharField(max_length=255, blank=False)
+    description = models.TextField(blank=True)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    image = models.FileField(upload_to='resource_images', blank=True, null=True, max_length=200)

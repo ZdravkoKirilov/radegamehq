@@ -1,9 +1,13 @@
 from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
 from .views import GameView, GameDetailsView, BoardFieldView, BoardFieldDetailsView, MapLocationView, \
-    MapLocationDetailsView, MapView, MapDetailsView, MapPathView, MapPathDetailsView
+    MapLocationDetailsView, MapView, MapDetailsView, MapPathView, MapPathDetailsView, ResourceView, ResourceDetailsView
 
 urlpatterns = {
+    url(r'games/(?P<gameid>[0-9]+)/resources/(?P<pk>[0-9]+)/$', ResourceDetailsView.as_view(),
+        name="resource.details"),
+    url(r'games/(?P<pk>[0-9]+)/resources/$', ResourceView.as_view(), name="resource.list"),
+
     url(r'games/(?P<gameid>[0-9]+)/paths/(?P<pk>[0-9]+)/$', MapPathDetailsView.as_view(),
         name="mappath.details"),
     url(r'games/(?P<pk>[0-9]+)/paths/$', MapPathView.as_view(), name="mappath.list"),
