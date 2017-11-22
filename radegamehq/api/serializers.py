@@ -16,7 +16,7 @@ class BoardFieldSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BoardField
-        fields = ('id', 'name', 'description', 'image', 'game', 'date_created', 'date_modified')
+        fields = ('id', 'name', 'description', 'image', 'game', 'income')
         read_only_fields = ('date_created', 'date_modified')
 
 

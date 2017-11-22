@@ -19,6 +19,18 @@ class Game(models.Model):
         return "{}".format(self.title)
 
 
+class Resource(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    name = models.CharField(max_length=255, blank=False)
+    description = models.TextField(blank=True)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    image = models.FileField(upload_to='resource_images', blank=True, null=True, max_length=200)
+
+    def __str__(self):
+        return "{}".format(self.name)
+
+
 class BoardField(models.Model):
     name = models.CharField(max_length=255, blank=False)
     description = models.TextField(blank=True)
@@ -26,10 +38,21 @@ class BoardField(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
+    income = models.ManyToManyField(Resource, through='FieldIncome')
 
     def __str__(self):
         return "{}".format(self.name)
 
+
+class FieldIncome(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    field = models.ForeignKey(BoardField, on_delete=models.CASCADE)
+    resource = models.ForeignKey(Resource, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+
+    def __str__(self):
+        return "{}_{}".format(self.field.name, self.resource.name)
 
 class MapLocation(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
@@ -78,12 +101,3 @@ class MapPath(models.Model):
 
     def __str__(self):
         return "{}".format('From: ' + self.fromLoc.field.name + ' To: ' + self.toLoc.field.name)
-
-
-class Resource(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-    name = models.CharField(max_length=255, blank=False)
-    description = models.TextField(blank=True)
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    image = models.FileField(upload_to='resource_images', blank=True, null=True, max_length=200)
