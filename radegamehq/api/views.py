@@ -1,5 +1,6 @@
 from rest_framework import generics
-from .serializers import GameSerializer, BoardFieldSerializer, MapLocationSerializer, MapSerializer, MapPathSerializer, ResourceSerializer
+from .serializers import GameSerializer, BoardFieldSerializer, MapLocationSerializer, MapSerializer, MapPathSerializer, \
+    ResourceSerializer
 from .models import Game, BoardField, MapLocation, Map, MapPath, Resource
 
 

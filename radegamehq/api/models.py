@@ -38,7 +38,7 @@ class BoardField(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-    income = models.ManyToManyField(Resource, through='FieldIncome')
+    income = models.ManyToManyField(Resource, blank=True, through='FieldIncome', related_name="income")
 
     def __str__(self):
         return "{}".format(self.name)
@@ -47,12 +47,13 @@ class BoardField(models.Model):
 class FieldIncome(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-    field = models.ForeignKey(BoardField, on_delete=models.CASCADE)
+    field = models.ForeignKey(BoardField, on_delete=models.CASCADE, related_name='field_income')
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
     def __str__(self):
         return "{}_{}".format(self.field.name, self.resource.name)
+
 
 class MapLocation(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
@@ -98,6 +99,9 @@ class MapPath(models.Model):
         on_delete=models.CASCADE,
     )
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
+
+    class Meta:
+        pass
 
     def __str__(self):
         return "{}".format('From: ' + self.fromLoc.field.name + ' To: ' + self.toLoc.field.name)
