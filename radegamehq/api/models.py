@@ -38,7 +38,7 @@ class BoardField(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-    income = models.ManyToManyField(Resource, blank=True, through='FieldIncome', related_name="income")
+    income = models.ManyToManyField(Resource, blank=True, through='FieldIncome')
 
     def __str__(self):
         return "{}".format(self.name)
