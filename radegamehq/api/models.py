@@ -38,7 +38,8 @@ class BoardField(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-    income = models.ManyToManyField(Resource, blank=True, through='FieldIncome')
+    income = models.ManyToManyField(Resource, blank=True, through='FieldIncome', related_name='_income')
+    cost = models.ManyToManyField(Resource, blank=True, through='FieldCost', related_name='_cost')
 
     def __str__(self):
         return "{}".format(self.name)
@@ -48,6 +49,17 @@ class FieldIncome(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
     field = models.ForeignKey(BoardField, on_delete=models.CASCADE, related_name='field_income')
+    resource = models.ForeignKey(Resource, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+
+    def __str__(self):
+        return "{}_{}".format(self.field.name, self.resource.name)
+
+
+class FieldCost(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    field = models.ForeignKey(BoardField, on_delete=models.CASCADE, related_name='field_cost')
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
@@ -105,3 +117,27 @@ class MapPath(models.Model):
 
     def __str__(self):
         return "{}".format('From: ' + self.fromLoc.field.name + ' To: ' + self.toLoc.field.name)
+
+
+class Faction(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    name = models.CharField(max_length=255, blank=False)
+    description = models.TextField(blank=True)
+    image = models.FileField(upload_to='faction_images', blank=True, null=True, max_length=200)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    resources = models.ManyToManyField(Resource, blank=True, through='FactionResource')
+
+    def __str__(self):
+        return self.name
+
+
+class FactionResource(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    faction = models.ForeignKey(Faction, on_delete=models.CASCADE, related_name='faction_resource')
+    resource = models.ForeignKey(Resource, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+
+    def __str__(self):
+        return "{}_{}".format(self.faction.name, self.resource.name)

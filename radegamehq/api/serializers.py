@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Game, BoardField, MapLocation, Map, MapPath, Resource, FieldIncome
+from .models import Game, BoardField, MapLocation, Map, MapPath, Resource, FieldIncome, FieldCost, Faction, \
+    FactionResource
 from django.db import transaction
 import json
 
@@ -18,25 +19,32 @@ class FieldIncomeSerializer(serializers.ModelSerializer):
         read_only_fields = ('date_created', 'date_modified')
 
 
+class FieldCostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FieldIncome
+        fields = ('id', 'field', 'resource', 'quantity')
+        read_only_fields = ('date_created', 'date_modified')
+
+
 class BoardFieldSerializer(serializers.ModelSerializer):
-    # image = Base64ImageField(
-    #     max_length=None, use_url=True
-    #
     income = FieldIncomeSerializer(many=True, source='field_income')
+    cost = FieldCostSerializer(many=True, source='field_cost')
 
     class Meta:
         model = BoardField
-        fields = ('id', 'name', 'description', 'image', 'game', 'income')
+        fields = ('id', 'name', 'description', 'image', 'game', 'income', 'cost')
         read_only_fields = ('date_created', 'date_modified')
 
     def to_internal_value(self, data):
         value = super(BoardFieldSerializer, self).to_internal_value(data)
         value['income'] = json.loads(data['income'])
+        value['cost'] = json.loads(data['cost'])
         return value
 
     @transaction.atomic
     def create(self, validated_data):
         income = validated_data.pop('income')
+        cost = validated_data.pop('income')
         field = BoardField.objects.create(name=validated_data['name'], description=validated_data['description'],
                                           image=validated_data['image'], game=validated_data['game'])
 
@@ -44,12 +52,27 @@ class BoardFieldSerializer(serializers.ModelSerializer):
             resource = Resource.objects.get(pk=item['resource'])
             FieldIncome.objects.create(field=field, resource=resource, quantity=item['quantity'])
 
+        for item in cost:
+            resource = Resource.objects.get(pk=item['resource'])
+            FieldCost.objects.create(field=field, resource=resource, quantity=item['quantity'])
+
         return field
 
     @transaction.atomic
     def update(self, instance, validated_data):
-        # existing_income = FieldIncome.objects.filter(field=instance)
+        existing_income = FieldIncome.objects.filter(field=instance)
         income = validated_data.pop('income')
+        income_ids = [item['id'] for item in income if 'id' in item]
+
+        existing_cost = FieldCost.objects.filter(field=instance)
+        cost = validated_data.pop('cost')
+        cost_ids = [item['id'] for item in cost if 'id' in item]
+
+        try:
+            existing_income.exclude(pk__in=income_ids).delete()
+            existing_cost.exclude(pk__in=cost_ids).delete()
+        except (FieldIncome.DoesNotExist, FieldCost.DoesNotExist) as e:
+            pass
 
         for item in income:
             resource = Resource.objects.get(pk=item['resource'])
@@ -57,6 +80,16 @@ class BoardFieldSerializer(serializers.ModelSerializer):
                 obj = FieldIncome.objects.get(pk=item['id'])
             except KeyError:
                 FieldIncome.objects.create(field=instance, resource=resource, quantity=item['quantity'])
+            else:
+                obj.quantity = item['quantity']
+                obj.save()
+
+        for item in cost:
+            resource = Resource.objects.get(pk=item['resource'])
+            try:
+                obj = FieldCost.objects.get(pk=item['id'])
+            except KeyError:
+                FieldCost.objects.create(field=instance, resource=resource, quantity=item['quantity'])
             else:
                 obj.quantity = item['quantity']
                 obj.save()
@@ -81,9 +114,6 @@ class FieldIncomeSerializer(serializers.ModelSerializer):
 
 
 class MapSerializer(serializers.ModelSerializer):
-    # image = Base64ImageField(
-    #     max_length=None, use_url=True
-    # )
     class Meta:
         model = Map
         fields = ('id', 'image', 'game',)
@@ -102,3 +132,61 @@ class ResourceSerializer(serializers.ModelSerializer):
         model = Resource
         fields = ('id', 'name', 'description', 'image', 'game')
         read_only_fields = ('date_created', 'date_modified')
+
+
+class FactionResourceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FactionResource
+        fields = ('id', 'faction', 'resource', 'quantity')
+        read_only_fields = ('date_created', 'date_modified')
+
+
+class FactionSerializer(serializers.ModelSerializer):
+    resources = FactionResourceSerializer(many=True, source='faction_resource')
+
+    class Meta:
+        model = Faction
+        fields = ('id', 'name', 'description', 'image', 'game', 'resources')
+        read_only_fields = ('date_created', 'date_modified')
+
+    def to_internal_value(self, data):
+        value = super(FactionSerializer, self).to_internal_value(data)
+        value['resources'] = json.loads(data['resources'])
+        return value
+
+    @transaction.atomic
+    def create(self, validated_data):
+        resources = validated_data.pop('resources')
+        faction = Faction.objects.create(name=validated_data['name'], description=validated_data['description'],
+                                         image=validated_data['image'], game=validated_data['game'])
+
+        for item in resources:
+            resource = Resource.objects.get(pk=item['resource'])
+            FactionResource.objects.create(faction=faction, resource=resource, quantity=item['quantity'])
+
+        return faction
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        existing_resources = FactionResource.objects.filter(faction=instance)
+        resources = validated_data.pop('resources')
+        resource_ids = [item['id'] for item in resources if 'id' in item]
+
+        try:
+            existing_resources.exclude(pk__in=resource_ids).delete()
+        except FactionResource.DoesNotExist:
+            pass
+
+        for item in resources:
+            resource = Resource.objects.get(pk=item['resource'])
+            try:
+                obj = FactionResource.objects.get(pk=item['id'])
+            except KeyError:
+                FactionResource.objects.create(faction=instance, resource=resource, quantity=item['quantity'])
+            else:
+                obj.quantity = item['quantity']
+                obj.save()
+
+        instance.__dict__.update(**validated_data)
+        instance.save()
+        return instance
