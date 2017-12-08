@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Game, BoardField, MapLocation, Map, MapPath, Resource, FieldIncome, FieldCost, Faction, \
-    FactionResource
+    FactionResource, FactionIncome
 from django.db import transaction
 import json
 
@@ -12,14 +12,7 @@ class GameSerializer(serializers.ModelSerializer):
         read_only_fields = ('date_created', 'date_modified')
 
 
-class FieldIncomeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = FieldIncome
-        fields = ('id', 'field', 'resource', 'quantity')
-        read_only_fields = ('date_created', 'date_modified')
-
-
-class FieldCostSerializer(serializers.ModelSerializer):
+class FieldResourceSerializer(serializers.ModelSerializer):
     class Meta:
         model = FieldIncome
         fields = ('id', 'field', 'resource', 'quantity')
@@ -27,8 +20,8 @@ class FieldCostSerializer(serializers.ModelSerializer):
 
 
 class BoardFieldSerializer(serializers.ModelSerializer):
-    income = FieldIncomeSerializer(many=True, source='field_income')
-    cost = FieldCostSerializer(many=True, source='field_cost')
+    income = FieldResourceSerializer(many=True, source='field_income')
+    cost = FieldResourceSerializer(many=True, source='field_cost')
 
     class Meta:
         model = BoardField
@@ -44,7 +37,7 @@ class BoardFieldSerializer(serializers.ModelSerializer):
     @transaction.atomic
     def create(self, validated_data):
         income = validated_data.pop('income')
-        cost = validated_data.pop('income')
+        cost = validated_data.pop('cost')
         field = BoardField.objects.create(name=validated_data['name'], description=validated_data['description'],
                                           image=validated_data['image'], game=validated_data['game'])
 
@@ -106,13 +99,6 @@ class MapLocationSerializer(serializers.ModelSerializer):
         read_only_fields = ('date_created', 'date_modified')
 
 
-class FieldIncomeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MapLocation
-        fields = ('id', 'field', 'income', 'quantity')
-        read_only_fields = ('date_created', 'date_modified')
-
-
 class MapSerializer(serializers.ModelSerializer):
     class Meta:
         model = Map
@@ -141,28 +127,41 @@ class FactionResourceSerializer(serializers.ModelSerializer):
         read_only_fields = ('date_created', 'date_modified')
 
 
+# class FactionIncomeSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = FactionIncome
+#         fields = ('id', 'faction', 'resource', 'quantity')
+#         read_only_fields = ('date_created', 'date_modified')
+
+
 class FactionSerializer(serializers.ModelSerializer):
     resources = FactionResourceSerializer(many=True, source='faction_resource')
+    income = FactionResourceSerializer(many=True, source='faction_income')
 
     class Meta:
         model = Faction
-        fields = ('id', 'name', 'description', 'image', 'game', 'resources')
+        fields = ('id', 'name', 'description', 'image', 'game', 'resources', 'income')
         read_only_fields = ('date_created', 'date_modified')
 
     def to_internal_value(self, data):
         value = super(FactionSerializer, self).to_internal_value(data)
         value['resources'] = json.loads(data['resources'])
+        value['income'] = json.loads(data['income'])
         return value
 
     @transaction.atomic
     def create(self, validated_data):
         resources = validated_data.pop('resources')
+        income = validated_data.pop('income')
         faction = Faction.objects.create(name=validated_data['name'], description=validated_data['description'],
                                          image=validated_data['image'], game=validated_data['game'])
-
         for item in resources:
             resource = Resource.objects.get(pk=item['resource'])
             FactionResource.objects.create(faction=faction, resource=resource, quantity=item['quantity'])
+
+        for item in income:
+            resource = Resource.objects.get(pk=item['resource'])
+            FactionIncome.objects.create(faction=faction, resource=resource, quantity=item['quantity'])
 
         return faction
 
@@ -172,9 +171,14 @@ class FactionSerializer(serializers.ModelSerializer):
         resources = validated_data.pop('resources')
         resource_ids = [item['id'] for item in resources if 'id' in item]
 
+        existing_income = FactionIncome.objects.filter(faction=instance)
+        income = validated_data.pop('income')
+        income_ids = [item['id'] for item in income if 'id' in item]
+
         try:
             existing_resources.exclude(pk__in=resource_ids).delete()
-        except FactionResource.DoesNotExist:
+            existing_income.exclude(pk__in=income_ids).delete()
+        except (FactionResource.DoesNotExist, FactionIncome.DoesNotExist) as e:
             pass
 
         for item in resources:
@@ -183,6 +187,16 @@ class FactionSerializer(serializers.ModelSerializer):
                 obj = FactionResource.objects.get(pk=item['id'])
             except KeyError:
                 FactionResource.objects.create(faction=instance, resource=resource, quantity=item['quantity'])
+            else:
+                obj.quantity = item['quantity']
+                obj.save()
+
+        for item in income:
+            resource = Resource.objects.get(pk=item['resource'])
+            try:
+                obj = FactionIncome.objects.get(pk=item['id'])
+            except KeyError:
+                FactionIncome.objects.create(faction=instance, resource=resource, quantity=item['quantity'])
             else:
                 obj.quantity = item['quantity']
                 obj.save()
