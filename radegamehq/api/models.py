@@ -19,6 +19,48 @@ class Game(models.Model):
         return "{}".format(self.title)
 
 
+class Action(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    name = models.CharField(max_length=255, blank=False)
+    description = models.TextField(blank=True)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    image = models.FileField(upload_to='resource_images', blank=True, null=True, max_length=200)
+
+    def __str__(self):
+        return "{}".format(self.name)
+
+
+class ActionConfig(models.Model):
+    ATTACK_FIELD = 'ATTACK_FIELD'
+    DEFEND_FIELD = 'DEFEND_FIELD'
+
+    TRIGGER = 'TRIGGER'
+
+    FIELD = 'FIELD'
+
+    TYPE_CHOICES = (
+        (ATTACK_FIELD, 'ATTACK_FIELD'),
+        (DEFEND_FIELD, 'DEFEND_FIELD'),
+    )
+
+    MODE_CHOICES = (TRIGGER, 'TRIGGER')
+
+    TARGET_CHOICES = (FIELD, 'FIELD')
+
+    type = models.CharField(max_length=255, blank=False, choices=TYPE_CHOICES)
+    mode = models.CharField(max_length=255, blank=False)
+    target = models.CharField(max_length=255, blank=False)
+    action = models.ForeignKey(Action, on_delete=models.CASCADE)
+    bonus = models.IntegerField(blank=True)
+
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "{}_{}".format(self.action.name, self.type)
+
+
 class Resource(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
