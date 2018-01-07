@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Game, BoardField, MapLocation, Map, MapPath, Resource, FieldIncome, FieldCost, Faction, \
-    FactionResource, FactionIncome
+    FactionResource, FactionIncome, Action, ActionConfig
 from django.db import transaction
 import json
 
@@ -9,6 +9,22 @@ class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
         fields = ('id', 'title', 'boardType', 'date_created', 'date_modified')
+        read_only_fields = ('date_created', 'date_modified')
+
+
+class ActionConfigSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ActionConfig
+        fields = ('id', 'type', 'mode', 'target', 'bonus')
+        read_only_fields = ('date_created', 'date_modified')
+
+
+class ActionSerializer(serializers.ModelSerializer):
+    configs = ActionConfigSerializer(many=True, source='config')
+
+    class Meta:
+        model = Action
+        fields = ('id', 'name', 'description', 'image', 'game', 'configs')
         read_only_fields = ('date_created', 'date_modified')
 
 

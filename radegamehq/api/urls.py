@@ -2,9 +2,13 @@ from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
 from .views import GameView, GameDetailsView, BoardFieldView, BoardFieldDetailsView, MapLocationView, \
     MapLocationDetailsView, MapView, MapDetailsView, MapPathView, MapPathDetailsView, ResourceView, ResourceDetailsView, \
-    FactionView, FactionDetailsView
+    FactionView, FactionDetailsView, ActionView, ActionDetailsView
 
 urlpatterns = {
+
+    url(r'games/(?P<gameid>[0-9]+)/actions/(?P<pk>[0-9]+)/$', ActionDetailsView.as_view(),
+        name="action.details"),
+    url(r'games/(?P<pk>[0-9]+)/actions/$', ActionView.as_view(), name="action.list"),
 
     url(r'games/(?P<gameid>[0-9]+)/factions/(?P<pk>[0-9]+)/$', FactionDetailsView.as_view(),
         name="faction.details"),
