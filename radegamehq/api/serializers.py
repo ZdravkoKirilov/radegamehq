@@ -27,6 +27,68 @@ class ActionSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'description', 'image', 'game', 'configs')
         read_only_fields = ('date_created', 'date_modified')
 
+    def to_internal_value(self, data):
+        value = super(ActionSerializer, self).to_internal_value(data)
+        value['configs'] = json.loads(data['configs'])
+        return value
+
+    @transaction.atomic
+    def create(self, validated_data):
+        income = validated_data.pop('income')
+        cost = validated_data.pop('cost')
+        field = BoardField.objects.create(name=validated_data['name'], description=validated_data['description'],
+                                          image=validated_data['image'], game=validated_data['game'])
+
+        for item in income:
+            resource = Resource.objects.get(pk=item['resource'])
+            FieldIncome.objects.create(field=field, resource=resource, quantity=item['quantity'])
+
+        for item in cost:
+            resource = Resource.objects.get(pk=item['resource'])
+            FieldCost.objects.create(field=field, resource=resource, quantity=item['quantity'])
+
+        return field
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        existing_income = FieldIncome.objects.filter(field=instance)
+        income = validated_data.pop('income')
+        income_ids = [item['id'] for item in income if 'id' in item]
+
+        existing_cost = FieldCost.objects.filter(field=instance)
+        cost = validated_data.pop('cost')
+        cost_ids = [item['id'] for item in cost if 'id' in item]
+
+        try:
+            existing_income.exclude(pk__in=income_ids).delete()
+            existing_cost.exclude(pk__in=cost_ids).delete()
+        except (FieldIncome.DoesNotExist, FieldCost.DoesNotExist) as e:
+            pass
+
+        for item in income:
+            resource = Resource.objects.get(pk=item['resource'])
+            try:
+                obj = FieldIncome.objects.get(pk=item['id'])
+            except KeyError:
+                FieldIncome.objects.create(field=instance, resource=resource, quantity=item['quantity'])
+            else:
+                obj.quantity = item['quantity']
+                obj.save()
+
+        for item in cost:
+            resource = Resource.objects.get(pk=item['resource'])
+            try:
+                obj = FieldCost.objects.get(pk=item['id'])
+            except KeyError:
+                FieldCost.objects.create(field=instance, resource=resource, quantity=item['quantity'])
+            else:
+                obj.quantity = item['quantity']
+                obj.save()
+
+        instance.__dict__.update(**validated_data)
+        instance.save()
+        return instance
+
 
 class FieldResourceSerializer(serializers.ModelSerializer):
     class Meta:
