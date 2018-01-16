@@ -52,7 +52,7 @@ class ActionConfig(models.Model):
     mode = models.CharField(max_length=255, blank=False)
     target = models.CharField(max_length=255, blank=False)
     action = models.ForeignKey(Action, on_delete=models.CASCADE, related_name='config')
-    bonus = models.IntegerField(blank=True)
+    amount = models.IntegerField(blank=True)
 
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)

@@ -15,7 +15,7 @@ class GameSerializer(serializers.ModelSerializer):
 class ActionConfigSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActionConfig
-        fields = ('id', 'type', 'mode', 'target', 'bonus')
+        fields = ('id', 'type', 'mode', 'target', 'amount')
         read_only_fields = ('date_created', 'date_modified')
 
 
@@ -41,7 +41,7 @@ class ActionSerializer(serializers.ModelSerializer):
 
         for item in configs:
             ActionConfig.objects.create(action=action, mode=item['mode'], target=item['target'], type=item['type'],
-                                        bonus=item['bonus'])
+                                        bonus=item['amount'])
 
         return action
 
@@ -62,9 +62,9 @@ class ActionSerializer(serializers.ModelSerializer):
             except KeyError:
                 ActionConfig.objects.create(action=instance, mode=item['mode'], target=item['target'],
                                             type=item['type'],
-                                            bonus=item['bonus'])
+                                            bonus=item['amount'])
             else:
-                obj.bonus = item['bonus']
+                obj.amount = item['amount']
                 obj.type = item['type']
                 obj.mode = item['mode']
                 obj.target = item['target']
