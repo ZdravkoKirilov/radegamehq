@@ -15,7 +15,7 @@ class GameSerializer(serializers.ModelSerializer):
 class ActionConfigSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActionConfig
-        fields = ('id', 'type', 'mode', 'target', 'amount')
+        fields = ('id', 'type', 'mode', 'target', 'amount', 'resource')
         read_only_fields = ('date_created', 'date_modified')
 
 
@@ -36,12 +36,24 @@ class ActionSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         configs = validated_data.pop('configs')
 
-        action = Action.objects.create(name=validated_data['name'], description=validated_data['description'],
-                                       image=validated_data['image'], game=validated_data['game'])
+        action = Action.objects.create(name=validated_data['name'],
+                                       description=validated_data['description'],
+                                       image=validated_data['image'],
+                                       game=validated_data['game'])
 
         for item in configs:
-            ActionConfig.objects.create(action=action, mode=item['mode'], target=item['target'], type=item['type'],
-                                        bonus=item['amount'])
+            obj = ActionConfig(action=action,
+                               mode=item['mode'],
+                               target=item['target'],
+                               type=item['type'], )
+
+            if 'resource' in item:
+                resource = Resource.objects.get(pk=item['resource'])
+                obj.resource = resource
+            if 'amount' in item:
+                obj.amount = item['amount']
+
+            obj.save()
 
         return action
 
@@ -60,15 +72,19 @@ class ActionSerializer(serializers.ModelSerializer):
             try:
                 obj = ActionConfig.objects.get(pk=item['id'])
             except KeyError:
-                ActionConfig.objects.create(action=instance, mode=item['mode'], target=item['target'],
-                                            type=item['type'],
-                                            bonus=item['amount'])
-            else:
+                obj = ActionConfig.objects.create(action=instance,
+                                                  mode=item['mode'],
+                                                  target=item['target'],
+                                                  type=item['type'], )
+
+            if 'resource' in item:
+                resource = Resource.objects.get(pk=item['resource'])
+                obj.resource = resource
+
+            if 'amount' in item:
                 obj.amount = item['amount']
-                obj.type = item['type']
-                obj.mode = item['mode']
-                obj.target = item['target']
-                obj.save()
+
+            obj.save()
 
         instance.__dict__.update(**validated_data)
         instance.save()

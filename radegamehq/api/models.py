@@ -31,36 +31,6 @@ class Action(models.Model):
         return "{}".format(self.name)
 
 
-class ActionConfig(models.Model):
-    ATTACK_FIELD = 'ATTACK_FIELD'
-    DEFEND_FIELD = 'DEFEND_FIELD'
-
-    TRIGGER = 'TRIGGER'
-
-    FIELD = 'FIELD'
-
-    TYPE_CHOICES = (
-        (ATTACK_FIELD, 'ATTACK_FIELD'),
-        (DEFEND_FIELD, 'DEFEND_FIELD'),
-    )
-
-    MODE_CHOICES = (TRIGGER, 'TRIGGER')
-
-    TARGET_CHOICES = (FIELD, 'FIELD')
-
-    type = models.CharField(max_length=255, blank=False, choices=TYPE_CHOICES)
-    mode = models.CharField(max_length=255, blank=False)
-    target = models.CharField(max_length=255, blank=False)
-    action = models.ForeignKey(Action, on_delete=models.CASCADE, related_name='config')
-    amount = models.IntegerField(blank=True)
-
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return "{}_{}".format(self.action.name, self.type)
-
-
 class Resource(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
@@ -71,6 +41,82 @@ class Resource(models.Model):
 
     def __str__(self):
         return "{}".format(self.name)
+
+
+class ActionConfig(models.Model):
+    ATTACK_FIELD = 'ATTACK_FIELD'
+    DEFEND_FIELD = 'DEFEND_FIELD'
+    MINE_RESOURCES = 'MINE_RESOURCES'
+    CANCEL_ATTACK_FIELD = 'CANCEL_ATTACK_FIELD'
+    CANCEL_DEFEND_FIELD = 'CANCEL_DEFEND_FIELD'
+    CANCEL_MINE_RESOURCE = 'CANCEL_MINE_RESOURCE'
+    ALTER_RESOURCE = 'ALTER_RESOURCE'
+    STEAL_QUEST = 'STEAL_QUEST'
+    DISCARD_QUEST = 'DISCARD_QUEST'
+    DRAW_QUEST = 'DRAW_QUEST'
+    STEAL_ACTIVITY = 'STEAL_ACTIVITY'
+    DISCARD_ACTIVITY = 'DISCARD_ACTIVITY'
+    CANCEL_ACTIVITY = 'CANCEL_ACTIVITY'
+    PEEK_QUESTS = 'PEEK_QUESTS'
+    PEEK_ACTIVITIES = 'PEEK_ACTIVITIES'
+
+    TYPE_CHOICES = (
+        (ATTACK_FIELD, 'ATTACK_FIELD'),
+        (DEFEND_FIELD, 'DEFEND_FIELD'),
+        (MINE_RESOURCES, 'MINE_RESOURCES'),
+        (CANCEL_ATTACK_FIELD, 'CANCEL_ATTACK_FIELD'),
+        (CANCEL_DEFEND_FIELD, 'CANCEL_DEFEND_FIELD'),
+        (CANCEL_MINE_RESOURCE, 'CANCEL_MINE_RESOURCE'),
+        (ALTER_RESOURCE, 'ALTER_RESOURCE'),
+        (STEAL_QUEST, 'STEAL_QUEST'),
+        (DISCARD_QUEST, 'DISCARD_QUEST'),
+        (DRAW_QUEST, 'DRAW_QUEST'),
+        (STEAL_ACTIVITY, 'STEAL_ACTIVITY'),
+        (DISCARD_ACTIVITY, 'DISCARD_ACTIVITY'),
+        (CANCEL_ACTIVITY, 'CANCEL_ACTIVITY'),
+        (PEEK_QUESTS, 'PEEK_QUESTS'),
+        (PEEK_ACTIVITIES, 'PEEK_ACTIVITIES'),
+    )
+
+    TRIGGER = 'TRIGGER'
+    PASSIVE = 'PASSIVE'
+    HIDDEN = 'HIDDEN'
+
+    MODE_CHOICES = (
+        (TRIGGER, 'TRIGGER'),
+        (PASSIVE, 'PASSIVE'),
+        (HIDDEN, 'HIDDEN'),
+    )
+
+    FIELD = 'FIELD'
+    PLAYER = 'PLAYER'
+    OTHER_PLAYER = 'OTHER_PLAYER'
+    SELF = 'SELF'
+    ACTIVE_FIELD = 'ACTIVE_FIELD'
+    ACTIVE_PLAYER = 'ACTIVE_PLAYER'
+
+    TARGET_CHOICES = (
+        (FIELD, 'FIELD'),
+        (PLAYER, 'PLAYER'),
+        (OTHER_PLAYER, 'OTHER_PLAYER'),
+        (SELF, 'SELF'),
+        (ACTIVE_FIELD, 'ACTIVE_FIELD'),
+        (ACTIVE_PLAYER, 'ACTIVE_PLAYER')
+    )
+
+    type = models.CharField(max_length=255, blank=False, choices=TYPE_CHOICES)
+    mode = models.CharField(max_length=255, blank=False, choices=MODE_CHOICES)
+    target = models.CharField(max_length=255, blank=False, choices=TARGET_CHOICES)
+    action = models.ForeignKey(Action, on_delete=models.CASCADE, related_name='config')
+    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='config_resource', blank=True,
+                                 null=True)
+    amount = models.IntegerField(blank=True, null=True)
+
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "{}_{}".format(self.action.name, self.type)
 
 
 class BoardField(models.Model):
