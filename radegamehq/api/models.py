@@ -19,18 +19,6 @@ class Game(models.Model):
         return "{}".format(self.title)
 
 
-class Action(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-    name = models.CharField(max_length=255, blank=False)
-    description = models.TextField(blank=True)
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    image = models.FileField(upload_to='resource_images', blank=True, null=True, max_length=200)
-
-    def __str__(self):
-        return "{}".format(self.name)
-
-
 class Resource(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
@@ -41,6 +29,123 @@ class Resource(models.Model):
 
     def __str__(self):
         return "{}".format(self.name)
+
+
+class BoardField(models.Model):
+    name = models.CharField(max_length=255, blank=False)
+    description = models.TextField(blank=True)
+    image = models.FileField(upload_to='field_images', blank=True, null=True, max_length=200)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    income = models.ManyToManyField(Resource, blank=True, through='FieldIncome', related_name='_income')
+    cost = models.ManyToManyField(Resource, blank=True, through='FieldCost', related_name='_cost')
+
+    def __str__(self):
+        return "{}".format(self.name)
+
+
+class Action(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    name = models.CharField(max_length=255, blank=False)
+    description = models.TextField(blank=True)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    image = models.FileField(upload_to='action_images', blank=True, null=True, max_length=200)
+
+    def __str__(self):
+        return "{}".format(self.name)
+
+
+class Quest(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    name = models.CharField(max_length=255, blank=False)
+    description = models.TextField(blank=True)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    image = models.FileField(upload_to='quest_images', blank=True, null=True, max_length=200)
+
+    def __str__(self):
+        return "{}".format(self.name)
+
+
+class QuestCost(models.Model):
+    type = models.CharField(max_length=255, blank=False)
+    owner = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_cost')
+    quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_cost_quest', blank=True, null=True)
+    action = models.ForeignKey(Action, on_delete=models.CASCADE, related_name='quest_cost_action', blank=True,
+                               null=True)
+    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='quest_cost_resource', blank=True,
+                                 null=True)
+    field = models.ForeignKey(BoardField, on_delete=models.CASCADE, related_name='quest_cost_field', blank=True,
+                              null=True)
+    amount = models.IntegerField(blank=True, null=True)
+
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "{}_{}".format(self.action.name, self.type)
+
+
+class QuestCondition(models.Model):
+    type = models.CharField(max_length=255, blank=False)
+    owner = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_condition')
+    quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_condition_quest', blank=True,
+                              null=True)
+    action = models.ForeignKey(Action, on_delete=models.CASCADE, related_name='quest_condition_action', blank=True,
+                               null=True)
+    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='quest_cond_resource', blank=True,
+                                 null=True)
+    field = models.ForeignKey(BoardField, on_delete=models.CASCADE, related_name='quest_cond_field', blank=True,
+                              null=True)
+    amount = models.IntegerField(blank=True, null=True)
+
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "{}_{}".format(self.action.name, self.type)
+
+
+class QuestAward(models.Model):
+    type = models.CharField(max_length=255, blank=False)
+    owner = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_award')
+    quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_award_quest', blank=True, null=True)
+    action = models.ForeignKey(Action, on_delete=models.CASCADE, related_name='quest_award_action', blank=True,
+                               null=True)
+    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='quest_award_resource', blank=True,
+                                 null=True)
+    field = models.ForeignKey(BoardField, on_delete=models.CASCADE, related_name='quest_award_field', blank=True,
+                              null=True)
+    minAmount = models.IntegerField(blank=True, null=True)
+    maxAmount = models.IntegerField(blank=True, null=True)
+
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "{}_{}".format(self.action.name, self.type)
+
+
+class QuestPenalty(models.Model):
+    type = models.CharField(max_length=255, blank=False)
+    owner = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_penalty')
+    quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_pen_quest', blank=True,
+                              null=True)
+    action = models.ForeignKey(Action, on_delete=models.CASCADE, related_name='quest_pen_action', blank=True, null=True)
+    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='quest_pen_resource', blank=True,
+                                 null=True)
+    field = models.ForeignKey(BoardField, on_delete=models.CASCADE, related_name='quest_pen_field', blank=True,
+                              null=True)
+    minAmount = models.IntegerField(blank=True, null=True)
+    maxAmount = models.IntegerField(blank=True, null=True)
+
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "{}_{}".format(self.action.name, self.type)
 
 
 class ActionConfig(models.Model):
@@ -117,20 +222,6 @@ class ActionConfig(models.Model):
 
     def __str__(self):
         return "{}_{}".format(self.action.name, self.type)
-
-
-class BoardField(models.Model):
-    name = models.CharField(max_length=255, blank=False)
-    description = models.TextField(blank=True)
-    image = models.FileField(upload_to='field_images', blank=True, null=True, max_length=200)
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-    income = models.ManyToManyField(Resource, blank=True, through='FieldIncome', related_name='_income')
-    cost = models.ManyToManyField(Resource, blank=True, through='FieldCost', related_name='_cost')
-
-    def __str__(self):
-        return "{}".format(self.name)
 
 
 class FieldIncome(models.Model):
