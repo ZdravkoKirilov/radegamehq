@@ -70,7 +70,15 @@ class Quest(models.Model):
 
 
 class QuestCost(models.Model):
-    type = models.CharField(max_length=255, blank=False)
+    RESOURCE = 'RESOURCE'
+    FIELD = 'FIELD'
+
+    TYPE_CHOICES = (
+        (RESOURCE, 'RESOURCE'),
+        (FIELD, 'FIELD'),
+    )
+
+    type = models.CharField(max_length=255, blank=False, choices=TYPE_CHOICES)
     owner = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_cost')
     quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_cost_quest', blank=True, null=True)
     action = models.ForeignKey(Action, on_delete=models.CASCADE, related_name='quest_cost_action', blank=True,
@@ -85,11 +93,39 @@ class QuestCost(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return "{}_{}".format(self.action.name, self.type)
+        return "Cost_{}_{}".format(self.owner.name, self.type)
 
 
 class QuestCondition(models.Model):
-    type = models.CharField(max_length=255, blank=False)
+    CLAIM_FIELD = 'CLAIM_FIELD'
+    CLAIM_ANY_FIELDS = 'CLAIM_ANY_FIELDS'
+    DEFEND_FIELD = 'DEFEND_FIELD'
+    DEFEND_ANY_FIELDS = 'DEFEND_ANY_FIELDS'
+    CLAIM_RESOURCE = 'CLAIM_RESOURCE'
+    CLAIM_ANY_RESOURCE = 'CLAIM_ANY_RESOURCE'
+    STEAL_ACTIVITY = 'STEAL_ACTIVITY'
+    STEAL_ANY_ACTIVITY = 'STEAL_ANY_ACTIVITY'
+    DISCARD_ACTIVITY = 'DISCARD_ACTIVITY'
+    DISCARD_ANY_ACTIVITY = 'DISCARD_ANY_ACTIVITY'
+    PLAY_ACTIVITY = 'PLAY_ACTIVITY'
+    PLAY_ANY_ACTIVITY = 'PLAY_ANY_ACTIVITY'
+
+    TYPE_CHOICES = (
+        (CLAIM_FIELD, 'CLAIM_FIELD'),
+        (CLAIM_ANY_FIELDS, 'CLAIM_ANY_FIELDS'),
+        (DEFEND_FIELD, 'DEFEND_FIELD'),
+        (DEFEND_ANY_FIELDS, 'DEFEND_ANY_FIELDS'),
+        (CLAIM_RESOURCE, 'CLAIM_RESOURCE'),
+        (CLAIM_ANY_RESOURCE, 'CLAIM_ANY_RESOURCE'),
+        (STEAL_ACTIVITY, 'STEAL_ACTIVITY'),
+        (STEAL_ANY_ACTIVITY, 'STEAL_ANY_ACTIVITY'),
+        (DISCARD_ACTIVITY, 'DISCARD_ACTIVITY'),
+        (DISCARD_ANY_ACTIVITY, 'DISCARD_ANY_ACTIVITY'),
+        (PLAY_ACTIVITY, 'PLAY_ACTIVITY'),
+        (PLAY_ANY_ACTIVITY, 'PLAY_ANY_ACTIVITY'),
+    )
+
+    type = models.CharField(max_length=255, blank=False, choices=TYPE_CHOICES)
     owner = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_condition')
     quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_condition_quest', blank=True,
                               null=True)
@@ -105,11 +141,19 @@ class QuestCondition(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return "{}_{}".format(self.action.name, self.type)
+        return "Condition_{}_{}".format(self.owner.name, self.type)
 
 
 class QuestAward(models.Model):
-    type = models.CharField(max_length=255, blank=False)
+    RESOURCE = 'RESOURCE'
+    RANDOM_RESOURCE = 'RANDOM_RESOURCE'
+
+    TYPE_CHOICES = (
+        (RESOURCE, 'RESOURCE'),
+        (RANDOM_RESOURCE, 'RANDOM_RESOURCE'),
+    )
+
+    type = models.CharField(max_length=255, blank=False, choices=TYPE_CHOICES)
     owner = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_award')
     quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_award_quest', blank=True, null=True)
     action = models.ForeignKey(Action, on_delete=models.CASCADE, related_name='quest_award_action', blank=True,
@@ -125,11 +169,19 @@ class QuestAward(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return "{}_{}".format(self.action.name, self.type)
+        return "Award_{}_{}".format(self.owner.name, self.type)
 
 
 class QuestPenalty(models.Model):
-    type = models.CharField(max_length=255, blank=False)
+    RESOURCE = 'RESOURCE'
+    RANDOM_RESOURCE = 'RANDOM_RESOURCE'
+
+    TYPE_CHOICES = (
+        (RESOURCE, 'RESOURCE'),
+        (RANDOM_RESOURCE, 'RANDOM_RESOURCE'),
+    )
+
+    type = models.CharField(max_length=255, blank=False, choices=TYPE_CHOICES)
     owner = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_penalty')
     quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_pen_quest', blank=True,
                               null=True)
@@ -145,7 +197,10 @@ class QuestPenalty(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return "{}_{}".format(self.action.name, self.type)
+        return "Penalty_{}_{}".format(self.owner.name, self.type)
+
+    class Meta:
+        verbose_name_plural = 'Quest penalties'
 
 
 class ActionConfig(models.Model):

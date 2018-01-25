@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Game, BoardField, MapLocation, Map, MapPath, Resource, FieldIncome, FieldCost, Faction, \
-    FactionResource, FactionIncome, Action, ActionConfig
+    FactionResource, FactionIncome, Action, ActionConfig, Quest, QuestCost, QuestAward, QuestCondition, QuestPenalty
 from django.db import transaction
 import json
 
@@ -9,6 +9,46 @@ class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
         fields = ('id', 'title', 'boardType', 'date_created', 'date_modified')
+        read_only_fields = ('date_created', 'date_modified')
+
+
+class QuestCostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QuestCost
+        fields = ('id', 'type', 'owner', 'quest', 'action', 'resource', 'field', 'amount')
+        read_only_fields = ('date_created', 'date_modified')
+
+
+class QuestConditionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QuestCondition
+        fields = ('id', 'type', 'owner', 'quest', 'action', 'resource', 'field', 'amount')
+        read_only_fields = ('date_created', 'date_modified')
+
+
+class QuestAwardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QuestAward
+        fields = ('id', 'type', 'owner', 'quest', 'action', 'resource', 'field', 'minAmount', 'maxAmount')
+        read_only_fields = ('date_created', 'date_modified')
+
+
+class QuestPenaltySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QuestAward
+        fields = ('id', 'type', 'owner', 'quest', 'action', 'resource', 'field', 'minAmount', 'maxAmount')
+        read_only_fields = ('date_created', 'date_modified')
+
+
+class QuestSerializer(serializers.ModelSerializer):
+    cost = QuestCostSerializer(many=True, source='quest_cost')
+    condition = QuestConditionSerializer(many=True, source='quest_condition')
+    award = QuestAwardSerializer(many=True, source='quest_award')
+    penalty = QuestPenaltySerializer(many=True, source='quest_penalty')
+
+    class Meta:
+        model = Quest
+        fields = ('id', 'name', 'description', 'image', 'game', 'cost', 'condition', 'award', 'penalty')
         read_only_fields = ('date_created', 'date_modified')
 
 
