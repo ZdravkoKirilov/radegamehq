@@ -51,6 +51,240 @@ class QuestSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'description', 'image', 'game', 'cost', 'condition', 'award', 'penalty')
         read_only_fields = ('date_created', 'date_modified')
 
+    def to_internal_value(self, data):
+        value = super(QuestSerializer, self).to_internal_value(data)
+        value['cost'] = json.loads(data['cost'])
+        value['condition'] = json.loads(data['condition'])
+        value['award'] = json.loads(data['award'])
+        value['penalty'] = json.loads(data['penalty'])
+        return value
+
+    @transaction.atomic
+    def create(self, validated_data):
+        cost = validated_data.pop('cost')
+        condition = validated_data.pop('condition')
+        award = validated_data.pop('award')
+        penalty = validated_data.pop('penalty')
+
+        quest = Quest.objects.create(name=validated_data['name'],
+                                     description=validated_data['description'],
+                                     image=validated_data['image'],
+                                     game=validated_data['game'])
+
+        for item in cost:
+            obj = QuestCost(owner=quest, type=item['type'], )
+
+            if 'resource' in item:
+                resource = Resource.objects.get(pk=item['resource'])
+                obj.resource = resource
+            if 'amount' in item:
+                obj.amount = item['amount']
+            if 'quest' in item:
+                quest = Quest.objects.get(pk=item['quest'])
+                obj.quest = quest
+            if 'action' in item:
+                action = Action.objects.get(pk=item['action'])
+                obj.action = action
+            if 'field' in item:
+                field = BoardField.objects.get(pk=item['field'])
+                obj.field = field
+
+            obj.save()
+
+        for item in condition:
+            obj = QuestCondition(owner=quest, type=item['type'], )
+
+            if 'resource' in item:
+                resource = Resource.objects.get(pk=item['resource'])
+                obj.resource = resource
+            if 'amount' in item:
+                obj.amount = item['amount']
+            if 'quest' in item:
+                quest = Quest.objects.get(pk=item['quest'])
+                obj.quest = quest
+            if 'action' in item:
+                action = Action.objects.get(pk=item['action'])
+                obj.action = action
+            if 'field' in item:
+                field = BoardField.objects.get(pk=item['field'])
+                obj.field = field
+
+            obj.save()
+
+        for item in award:
+            obj = QuestAward(owner=quest, type=item['type'], )
+
+            if 'resource' in item:
+                resource = Resource.objects.get(pk=item['resource'])
+                obj.resource = resource
+            if 'maxAmount' in item:
+                obj.maxAmount = item['maxAmount']
+            if 'minAmount' in item:
+                obj.minAmount = item['minAmount']
+            if 'quest' in item:
+                quest = Quest.objects.get(pk=item['quest'])
+                obj.quest = quest
+            if 'action' in item:
+                action = Action.objects.get(pk=item['action'])
+                obj.action = action
+            if 'field' in item:
+                field = BoardField.objects.get(pk=item['field'])
+                obj.field = field
+
+            obj.save()
+
+        for item in penalty:
+            obj = QuestPenalty(owner=quest, type=item['type'], )
+
+            if 'resource' in item:
+                resource = Resource.objects.get(pk=item['resource'])
+                obj.resource = resource
+            if 'maxAmount' in item:
+                obj.maxAmount = item['maxAmount']
+            if 'minAmount' in item:
+                obj.minAmount = item['minAmount']
+            if 'quest' in item:
+                quest = Quest.objects.get(pk=item['quest'])
+                obj.quest = quest
+            if 'action' in item:
+                action = Action.objects.get(pk=item['action'])
+                obj.action = action
+            if 'field' in item:
+                field = BoardField.objects.get(pk=item['field'])
+                obj.field = field
+
+            obj.save()
+
+        return quest
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        existing_cost = QuestCost.objects.filter(owner=instance)
+        cost = validated_data.pop('cost')
+        cost_ids = [item['id'] for item in cost if 'id' in item]
+
+        existing_condition = QuestCondition.objects.filter(owner=instance)
+        condition = validated_data.pop('condition')
+        condition_ids = [item['id'] for item in condition if 'id' in item]
+
+        existing_award = QuestAward.objects.filter(owner=instance)
+        award = validated_data.pop('award')
+        award_ids = [item['id'] for item in award if 'id' in item]
+
+        existing_penalty = QuestPenalty.objects.filter(owner=instance)
+        penalty = validated_data.pop('penalty')
+        penalty_ids = [item['id'] for item in penalty if 'id' in item]
+
+        try:
+            existing_cost.exclude(pk__in=cost_ids).delete()
+            existing_condition.exclude(pk__in=condition_ids).delete()
+            existing_award.exclude(pk__in=award_ids).delete()
+            existing_penalty.exclude(pk__in=penalty_ids).delete()
+        except (
+                QuestCost.DoesNotExist, QuestCondition.DoesNotExist, QuestAward.DoesNotExist,
+                QuestPenalty.DoesNotExist) as e:
+            pass
+
+        for item in cost:
+            try:
+                obj = QuestCost.objects.get(pk=item['id'])
+            except KeyError:
+                obj = QuestCost.objects.create(owner=instance, type=item['type'], )
+
+            if 'resource' in item:
+                resource = Resource.objects.get(pk=item['resource'])
+                obj.resource = resource
+            if 'amount' in item:
+                obj.amount = item['amount']
+            if 'quest' in item:
+                quest = Quest.objects.get(pk=item['quest'])
+                obj.quest = quest
+            if 'action' in item:
+                action = Action.objects.get(pk=item['action'])
+                obj.action = action
+            if 'field' in item:
+                field = BoardField.objects.get(pk=item['field'])
+                obj.field = field
+
+            obj.save()
+
+        for item in condition:
+            try:
+                obj = QuestCondition.objects.get(pk=item['id'])
+            except KeyError:
+                obj = QuestCondition.objects.create(owner=instance, type=item['type'], )
+
+            if 'resource' in item:
+                resource = Resource.objects.get(pk=item['resource'])
+                obj.resource = resource
+            if 'amount' in item:
+                obj.amount = item['amount']
+            if 'quest' in item:
+                quest = Quest.objects.get(pk=item['quest'])
+                obj.quest = quest
+            if 'action' in item:
+                action = Action.objects.get(pk=item['action'])
+                obj.action = action
+            if 'field' in item:
+                field = BoardField.objects.get(pk=item['field'])
+                obj.field = field
+
+            obj.save()
+
+        for item in award:
+            try:
+                obj = QuestAward.objects.get(pk=item['id'])
+            except KeyError:
+                obj = QuestAward.objects.create(owner=instance, type=item['type'], )
+
+            if 'resource' in item:
+                resource = Resource.objects.get(pk=item['resource'])
+                obj.resource = resource
+            if 'maxAmount' in item:
+                obj.maxAmount = item['maxAmount']
+            if 'minAmount' in item:
+                obj.minAmount = item['minAmount']
+            if 'quest' in item:
+                quest = Quest.objects.get(pk=item['quest'])
+                obj.quest = quest
+            if 'action' in item:
+                action = Action.objects.get(pk=item['action'])
+                obj.action = action
+            if 'field' in item:
+                field = BoardField.objects.get(pk=item['field'])
+                obj.field = field
+
+            obj.save()
+
+        for item in penalty:
+            try:
+                obj = QuestPenalty.objects.get(pk=item['id'])
+            except KeyError:
+                obj = QuestPenalty.objects.create(owner=instance, type=item['type'], )
+
+            if 'resource' in item:
+                resource = Resource.objects.get(pk=item['resource'])
+                obj.resource = resource
+            if 'maxAmount' in item:
+                obj.maxAmount = item['maxAmount']
+            if 'minAmount' in item:
+                obj.minAmount = item['minAmount']
+            if 'quest' in item:
+                quest = Quest.objects.get(pk=item['quest'])
+                obj.quest = quest
+            if 'action' in item:
+                action = Action.objects.get(pk=item['action'])
+                obj.action = action
+            if 'field' in item:
+                field = BoardField.objects.get(pk=item['field'])
+                obj.field = field
+
+            obj.save()
+
+        instance.__dict__.update(**validated_data)
+        instance.save()
+        return instance
+
 
 class ActionConfigSerializer(serializers.ModelSerializer):
     class Meta:
