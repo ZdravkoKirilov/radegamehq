@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Game, BoardField, MapLocation, Map, MapPath, Resource, FieldIncome, FieldCost, Faction, \
-    FactionResource, FactionIncome, Action, ActionConfig, Quest, QuestCost, QuestAward, QuestCondition, QuestPenalty
+    FactionResource, FactionIncome, Action, ActionConfig, Quest, QuestCost, QuestAward, QuestCondition, QuestPenalty, \
+    Round
 from django.db import transaction
 import json
 
@@ -9,6 +10,13 @@ class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
         fields = ('id', 'title', 'boardType', 'date_created', 'date_modified')
+        read_only_fields = ('date_created', 'date_modified')
+
+
+class RoundSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Round
+        fields = ('id', 'game', 'name', 'description', 'order', 'replay')
         read_only_fields = ('date_created', 'date_modified')
 
 
