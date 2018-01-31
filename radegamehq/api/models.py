@@ -117,6 +117,31 @@ class BoardField(models.Model):
         return "{}".format(self.name)
 
 
+class FieldQuest(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    field = models.ForeignKey(BoardField, on_delete=models.CASCADE, related_name='field_quest')
+    quest = models.ForeignKey(Quest, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "{}_{}".format(self.field.name, self.quest.name)
+
+
+class FieldActivity(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    field = models.ForeignKey(BoardField, on_delete=models.CASCADE, related_name='field_activity')
+    activity = models.ForeignKey(Action, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "{}_{}".format(self.field.name, self.activity.name)
+
+    class Meta:
+        verbose_name_plural = 'Field activities'
+
+
 class QuestCost(models.Model):
     RESOURCE = 'RESOURCE'
     FIELD = 'FIELD'

@@ -2,10 +2,12 @@ from django.contrib import admin
 
 from .models import Game, BoardField, MapLocation, \
     Map, MapPath, Resource, FieldIncome, FieldCost, Faction, FactionResource, Action, ActionConfig, Quest, QuestCost, \
-    QuestCondition, QuestAward, QuestPenalty, Round, RoundAction, RoundQuest, RoundCondition
+    QuestCondition, QuestAward, QuestPenalty, Round, RoundAction, RoundQuest, RoundCondition, FieldQuest, FieldActivity
 
 admin.site.register(Game)
 admin.site.register(BoardField)
+admin.site.register(FieldQuest)
+admin.site.register(FieldActivity)
 admin.site.register(MapLocation)
 admin.site.register(Map)
 admin.site.register(MapPath)

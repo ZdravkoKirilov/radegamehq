@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Game, BoardField, MapLocation, Map, MapPath, Resource, FieldIncome, FieldCost, Faction, \
     FactionResource, FactionIncome, Action, ActionConfig, Quest, QuestCost, QuestAward, QuestCondition, QuestPenalty, \
-    Round, RoundQuest, RoundAction, RoundCondition
+    Round, RoundQuest, RoundAction, RoundCondition, FieldQuest, FieldActivity
 from django.db import transaction
 import json
 
@@ -481,6 +481,20 @@ class ActionSerializer(serializers.ModelSerializer):
         return instance
 
 
+class FieldQuestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FieldQuest
+        fields = ('id', 'quest',)
+        read_only_fields = ('date_created', 'date_modified')
+
+
+class FieldActivitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FieldActivity
+        fields = ('id', 'activity',)
+        read_only_fields = ('date_created', 'date_modified')
+
+
 class FieldResourceSerializer(serializers.ModelSerializer):
     class Meta:
         model = FieldIncome
@@ -491,10 +505,12 @@ class FieldResourceSerializer(serializers.ModelSerializer):
 class BoardFieldSerializer(serializers.ModelSerializer):
     income = FieldResourceSerializer(many=True, source='field_income')
     cost = FieldResourceSerializer(many=True, source='field_cost')
+    quests = FieldQuestSerializer(many=True, source='field_quest')
+    activities = FieldActivitySerializer(many=True, source='field_activity')
 
     class Meta:
         model = BoardField
-        fields = ('id', 'name', 'description', 'image', 'game', 'income', 'cost')
+        fields = ('id', 'name', 'description', 'image', 'game', 'income', 'cost', 'quests', 'activities')
         read_only_fields = ('date_created', 'date_modified')
 
     def to_internal_value(self, data):
