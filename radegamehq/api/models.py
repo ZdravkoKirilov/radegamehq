@@ -19,20 +19,6 @@ class Game(models.Model):
         return "{}".format(self.title)
 
 
-class Round(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-    name = models.CharField(max_length=255, blank=False)
-    description = models.TextField(blank=True)
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    image = models.FileField(upload_to='round_images', blank=True, null=True, max_length=200)
-    replay = models.IntegerField(null=True, blank=True)
-    order = models.IntegerField(null=True, blank=True)
-
-    def __str__(self):
-        return "{}".format(self.name)
-
-
 class Resource(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
@@ -45,15 +31,16 @@ class Resource(models.Model):
         return "{}".format(self.name)
 
 
-class BoardField(models.Model):
-    name = models.CharField(max_length=255, blank=False)
-    description = models.TextField(blank=True)
-    image = models.FileField(upload_to='field_images', blank=True, null=True, max_length=200)
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+class Round(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-    income = models.ManyToManyField(Resource, blank=True, through='FieldIncome', related_name='_income')
-    cost = models.ManyToManyField(Resource, blank=True, through='FieldCost', related_name='_cost')
+
+    name = models.CharField(max_length=255, blank=False)
+    description = models.TextField(blank=True)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    image = models.FileField(upload_to='round_images', blank=True, null=True, max_length=200)
+    replay = models.IntegerField(null=True, blank=True)
+    order = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return "{}".format(self.name)
@@ -78,6 +65,53 @@ class Quest(models.Model):
     description = models.TextField(blank=True)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     image = models.FileField(upload_to='quest_images', blank=True, null=True, max_length=200)
+
+    def __str__(self):
+        return "{}".format(self.name)
+
+
+class RoundQuest(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    round = models.ForeignKey(Round, on_delete=models.CASCADE, related_name='round_quest')
+    quest = models.ForeignKey(Quest, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "{}_{}".format(self.round.name, self.quest.name)
+
+
+class RoundCondition(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    round = models.ForeignKey(Round, on_delete=models.CASCADE, related_name='round_condition')
+    quest = models.ForeignKey(Quest, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "{}_{}".format(self.round.name, self.quest.name)
+
+
+class RoundAction(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    round = models.ForeignKey(Round, on_delete=models.CASCADE, related_name='round_action')
+    action = models.ForeignKey(Action, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "{}_{}".format(self.round.name, self.action.name)
+
+
+class BoardField(models.Model):
+    name = models.CharField(max_length=255, blank=False)
+    description = models.TextField(blank=True)
+    image = models.FileField(upload_to='field_images', blank=True, null=True, max_length=200)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    income = models.ManyToManyField(Resource, blank=True, through='FieldIncome', related_name='_income')
+    cost = models.ManyToManyField(Resource, blank=True, through='FieldCost', related_name='_cost')
 
     def __str__(self):
         return "{}".format(self.name)
@@ -149,6 +183,10 @@ class QuestCondition(models.Model):
                                  null=True)
     field = models.ForeignKey(BoardField, on_delete=models.CASCADE, related_name='quest_cond_field', blank=True,
                               null=True)
+    byRound = models.ForeignKey(Round, blank=True, null=True, related_name='quest_cond_byRound',
+                                on_delete=models.SET_NULL)
+    atRound = models.ForeignKey(Round, blank=True, null=True, related_name='quest_cond_atRound',
+                                on_delete=models.SET_NULL)
     amount = models.IntegerField(blank=True, null=True)
 
     date_created = models.DateTimeField(auto_now_add=True)

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Game, BoardField, MapLocation, Map, MapPath, Resource, FieldIncome, FieldCost, Faction, \
     FactionResource, FactionIncome, Action, ActionConfig, Quest, QuestCost, QuestAward, QuestCondition, QuestPenalty, \
-    Round
+    Round, RoundQuest, RoundAction, RoundCondition
 from django.db import transaction
 import json
 
@@ -13,11 +13,119 @@ class GameSerializer(serializers.ModelSerializer):
         read_only_fields = ('date_created', 'date_modified')
 
 
+class RoundQuestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RoundQuest
+        fields = ('id', 'quest')
+        read_only_fields = ('date_created', 'date_modified')
+
+        # def to_representation(self, instance):
+        #     data = super().to_representation(instance)
+        #     return data['quest']
+
+
+class RoundActionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RoundAction
+        fields = ('id', 'action')
+        read_only_fields = ('date_created', 'date_modified')
+
+        # def to_representation(self, instance):
+        #     data = super().to_representation(instance)
+        #     return data['action']
+
+
 class RoundSerializer(serializers.ModelSerializer):
+    quests = RoundQuestSerializer(many=True, source='round_quest')
+    condition = RoundQuestSerializer(many=True, source='round_condition')
+    activities = RoundActionSerializer(many=True, source='round_action')
+
     class Meta:
         model = Round
-        fields = ('id', 'game', 'name', 'description', 'order', 'replay')
+        fields = ('id', 'game', 'name', 'description', 'image', 'order', 'replay', 'quests', 'activities', 'condition')
         read_only_fields = ('date_created', 'date_modified')
+
+    # def to_representation(self, instance):
+    #     data = super().to_representation(instance)
+    #     data['quests'] = [item['quest'] for item in data['quests']]
+    #     data['activities'] = [item['action'] for item in data['activities']]
+    #     return data
+
+    def to_internal_value(self, data):
+        value = super(RoundSerializer, self).to_internal_value(data)
+        value['quests'] = json.loads(data['quests'])
+        value['activities'] = json.loads(data['activities'])
+        value['condition'] = json.loads(data['condition'])
+        return value
+
+    @transaction.atomic
+    def create(self, validated_data):
+        quests = validated_data.pop('quests')
+        activities = validated_data.pop('activities')
+        condition = validated_data.pop('condition')
+
+        instance = Round.objects.create(name=validated_data['name'],
+                                        description=validated_data['description'],
+                                        image=validated_data['image'],
+                                        game=validated_data['game'],
+                                        order=validated_data['order'],
+                                        replay=validated_data['replay']
+                                        )
+
+        for item in quests:
+            quest = Quest.objects.get(pk=item)
+            RoundQuest.objects.create(quest=quest, round=instance)
+
+        for item in condition:
+            quest = Quest.objects.get(pk=item)
+            RoundCondition.objects.create(quest=quest, round=instance)
+
+        for item in activities:
+            action = Action.objects.get(pk=item)
+            RoundAction.objects.create(action=action, round=instance)
+
+        return instance
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        existing_quests = RoundQuest.objects.filter(round=instance)
+        quests = validated_data.pop('quests')
+        existing_actions = RoundAction.objects.filter(round=instance)
+        actions = validated_data.pop('activities')
+        existing_conditions = RoundCondition.objects.filter(round=instance)
+        conditions = validated_data.pop('condition')
+
+        try:
+            existing_quests.exclude(quest__in=quests).delete()
+            existing_conditions.exclude(quest__in=conditions).delete()
+            existing_actions.exclude(action__in=actions).delete()
+        except (RoundQuest.DoesNotExist, RoundCondition.DoesNotExist, RoundAction.DoesNotExist) as e:
+            pass
+
+        for item in quests:
+            quest = Quest.objects.get(pk=item)
+            try:
+                RoundQuest.objects.get(quest=quest, round=instance)
+            except RoundQuest.DoesNotExist:
+                RoundQuest.objects.create(quest=quest, round=instance)
+
+        for item in conditions:
+            quest = Quest.objects.get(pk=item)
+            try:
+                RoundCondition.objects.get(quest=quest, round=instance)
+            except RoundCondition.DoesNotExist:
+                RoundCondition.objects.create(quest=quest, round=instance)
+
+        for item in actions:
+            action = Action.objects.get(pk=item)
+            try:
+                RoundAction.objects.get(action=action, round=instance)
+            except RoundAction.DoesNotExist:
+                RoundAction.objects.create(action=action, round=instance)
+
+        instance.__dict__.update(**validated_data)
+        instance.save()
+        return instance
 
 
 class QuestCostSerializer(serializers.ModelSerializer):
@@ -30,7 +138,7 @@ class QuestCostSerializer(serializers.ModelSerializer):
 class QuestConditionSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestCondition
-        fields = ('id', 'type', 'owner', 'quest', 'action', 'resource', 'field', 'amount')
+        fields = ('id', 'type', 'owner', 'quest', 'action', 'resource', 'field', 'amount', 'atRound', 'byRound')
         read_only_fields = ('date_created', 'date_modified')
 
 

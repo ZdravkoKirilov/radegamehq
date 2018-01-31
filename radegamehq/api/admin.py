@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from .models import Game, BoardField, MapLocation, \
     Map, MapPath, Resource, FieldIncome, FieldCost, Faction, FactionResource, Action, ActionConfig, Quest, QuestCost, \
-    QuestCondition, QuestAward, QuestPenalty, Round
+    QuestCondition, QuestAward, QuestPenalty, Round, RoundAction, RoundQuest, RoundCondition
 
 admin.site.register(Game)
 admin.site.register(BoardField)
@@ -22,3 +22,6 @@ admin.site.register(QuestAward)
 admin.site.register(QuestCondition)
 admin.site.register(QuestPenalty)
 admin.site.register(Round)
+admin.site.register(RoundAction)
+admin.site.register(RoundQuest)
+admin.site.register(RoundCondition)
