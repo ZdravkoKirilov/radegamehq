@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Game, BoardField, MapLocation, Map, MapPath, Resource, FieldIncome, FieldCost, Faction, \
-    FactionResource, FactionIncome, Action, ActionConfig, Quest, QuestCost, QuestAward, QuestCondition, QuestPenalty, \
-    Round, RoundQuest, RoundAction, RoundCondition, FieldQuest, FieldActivity
+    FactionResource, FactionIncome, Round, RoundQuest, RoundActivity, RoundCondition, FieldQuest, FieldActivity, \
+    Activity, ActivityConfig, Quest, QuestCost, QuestCondition, QuestAward, QuestPenalty
 from django.db import transaction
 import json
 
@@ -24,21 +24,21 @@ class RoundQuestSerializer(serializers.ModelSerializer):
         #     return data['quest']
 
 
-class RoundActionSerializer(serializers.ModelSerializer):
+class RoundActivitySerializer(serializers.ModelSerializer):
     class Meta:
-        model = RoundAction
-        fields = ('id', 'action')
+        model = RoundActivity
+        fields = ('id', 'activity')
         read_only_fields = ('date_created', 'date_modified')
 
         # def to_representation(self, instance):
         #     data = super().to_representation(instance)
-        #     return data['action']
+        #     return data['activity']
 
 
 class RoundSerializer(serializers.ModelSerializer):
     quests = RoundQuestSerializer(many=True, source='round_quest')
     condition = RoundQuestSerializer(many=True, source='round_condition')
-    activities = RoundActionSerializer(many=True, source='round_action')
+    activities = RoundActivitySerializer(many=True, source='round_activity')
 
     class Meta:
         model = Round
@@ -48,7 +48,7 @@ class RoundSerializer(serializers.ModelSerializer):
     # def to_representation(self, instance):
     #     data = super().to_representation(instance)
     #     data['quests'] = [item['quest'] for item in data['quests']]
-    #     data['activities'] = [item['action'] for item in data['activities']]
+    #     data['activities'] = [item['activity'] for item in data['activities']]
     #     return data
 
     def to_internal_value(self, data):
@@ -81,8 +81,8 @@ class RoundSerializer(serializers.ModelSerializer):
             RoundCondition.objects.create(quest=quest, round=instance)
 
         for item in activities:
-            action = Action.objects.get(pk=item)
-            RoundAction.objects.create(action=action, round=instance)
+            activity = Activity.objects.get(pk=item)
+            RoundActivity.objects.create(activity=activity, round=instance)
 
         return instance
 
@@ -90,16 +90,16 @@ class RoundSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         existing_quests = RoundQuest.objects.filter(round=instance)
         quests = validated_data.pop('quests')
-        existing_actions = RoundAction.objects.filter(round=instance)
-        actions = validated_data.pop('activities')
+        existing_activities = RoundActivity.objects.filter(round=instance)
+        activities = validated_data.pop('activities')
         existing_conditions = RoundCondition.objects.filter(round=instance)
         conditions = validated_data.pop('condition')
 
         try:
             existing_quests.exclude(quest__in=quests).delete()
             existing_conditions.exclude(quest__in=conditions).delete()
-            existing_actions.exclude(action__in=actions).delete()
-        except (RoundQuest.DoesNotExist, RoundCondition.DoesNotExist, RoundAction.DoesNotExist) as e:
+            existing_activities.exclude(activity__in=activities).delete()
+        except (RoundQuest.DoesNotExist, RoundCondition.DoesNotExist, RoundActivity.DoesNotExist) as e:
             pass
 
         for item in quests:
@@ -116,12 +116,12 @@ class RoundSerializer(serializers.ModelSerializer):
             except RoundCondition.DoesNotExist:
                 RoundCondition.objects.create(quest=quest, round=instance)
 
-        for item in actions:
-            action = Action.objects.get(pk=item)
+        for item in activities:
+            activity = Activity.objects.get(pk=item)
             try:
-                RoundAction.objects.get(action=action, round=instance)
-            except RoundAction.DoesNotExist:
-                RoundAction.objects.create(action=action, round=instance)
+                RoundActivity.objects.get(activity=activity, round=instance)
+            except RoundActivity.DoesNotExist:
+                RoundActivity.objects.create(activity=activity, round=instance)
 
         instance.__dict__.update(**validated_data)
         instance.save()
@@ -131,28 +131,32 @@ class RoundSerializer(serializers.ModelSerializer):
 class QuestCostSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestCost
-        fields = ('id', 'type', 'owner', 'quest', 'action', 'resource', 'field', 'amount')
+        fields = ('id', 'type', 'owner', 'quest', 'activity', 'resource', 'field', 'amount')
         read_only_fields = ('date_created', 'date_modified')
 
 
 class QuestConditionSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestCondition
-        fields = ('id', 'type', 'owner', 'quest', 'action', 'resource', 'field', 'amount', 'atRound', 'byRound')
+        fields = ('id', 'type', 'owner', 'quest', 'activity', 'resource', 'field', 'amount', 'atRound', 'byRound')
         read_only_fields = ('date_created', 'date_modified')
 
 
 class QuestAwardSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestAward
-        fields = ('id', 'type', 'owner', 'quest', 'action', 'resource', 'field', 'minAmount', 'maxAmount')
+        fields = (
+            'id', 'type', 'owner', 'quest', 'activity', 'resource', 'field', 'minAmount', 'maxAmount', 'atRound',
+            'byRound')
         read_only_fields = ('date_created', 'date_modified')
 
 
 class QuestPenaltySerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestAward
-        fields = ('id', 'type', 'owner', 'quest', 'action', 'resource', 'field', 'minAmount', 'maxAmount')
+        fields = (
+            'id', 'type', 'owner', 'quest', 'activity', 'resource', 'field', 'minAmount', 'maxAmount', 'atRound',
+            'byRound')
         read_only_fields = ('date_created', 'date_modified')
 
 
@@ -198,9 +202,9 @@ class QuestSerializer(serializers.ModelSerializer):
             if 'quest' in item:
                 quest = Quest.objects.get(pk=item['quest'])
                 obj.quest = quest
-            if 'action' in item:
-                action = Action.objects.get(pk=item['action'])
-                obj.action = action
+            if 'activity' in item:
+                activity = Activity.objects.get(pk=item['activity'])
+                obj.activity = activity
             if 'field' in item:
                 field = BoardField.objects.get(pk=item['field'])
                 obj.field = field
@@ -218,12 +222,18 @@ class QuestSerializer(serializers.ModelSerializer):
             if 'quest' in item:
                 quest = Quest.objects.get(pk=item['quest'])
                 obj.quest = quest
-            if 'action' in item:
-                action = Action.objects.get(pk=item['action'])
-                obj.action = action
+            if 'activity' in item:
+                activity = Activity.objects.get(pk=item['activity'])
+                obj.activity = activity
             if 'field' in item:
                 field = BoardField.objects.get(pk=item['field'])
                 obj.field = field
+            if 'byRound' in item and item['byRound'] is not None:
+                by_round = Round.objects.get(pk=item['byRound'])
+                obj.byRound = by_round
+            if 'atRound' in item and item['atRound'] is not None:
+                at_round = Round.objects.get(pk=item['atRound'])
+                obj.atRound = at_round
 
             obj.save()
 
@@ -240,12 +250,18 @@ class QuestSerializer(serializers.ModelSerializer):
             if 'quest' in item:
                 quest = Quest.objects.get(pk=item['quest'])
                 obj.quest = quest
-            if 'action' in item:
-                action = Action.objects.get(pk=item['action'])
-                obj.action = action
+            if 'activity' in item:
+                activity = Activity.objects.get(pk=item['activity'])
+                obj.activity = activity
             if 'field' in item:
                 field = BoardField.objects.get(pk=item['field'])
                 obj.field = field
+            if 'byRound' in item and item['byRound'] is not None:
+                by_round = Round.objects.get(pk=item['byRound'])
+                obj.byRound = by_round
+            if 'atRound' in item and item['atRound'] is not None:
+                at_round = Round.objects.get(pk=item['atRound'])
+                obj.atRound = at_round
 
             obj.save()
 
@@ -262,12 +278,18 @@ class QuestSerializer(serializers.ModelSerializer):
             if 'quest' in item:
                 quest = Quest.objects.get(pk=item['quest'])
                 obj.quest = quest
-            if 'action' in item:
-                action = Action.objects.get(pk=item['action'])
-                obj.action = action
+            if 'activity' in item:
+                activity = Activity.objects.get(pk=item['activity'])
+                obj.activity = activity
             if 'field' in item:
                 field = BoardField.objects.get(pk=item['field'])
                 obj.field = field
+            if 'byRound' in item and item['byRound'] is not None:
+                by_round = Round.objects.get(pk=item['byRound'])
+                obj.byRound = by_round
+            if 'atRound' in item and item['atRound'] is not None:
+                at_round = Round.objects.get(pk=item['atRound'])
+                obj.atRound = at_round
 
             obj.save()
 
@@ -315,9 +337,9 @@ class QuestSerializer(serializers.ModelSerializer):
             if 'quest' in item:
                 quest = Quest.objects.get(pk=item['quest'])
                 obj.quest = quest
-            if 'action' in item:
-                action = Action.objects.get(pk=item['action'])
-                obj.action = action
+            if 'activity' in item:
+                activity = Activity.objects.get(pk=item['activity'])
+                obj.activity = activity
             if 'field' in item:
                 field = BoardField.objects.get(pk=item['field'])
                 obj.field = field
@@ -338,12 +360,18 @@ class QuestSerializer(serializers.ModelSerializer):
             if 'quest' in item:
                 quest = Quest.objects.get(pk=item['quest'])
                 obj.quest = quest
-            if 'action' in item:
-                action = Action.objects.get(pk=item['action'])
-                obj.action = action
+            if 'activity' in item:
+                activity = Activity.objects.get(pk=item['activity'])
+                obj.activity = activity
             if 'field' in item:
                 field = BoardField.objects.get(pk=item['field'])
                 obj.field = field
+            if 'byRound' in item and item['byRound'] is not None:
+                by_round = Round.objects.get(pk=item['byRound'])
+                obj.byRound = by_round
+            if 'atRound' in item and item['atRound'] is not None:
+                at_round = Round.objects.get(pk=item['atRound'])
+                obj.atRound = at_round
 
             obj.save()
 
@@ -363,12 +391,18 @@ class QuestSerializer(serializers.ModelSerializer):
             if 'quest' in item:
                 quest = Quest.objects.get(pk=item['quest'])
                 obj.quest = quest
-            if 'action' in item:
-                action = Action.objects.get(pk=item['action'])
-                obj.action = action
+            if 'activity' in item:
+                activity = Activity.objects.get(pk=item['activity'])
+                obj.activity = activity
             if 'field' in item:
                 field = BoardField.objects.get(pk=item['field'])
                 obj.field = field
+            if 'byRound' in item and item['byRound'] is not None:
+                by_round = Round.objects.get(pk=item['byRound'])
+                obj.byRound = by_round
+            if 'atRound' in item and item['atRound'] is not None:
+                at_round = Round.objects.get(pk=item['atRound'])
+                obj.atRound = at_round
 
             obj.save()
 
@@ -388,12 +422,18 @@ class QuestSerializer(serializers.ModelSerializer):
             if 'quest' in item:
                 quest = Quest.objects.get(pk=item['quest'])
                 obj.quest = quest
-            if 'action' in item:
-                action = Action.objects.get(pk=item['action'])
-                obj.action = action
+            if 'activity' in item:
+                activity = Activity.objects.get(pk=item['activity'])
+                obj.activity = activity
             if 'field' in item:
                 field = BoardField.objects.get(pk=item['field'])
                 obj.field = field
+            if 'byRound' in item and item['byRound'] is not None:
+                by_round = Round.objects.get(pk=item['byRound'])
+                obj.byRound = by_round
+            if 'atRound' in item and item['atRound'] is not None:
+                at_round = Round.objects.get(pk=item['atRound'])
+                obj.atRound = at_round
 
             obj.save()
 
@@ -402,23 +442,23 @@ class QuestSerializer(serializers.ModelSerializer):
         return instance
 
 
-class ActionConfigSerializer(serializers.ModelSerializer):
+class ActivityConfigSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ActionConfig
+        model = ActivityConfig
         fields = ('id', 'type', 'mode', 'target', 'amount', 'resource')
         read_only_fields = ('date_created', 'date_modified')
 
 
-class ActionSerializer(serializers.ModelSerializer):
-    configs = ActionConfigSerializer(many=True, source='config')
+class ActivitySerializer(serializers.ModelSerializer):
+    configs = ActivityConfigSerializer(many=True, source='config')
 
     class Meta:
-        model = Action
+        model = Activity
         fields = ('id', 'name', 'description', 'image', 'game', 'configs')
         read_only_fields = ('date_created', 'date_modified')
 
     def to_internal_value(self, data):
-        value = super(ActionSerializer, self).to_internal_value(data)
+        value = super(ActivitySerializer, self).to_internal_value(data)
         value['configs'] = json.loads(data['configs'])
         return value
 
@@ -426,16 +466,16 @@ class ActionSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         configs = validated_data.pop('configs')
 
-        action = Action.objects.create(name=validated_data['name'],
-                                       description=validated_data['description'],
-                                       image=validated_data['image'],
-                                       game=validated_data['game'])
+        activity = Activity.objects.create(name=validated_data['name'],
+                                           description=validated_data['description'],
+                                           image=validated_data['image'],
+                                           game=validated_data['game'])
 
         for item in configs:
-            obj = ActionConfig(action=action,
-                               mode=item['mode'],
-                               target=item['target'],
-                               type=item['type'], )
+            obj = ActivityConfig(activity=activity,
+                                 mode=item['mode'],
+                                 target=item['target'],
+                                 type=item['type'], )
 
             if 'resource' in item:
                 resource = Resource.objects.get(pk=item['resource'])
@@ -445,27 +485,27 @@ class ActionSerializer(serializers.ModelSerializer):
 
             obj.save()
 
-        return action
+        return activity
 
     @transaction.atomic
     def update(self, instance, validated_data):
-        existing_configs = ActionConfig.objects.filter(action=instance)
+        existing_configs = ActivityConfig.objects.filter(activity=instance)
         configs = validated_data.pop('configs')
         config_ids = [item['id'] for item in configs if 'id' in item]
 
         try:
             existing_configs.exclude(pk__in=config_ids).delete()
-        except ActionConfig.DoesNotExist:
+        except ActivityConfig.DoesNotExist:
             pass
 
         for item in configs:
             try:
-                obj = ActionConfig.objects.get(pk=item['id'])
+                obj = ActivityConfig.objects.get(pk=item['id'])
             except KeyError:
-                obj = ActionConfig.objects.create(action=instance,
-                                                  mode=item['mode'],
-                                                  target=item['target'],
-                                                  type=item['type'], )
+                obj = ActivityConfig.objects.create(activity=instance,
+                                                    mode=item['mode'],
+                                                    target=item['target'],
+                                                    type=item['type'], )
 
             if 'resource' in item:
                 resource = Resource.objects.get(pk=item['resource'])
@@ -517,12 +557,16 @@ class BoardFieldSerializer(serializers.ModelSerializer):
         value = super(BoardFieldSerializer, self).to_internal_value(data)
         value['income'] = json.loads(data['income'])
         value['cost'] = json.loads(data['cost'])
+        value['quests'] = json.loads(data['quests'])
+        value['activities'] = json.loads(data['activities'])
         return value
 
     @transaction.atomic
     def create(self, validated_data):
         income = validated_data.pop('income')
         cost = validated_data.pop('cost')
+        quests = validated_data.pop('quests')
+        activities = validated_data.pop('activities')
         field = BoardField.objects.create(name=validated_data['name'], description=validated_data['description'],
                                           image=validated_data['image'], game=validated_data['game'])
 
@@ -533,6 +577,12 @@ class BoardFieldSerializer(serializers.ModelSerializer):
         for item in cost:
             resource = Resource.objects.get(pk=item['resource'])
             FieldCost.objects.create(field=field, resource=resource, quantity=item['quantity'])
+        for item in quests:
+            quest = Quest.objects.get(pk=item)
+            FieldQuest.objects.create(quest=quest, field=field)
+        for item in activities:
+            activity = Activity.objects.get(pk=item)
+            FieldActivity.objects.create(activity=activity, field=field)
 
         return field
 
@@ -546,10 +596,20 @@ class BoardFieldSerializer(serializers.ModelSerializer):
         cost = validated_data.pop('cost')
         cost_ids = [item['id'] for item in cost if 'id' in item]
 
+        existing_quests = FieldQuest.objects.filter(field=instance)
+        quests = validated_data.pop('quests')
+
+        existing_activities = FieldActivity.objects.filter(field=instance)
+        activities = validated_data.pop('activities')
+
         try:
             existing_income.exclude(pk__in=income_ids).delete()
             existing_cost.exclude(pk__in=cost_ids).delete()
-        except (FieldIncome.DoesNotExist, FieldCost.DoesNotExist) as e:
+            existing_quests.exclude(quest__in=quests).delete()
+            existing_activities.exclude(activity__in=activities).delete()
+        except (
+                FieldIncome.DoesNotExist, FieldCost.DoesNotExist, FieldQuest.DoesNotExist,
+                FieldActivity.DoesNotExist) as e:
             pass
 
         for item in income:
@@ -571,6 +631,20 @@ class BoardFieldSerializer(serializers.ModelSerializer):
             else:
                 obj.quantity = item['quantity']
                 obj.save()
+
+        for item in quests:
+            quest = Quest.objects.get(pk=item)
+            try:
+                FieldQuest.objects.get(quest=quest, field=instance)
+            except FieldQuest.DoesNotExist:
+                FieldQuest.objects.create(field=instance, quest=quest)
+
+        for item in activities:
+            activity = Activity.objects.get(pk=item)
+            try:
+                FieldActivity.objects.get(activity=activity, field=instance)
+            except FieldActivity.DoesNotExist:
+                FieldActivity.objects.create(field=instance, activity=activity)
 
         instance.__dict__.update(**validated_data)
         instance.save()

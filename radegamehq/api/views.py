@@ -1,7 +1,7 @@
 from rest_framework import generics
 from .serializers import GameSerializer, BoardFieldSerializer, MapLocationSerializer, MapSerializer, MapPathSerializer, \
-    ResourceSerializer, FactionSerializer, ActionSerializer, QuestSerializer, RoundSerializer
-from .models import Game, BoardField, MapLocation, Map, MapPath, Resource, Faction, Action, Quest, Round
+    ResourceSerializer, FactionSerializer, ActivitySerializer, QuestSerializer, RoundSerializer
+from .models import Game, BoardField, MapLocation, Map, MapPath, Resource, Faction, Round, Activity, Quest
 
 
 class GameView(generics.ListCreateAPIView):
@@ -51,21 +51,21 @@ class QuestDetailsView(generics.RetrieveUpdateDestroyAPIView):
         return Quest.objects.all()
 
 
-class ActionView(generics.ListCreateAPIView):
-    serializer_class = ActionSerializer
+class ActivityView(generics.ListCreateAPIView):
+    serializer_class = ActivitySerializer
 
     def perform_create(self, serializer):
         serializer.save()
 
     def get_queryset(self):
-        return Action.objects.all().filter(game=self.kwargs['pk'])
+        return Activity.objects.all().filter(game=self.kwargs['pk'])
 
 
-class ActionDetailsView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = ActionSerializer
+class ActivityDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = ActivitySerializer
 
     def get_queryset(self):
-        return Action.objects.all()
+        return Activity.objects.all()
 
 
 class BoardFieldView(generics.ListCreateAPIView):
