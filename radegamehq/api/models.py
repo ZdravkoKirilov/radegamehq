@@ -335,30 +335,39 @@ class Quest(models.Model):
 
 
 class QuestCost(models.Model):
-    RESOURCE = 'RESOURCE'
-    FIELD = 'FIELD'
-
-    TYPE_CHOICES = (
-        (RESOURCE, 'RESOURCE'),
-        (FIELD, 'FIELD'),
-    )
-
-    type = models.CharField(max_length=255, blank=False, choices=TYPE_CHOICES)
-    owner = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_cost')
-    quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_cost_quest', blank=True, null=True)
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='quest_cost_activity', blank=True,
-                                 null=True)
-    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='quest_cost_resource', blank=True,
-                                 null=True)
-    field = models.ForeignKey(BoardField, on_delete=models.CASCADE, related_name='quest_cost_field', blank=True,
-                              null=True)
-    amount = models.IntegerField(blank=True, null=True)
+    quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_cost')
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='quest_cost_activity')
 
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return "Cost_{}_{}".format(self.owner.name, self.type)
+        return "Cost_{}_{}".format(self.quest.name, self.activity.name)
+
+
+class QuestAward(models.Model):
+    quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_award')
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='quest_award_activity')
+
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "Award_{}_{}".format(self.quest.name, self.activity.name)
+
+
+class QuestPenalty(models.Model):
+    quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_penalty')
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='quest_pen_activity')
+
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "Penalty_{}_{}".format(self.quest.name, self.activity.name)
+
+    class Meta:
+        verbose_name_plural = 'Quest penalties'
 
 
 class QuestCondition(models.Model):
@@ -412,71 +421,3 @@ class QuestCondition(models.Model):
 
     def __str__(self):
         return "Condition_{}_{}".format(self.owner.name, self.type)
-
-
-class QuestAward(models.Model):
-    RESOURCE = 'RESOURCE'
-    RANDOM_RESOURCE = 'RANDOM_RESOURCE'
-
-    TYPE_CHOICES = (
-        (RESOURCE, 'RESOURCE'),
-        (RANDOM_RESOURCE, 'RANDOM_RESOURCE'),
-    )
-
-    type = models.CharField(max_length=255, blank=False, choices=TYPE_CHOICES)
-    owner = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_award')
-    quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_award_quest', blank=True, null=True)
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='quest_award_activity', blank=True,
-                                 null=True)
-    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='quest_award_resource', blank=True,
-                                 null=True)
-    field = models.ForeignKey(BoardField, on_delete=models.CASCADE, related_name='quest_award_field', blank=True,
-                              null=True)
-    byRound = models.ForeignKey(Round, blank=True, null=True, related_name='quest_award_byRound',
-                                on_delete=models.SET_NULL)
-    atRound = models.ForeignKey(Round, blank=True, null=True, related_name='quest_award_atRound',
-                                on_delete=models.SET_NULL)
-    minAmount = models.IntegerField(blank=True, null=True)
-    maxAmount = models.IntegerField(blank=True, null=True)
-
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return "Award_{}_{}".format(self.owner.name, self.type)
-
-
-class QuestPenalty(models.Model):
-    RESOURCE = 'RESOURCE'
-    RANDOM_RESOURCE = 'RANDOM_RESOURCE'
-
-    TYPE_CHOICES = (
-        (RESOURCE, 'RESOURCE'),
-        (RANDOM_RESOURCE, 'RANDOM_RESOURCE'),
-    )
-
-    type = models.CharField(max_length=255, blank=False, choices=TYPE_CHOICES)
-    owner = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_penalty')
-    quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_pen_quest', blank=True,
-                              null=True)
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='quest_pen_activity', blank=True,
-                                 null=True)
-    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='quest_pen_resource', blank=True,
-                                 null=True)
-    field = models.ForeignKey(BoardField, on_delete=models.CASCADE, related_name='quest_pen_field', blank=True,
-                              null=True)
-    byRound = models.ForeignKey(Round, blank=True, null=True, related_name='quest_pen_byRound',
-                                on_delete=models.SET_NULL)
-    atRound = models.ForeignKey(Round, blank=True, null=True, related_name='quest_pen_atRound',
-                                on_delete=models.SET_NULL)
-    minAmount = models.IntegerField(blank=True, null=True)
-    maxAmount = models.IntegerField(blank=True, null=True)
-
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return "Penalty_{}_{}".format(self.owner.name, self.type)
-
-    class Meta:
-        verbose_name_plural = 'Quest penalties'
