@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import Game, BoardField, MapLocation, \
     Map, MapPath, Resource, FieldIncome, FieldCost, Faction, FactionResource, Round, RoundActivity, RoundQuest, \
     RoundCondition, FieldQuest, FieldActivity, Activity, ActivityConfig, Quest, QuestCost, QuestCondition, QuestAward, \
-    QuestPenalty
+    QuestPenalty, Trivia, TriviaAnswer, TriviaAnswerEffect
 
 admin.site.register(Game)
 admin.site.register(BoardField)
@@ -28,3 +28,6 @@ admin.site.register(Round)
 admin.site.register(RoundActivity)
 admin.site.register(RoundQuest)
 admin.site.register(RoundCondition)
+admin.site.register(Trivia)
+admin.site.register(TriviaAnswer)
+admin.site.register(TriviaAnswerEffect)

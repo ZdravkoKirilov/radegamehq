@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from .models import Game, BoardField, MapLocation, Map, MapPath, Resource, FieldIncome, FieldCost, Faction, \
     FactionResource, FactionIncome, Round, RoundQuest, RoundActivity, RoundCondition, FieldQuest, FieldActivity, \
-    Activity, ActivityConfig, Quest, QuestCost, QuestCondition, QuestAward, QuestPenalty
+    Activity, ActivityConfig, Quest, QuestCost, QuestCondition, QuestAward, QuestPenalty, Trivia, TriviaAnswer, \
+    TriviaAnswerEffect
 from django.db import transaction
 import json
 
@@ -625,3 +626,28 @@ class FactionSerializer(serializers.ModelSerializer):
         instance.__dict__.update(**validated_data)
         instance.save()
         return instance
+
+
+class TriviaAnswerEffectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TriviaAnswerEffect
+        fields = ('id', 'activity')
+        read_only_fields = ('date_created', 'date_modified')
+
+
+class TriviaAnswerSerializer(serializers.ModelSerializer):
+    effect = TriviaAnswerEffectSerializer(many=True, source='trivia_answer_effect')
+
+    class Meta:
+        model = TriviaAnswer
+        fields = ('id', 'name', 'description', 'image', 'effect')
+        read_only_fields = ('date_created', 'date_modified')
+
+
+class TriviaSerializer(serializers.ModelSerializer):
+    answers = TriviaAnswerSerializer(many=True, source='trivia_answer')
+
+    class Meta:
+        model = Trivia
+        fields = ('id', 'name', 'description', 'image', 'game', 'mode', 'answers')
+        read_only_fields = ('date_created', 'date_modified')
