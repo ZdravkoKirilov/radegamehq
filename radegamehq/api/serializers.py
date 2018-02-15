@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import Game, BoardField, MapLocation, Map, MapPath, Resource, FieldIncome, FieldCost, Faction, \
     FactionResource, FactionIncome, Round, RoundQuest, RoundActivity, RoundCondition, FieldQuest, FieldActivity, \
     Activity, ActivityConfig, Quest, QuestCost, QuestCondition, QuestAward, QuestPenalty, Trivia, TriviaAnswer, \
-    TriviaAnswerEffect
+    TriviaAnswerEffect, Stage
 from django.db import transaction
 import json
 
@@ -650,4 +650,11 @@ class TriviaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trivia
         fields = ('id', 'name', 'description', 'image', 'game', 'mode', 'answers')
+        read_only_fields = ('date_created', 'date_modified')
+
+
+class StageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Stage
+        fields = ('id', 'name', 'description', 'image', 'game')
         read_only_fields = ('date_created', 'date_modified')

@@ -1,7 +1,9 @@
 from rest_framework import generics
 from .serializers import GameSerializer, BoardFieldSerializer, MapLocationSerializer, MapSerializer, MapPathSerializer, \
-    ResourceSerializer, FactionSerializer, ActivitySerializer, QuestSerializer, RoundSerializer, TriviaSerializer
-from .models import Game, BoardField, MapLocation, Map, MapPath, Resource, Faction, Round, Activity, Quest, Trivia
+    ResourceSerializer, FactionSerializer, ActivitySerializer, QuestSerializer, RoundSerializer, TriviaSerializer, \
+    StageSerializer
+from .models import Game, BoardField, MapLocation, Map, MapPath, Resource, Faction, Round, Activity, Quest, Trivia, \
+    Stage
 
 
 class GameView(generics.ListCreateAPIView):
@@ -185,3 +187,20 @@ class TriviaDetailsView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Trivia.objects.all()
+
+
+class StageView(generics.ListCreateAPIView):
+    serializer_class = StageSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+    def get_queryset(self):
+        return Stage.objects.all().filter(game=self.kwargs['pk'])
+
+
+class StageDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = StageSerializer
+
+    def get_queryset(self):
+        return Stage.objects.all()

@@ -3,9 +3,13 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from .views import GameView, GameDetailsView, BoardFieldView, BoardFieldDetailsView, MapLocationView, \
     MapLocationDetailsView, MapView, MapDetailsView, MapPathView, MapPathDetailsView, ResourceView, ResourceDetailsView, \
     FactionView, FactionDetailsView, ActivityView, ActivityDetailsView, QuestView, QuestDetailsView, RoundView, \
-    RoundDetailsView, TriviaView, TriviaDetailsView
+    RoundDetailsView, TriviaView, TriviaDetailsView, StageView, StageDetailsView
 
 urlpatterns = {
+
+    url(r'games/(?P<gameid>[0-9]+)/stages/(?P<pk>[0-9]+)/$', StageDetailsView.as_view(),
+        name="stage.details"),
+    url(r'games/(?P<pk>[0-9]+)/stages/$', StageView.as_view(), name="stage.list"),
 
     url(r'games/(?P<gameid>[0-9]+)/trivia/(?P<pk>[0-9]+)/$', TriviaDetailsView.as_view(),
         name="trivia.details"),
