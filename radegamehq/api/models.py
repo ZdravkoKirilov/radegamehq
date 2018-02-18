@@ -440,8 +440,7 @@ class TriviaAnswer(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
     trivia = models.ForeignKey(Trivia, on_delete=models.CASCADE, related_name='trivia_answer')
-    name = models.CharField(max_length=255, blank=False)
-    description = models.TextField(blank=True)
+    description = models.TextField(blank=False)
     image = models.FileField(upload_to='trivia_answer_images', blank=True, null=True, max_length=200)
 
     def __str__(self):

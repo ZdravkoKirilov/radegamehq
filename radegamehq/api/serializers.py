@@ -5,6 +5,7 @@ from .models import Game, BoardField, MapLocation, Map, MapPath, Resource, Field
     TriviaAnswerEffect, Stage
 from django.db import transaction
 import json
+import copy
 
 
 class GameSerializer(serializers.ModelSerializer):
@@ -640,7 +641,7 @@ class TriviaAnswerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TriviaAnswer
-        fields = ('id', 'name', 'description', 'image', 'effect')
+        fields = ('id', 'description', 'image', 'effect')
         read_only_fields = ('date_created', 'date_modified')
 
 
@@ -652,9 +653,58 @@ class TriviaSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'description', 'image', 'game', 'mode', 'answers')
         read_only_fields = ('date_created', 'date_modified')
 
+    def serialize_nested(self, data, nested_prop):
+        result = dict()
+        new_data = copy.deepcopy(data)
+
+        for key, value in data.items():
+            if nested_prop in key:
+                index = key[len(nested_prop) + 1]
+                prop = key[len(nested_prop) + 4:len(key) - 1]
+                if index not in result:
+                    result[index] = dict()
+                result[index][prop] = value
+
+                del new_data[key]
+
+        new_data[nested_prop] = [result[key] for key in result]
+        return new_data
+
+    def to_internal_value(self, data):
+        data = self.serialize_nested(data, 'answers')
+        value = super(TriviaSerializer, self).to_internal_value(data)
+        value['answers'] = data['answers']
+        return value
+
+    @transaction.atomic
+    def create(self, validated_data):
+        answers = validated_data.pop('answers')
+        instance = Trivia.objects.create(name=validated_data['name'],
+                                         description=validated_data['description'],
+                                         mode=validated_data['mode'],
+                                         game=validated_data['game'],
+                                         image=validated_data['image'])
+        for item in answers:
+            TriviaAnswer.objects.create(trivia=instance, description=item['description'], image=item['image'])
+
+        return instance
+
 
 class StageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stage
         fields = ('id', 'name', 'description', 'image', 'game')
         read_only_fields = ('date_created', 'date_modified')
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+
+        if 'name' in validated_data:
+            instance.name = validated_data.pop('name')
+        if 'description' in validated_data:
+            instance.description = validated_data.pop('description')
+        if 'image' in validated_data:
+            instance.image = validated_data.pop('image')
+
+        instance.save()
+        return instance
