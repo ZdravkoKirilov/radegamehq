@@ -87,6 +87,7 @@ class BoardField(models.Model):
     description = models.TextField(blank=True)
     image = models.FileField(upload_to='field_images', blank=True, null=True, max_length=200)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    stage = models.ForeignKey('Stage', on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
     income = models.ManyToManyField(Resource, blank=True, through='FieldIncome', related_name='_income')
@@ -151,6 +152,7 @@ class MapLocation(models.Model):
     left = models.FloatField()
     top = models.FloatField()
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    stage = models.ForeignKey('Stage', on_delete=models.CASCADE)
     field = models.OneToOneField(
         BoardField,
         on_delete=models.CASCADE
@@ -158,19 +160,6 @@ class MapLocation(models.Model):
 
     def __str__(self):
         return "{}".format(self.field.name)
-
-
-class Map(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-    image = models.FileField(upload_to='maps', blank=True, null=True, max_length=200)
-    game = models.OneToOneField(
-        Game,
-        on_delete=models.CASCADE,
-    )
-
-    def __str__(self):
-        return "{}".format('Map_') + self.game.title
 
 
 class MapPath(models.Model):
@@ -187,6 +176,7 @@ class MapPath(models.Model):
         on_delete=models.CASCADE,
     )
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    stage = models.ForeignKey('Stage', on_delete=models.CASCADE)
 
     class Meta:
         pass
@@ -444,7 +434,7 @@ class TriviaAnswer(models.Model):
     image = models.FileField(upload_to='trivia_answer_images', blank=True, null=True, max_length=200)
 
     def __str__(self):
-        return "{}".format(self.name)
+        return "Answer_{}_{}".format(self.id, self.trivia.name)
 
 
 class TriviaAnswerEffect(models.Model):
@@ -454,7 +444,7 @@ class TriviaAnswerEffect(models.Model):
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "{}_{}_{}".format(self.answer.name, self.activity.name, self.id)
+        return "{}_{}_{}".format(self.answer.id, self.activity.name, self.id)
 
 
 class Stage(models.Model):

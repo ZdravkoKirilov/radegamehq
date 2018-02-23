@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import Game, BoardField, MapLocation, \
-    Map, MapPath, Resource, FieldIncome, FieldCost, Faction, FactionResource, Round, RoundActivity, RoundQuest, \
+    MapPath, Resource, FieldIncome, FieldCost, Faction, FactionResource, Round, RoundActivity, RoundQuest, \
     RoundCondition, FieldQuest, FieldActivity, Activity, ActivityConfig, Quest, QuestCost, QuestCondition, QuestAward, \
     QuestPenalty, Trivia, TriviaAnswer, TriviaAnswerEffect, Stage
 
@@ -10,7 +10,6 @@ admin.site.register(BoardField)
 admin.site.register(FieldQuest)
 admin.site.register(FieldActivity)
 admin.site.register(MapLocation)
-admin.site.register(Map)
 admin.site.register(MapPath)
 admin.site.register(Resource)
 admin.site.register(FieldIncome)

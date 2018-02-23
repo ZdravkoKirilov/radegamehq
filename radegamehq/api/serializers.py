@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Game, BoardField, MapLocation, Map, MapPath, Resource, FieldIncome, FieldCost, Faction, \
+from .models import Game, BoardField, MapLocation, MapPath, Resource, FieldIncome, FieldCost, Faction, \
     FactionResource, FactionIncome, Round, RoundQuest, RoundActivity, RoundCondition, FieldQuest, FieldActivity, \
     Activity, ActivityConfig, Quest, QuestCost, QuestCondition, QuestAward, QuestPenalty, Trivia, TriviaAnswer, \
     TriviaAnswerEffect, Stage
@@ -414,7 +414,7 @@ class BoardFieldSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BoardField
-        fields = ('id', 'name', 'description', 'image', 'game', 'income', 'cost', 'quests', 'activities')
+        fields = ('id', 'name', 'description', 'image', 'game', 'stage', 'income', 'cost', 'quests', 'activities')
         read_only_fields = ('date_created', 'date_modified')
 
     def to_internal_value(self, data):
@@ -431,8 +431,10 @@ class BoardFieldSerializer(serializers.ModelSerializer):
         cost = validated_data.pop('cost')
         quests = validated_data.pop('quests')
         activities = validated_data.pop('activities')
+
         field = BoardField.objects.create(name=validated_data['name'], description=validated_data['description'],
-                                          image=validated_data['image'], game=validated_data['game'])
+                                          image=validated_data['image'], game=validated_data['game'],
+                                          stage=validated_data['stage'])
 
         for item in income:
             resource = Resource.objects.get(pk=item['resource'])
@@ -518,21 +520,14 @@ class BoardFieldSerializer(serializers.ModelSerializer):
 class MapLocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = MapLocation
-        fields = ('id', 'width', 'height', 'top', 'left', 'game', 'field')
-        read_only_fields = ('date_created', 'date_modified')
-
-
-class MapSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Map
-        fields = ('id', 'image', 'game',)
+        fields = ('id', 'width', 'height', 'top', 'left', 'game', 'stage', 'field')
         read_only_fields = ('date_created', 'date_modified')
 
 
 class MapPathSerializer(serializers.ModelSerializer):
     class Meta:
         model = MapPath
-        fields = ('id', 'game', 'fromLoc', 'toLoc')
+        fields = ('id', 'game', 'stage', 'fromLoc', 'toLoc')
         read_only_fields = ('date_created', 'date_modified')
 
 
@@ -653,27 +648,48 @@ class TriviaSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'description', 'image', 'game', 'mode', 'answers')
         read_only_fields = ('date_created', 'date_modified')
 
-    def serialize_nested(self, data, nested_prop):
+    def serialize_answers(self, data, nested_prop):
         result = dict()
         new_data = copy.deepcopy(data)
 
         for key, value in data.items():
             if nested_prop in key:
                 index = key[len(nested_prop) + 1]
-                prop = key[len(nested_prop) + 4:len(key) - 1]
+                new_key = key[len(nested_prop) + 3:]
+
                 if index not in result:
                     result[index] = dict()
-                result[index][prop] = value
 
+                result[index][new_key] = value
                 del new_data[key]
 
-        new_data[nested_prop] = [result[key] for key in result]
+        new_data[nested_prop] = result
+        return new_data
+
+    def serialize_effect(self, data, nested_prop):
+        new_data = copy.deepcopy(data)
+
+        for key, value in data.items():
+            new_item = new_data[key]
+            for key2, value2 in value.items():
+                if nested_prop in key2:
+                    if nested_prop not in new_item:
+                        new_item[nested_prop] = list()
+
+                    new_item[nested_prop].append(value2)
+                else:
+                    new_key = key2[1:len(key2) - 1]
+                    new_item[new_key] = value2
+                del new_item[key2]
+
         return new_data
 
     def to_internal_value(self, data):
-        data = self.serialize_nested(data, 'answers')
+        without_effect = self.serialize_answers(data, 'answers')
+        answers = self.serialize_effect(without_effect['answers'], 'effect')
+
         value = super(TriviaSerializer, self).to_internal_value(data)
-        value['answers'] = data['answers']
+        value['answers'] = [answers[key] for key in answers]
         return value
 
     @transaction.atomic
@@ -682,12 +698,81 @@ class TriviaSerializer(serializers.ModelSerializer):
         instance = Trivia.objects.create(name=validated_data['name'],
                                          description=validated_data['description'],
                                          mode=validated_data['mode'],
-                                         game=validated_data['game'],
-                                         image=validated_data['image'])
-        for item in answers:
-            TriviaAnswer.objects.create(trivia=instance, description=item['description'], image=item['image'])
+                                         game=validated_data['game'], )
 
+        if 'image' in validated_data and type(validated_data['image']) is not str:
+            instance.image = validated_data['image']
+
+        for item in answers:
+            answer = TriviaAnswer.objects.create(trivia=instance, description=item['description'])
+            if 'image' in item and type(item['image']) is not str:
+                answer.image = item['image']
+            answer.save()
+            try:
+                self.create_answer_effect(item['effect'], answer)
+            except KeyError:
+                pass
+
+        instance.save()
         return instance
+
+    def update(self, instance, validated_data):
+        answers = validated_data.pop('answers')
+        existing_answers = TriviaAnswer.objects.filter(trivia=instance)
+        existing_answer_ids = [item['id'] for item in answers if 'id' in item]
+
+        try:
+            existing_answers.exclude(pk__in=existing_answer_ids).delete()
+        except TriviaAnswer.DoesNotExist:
+            pass
+
+        for item in answers:
+            try:
+                obj = TriviaAnswer.objects.get(pk=item['id'])
+                obj.description = item['description']
+            except (TriviaAnswer.DoesNotExist, KeyError) as e:
+                obj = TriviaAnswer.objects.create(trivia=instance, description=item['description'])
+            finally:
+                if 'image' in item and type(item['image']) is not str:
+                    obj.image = item['image']
+                obj.save()
+                try:
+                    self.update_answer_effect(item['effect'], obj)
+                except KeyError:
+                    self.update_answer_effect([], obj)
+
+        if 'name' in validated_data:
+            instance.name = validated_data.pop('name')
+        if 'description' in validated_data:
+            instance.description = validated_data.pop('description')
+        if 'image' in validated_data and type(validated_data['image']) is not str:
+            instance.image = validated_data.pop('image')
+        if 'mode' in validated_data:
+            instance.mode = validated_data.pop('mode')
+
+        instance.save()
+        return instance
+
+    def update_answer_effect(self, data, answer):
+        existing_effects = TriviaAnswerEffect.objects.filter(answer=answer)
+        existing_effect_ids = [item for item in data]
+
+        try:
+            existing_effects.exclude(activity__in=existing_effect_ids).delete()
+        except TriviaAnswerEffect.DoesNotExist:
+            pass
+
+        for item in data:
+            activity = Activity.objects.get(pk=item)
+            try:
+                TriviaAnswerEffect.objects.get(activity=activity, answer=answer)
+            except TriviaAnswerEffect.DoesNotExist:
+                TriviaAnswerEffect.objects.create(activity=activity, answer=answer)
+
+    def create_answer_effect(self, data, answer):
+        for item in data:
+            activity = Activity.objects.get(pk=item)
+            TriviaAnswerEffect.objects.create(activity=activity, answer=answer)
 
 
 class StageSerializer(serializers.ModelSerializer):
@@ -696,6 +781,12 @@ class StageSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'description', 'image', 'game')
         read_only_fields = ('date_created', 'date_modified')
 
+    def to_internal_value(self, input_data):
+        data = copy.deepcopy(input_data)
+        if 'image' in data and data['image'] == 'null':
+            data['image'] = None
+        return data
+
     @transaction.atomic
     def update(self, instance, validated_data):
 
@@ -703,8 +794,11 @@ class StageSerializer(serializers.ModelSerializer):
             instance.name = validated_data.pop('name')
         if 'description' in validated_data:
             instance.description = validated_data.pop('description')
-        if 'image' in validated_data:
-            instance.image = validated_data.pop('image')
+        if 'image' in validated_data and type(validated_data['image']) is not str:
+            if validated_data['image'] is not None:
+                instance.image = validated_data.pop('image')
+            else:
+                instance.image = None
 
         instance.save()
         return instance
