@@ -2,16 +2,13 @@ from django.db import models
 
 
 class Game(models.Model):
-    TYPE_TERRITORY_MAP = 'MAP'
-    TYPE_BASIC_GRID = 'BASIC_GRID'
-
-    TYPE_CHOICES = (
-        (TYPE_TERRITORY_MAP, 'MAP'),
-        (TYPE_BASIC_GRID, 'BASIC_GRID'),
-    )
-
     title = models.CharField(max_length=255, blank=False)
-    boardType = models.CharField(max_length=255, blank=False, choices=TYPE_CHOICES)
+    image = models.FileField(upload_to='game_images', blank=True, null=True, max_length=200)
+
+    main_stage = models.OneToOneField('Stage', on_delete=models.SET_NULL, null=True, blank=True,
+                                      related_name='main_stage')
+    hide_factions = models.NullBooleanField(blank=True, null=True)
+
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 
@@ -19,10 +16,25 @@ class Game(models.Model):
         return "{}".format(self.title)
 
 
+class GlobalTermination(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    game = models.ForeignKey('Game', on_delete=models.CASCADE)
+
+
+class FactionTermination(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    faction = models.ForeignKey('Faction', on_delete=models.CASCADE)
+
+
 class Resource(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-    name = models.CharField(max_length=255, blank=False)
+
+    name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     image = models.FileField(upload_to='resource_images', blank=True, null=True, max_length=200)
@@ -38,6 +50,7 @@ class Round(models.Model):
     name = models.CharField(max_length=255, blank=False)
     description = models.TextField(blank=True)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    stage = models.OneToOneField('Stage', on_delete=models.SET_NULL, blank=True, null=True, related_name="round_stage")
     image = models.FileField(upload_to='round_images', blank=True, null=True, max_length=200)
     replay = models.IntegerField(null=True, blank=True)
     order = models.IntegerField(null=True, blank=True)
@@ -318,6 +331,7 @@ class Quest(models.Model):
     name = models.CharField(max_length=255, blank=False)
     description = models.TextField(blank=True)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    stage = models.OneToOneField('Stage', on_delete=models.SET_NULL, null=True, blank=True, related_name="quest_stage")
     image = models.FileField(upload_to='quest_images', blank=True, null=True, max_length=200)
 
     def __str__(self):

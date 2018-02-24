@@ -11,7 +11,7 @@ import copy
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
-        fields = ('id', 'title', 'boardType', 'date_created', 'date_modified')
+        fields = ('id', 'title', 'date_created', 'date_modified')
         read_only_fields = ('date_created', 'date_modified')
 
 
@@ -44,7 +44,7 @@ class RoundSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Round
-        fields = ('id', 'game', 'name', 'description', 'image', 'order', 'replay', 'quests', 'activities', 'condition')
+        fields = ('id', 'game', 'name', 'description', 'image', 'order', 'replay', 'stage', 'quests', 'activities', 'condition')
         read_only_fields = ('date_created', 'date_modified')
 
     # def to_representation(self, instance):
@@ -166,7 +166,7 @@ class QuestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Quest
-        fields = ('id', 'name', 'description', 'image', 'game', 'cost', 'condition', 'award', 'penalty')
+        fields = ('id', 'name', 'description', 'image', 'game', 'stage', 'cost', 'condition', 'award', 'penalty')
         read_only_fields = ('date_created', 'date_modified')
 
     def to_internal_value(self, data):
