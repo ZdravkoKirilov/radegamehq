@@ -44,7 +44,9 @@ class RoundSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Round
-        fields = ('id', 'game', 'name', 'description', 'image', 'order', 'replay', 'stage', 'quests', 'activities', 'condition')
+        fields = (
+            'id', 'game', 'name', 'description', 'image', 'order', 'replay', 'stage', 'quests', 'activities',
+            'condition')
         read_only_fields = ('date_created', 'date_modified')
 
     # def to_representation(self, instance):
