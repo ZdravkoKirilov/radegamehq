@@ -44,6 +44,12 @@ INSTALLED_APPS = [
     'debug_toolbar',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'api_auth.authentication.TokenAuthentication',
+    )
+}
+
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',

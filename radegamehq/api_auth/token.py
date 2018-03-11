@@ -12,15 +12,19 @@ def decode_token(encoded):
     return decoded
 
 
-def validate_token(token):
+def user_from_token(token):
     try:
         data = decode_token(token)
     except jwt.exceptions.InvalidTokenError:
-        return False
+        return None
     if 'email' not in data or 'password' not in data:
-        return False
+        return None
     try:
-        AppUser.objects.get(email=data['email'], password=data['password'])
-        return True
+        user = AppUser.objects.get(email=data['email'], password=data['password'])
+        return user
     except AppUser.DoesNotExist:
-        return False
+        return None
+
+
+def get_header_token(header):
+    pass
