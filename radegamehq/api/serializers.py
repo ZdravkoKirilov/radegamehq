@@ -11,7 +11,7 @@ import copy
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
-        fields = ('id', 'title', 'date_created', 'date_modified')
+        fields = ('id', 'title', 'image', 'date_created', 'date_modified')
         read_only_fields = ('date_created', 'date_modified')
 
 
