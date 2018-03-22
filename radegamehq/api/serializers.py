@@ -787,6 +787,7 @@ class StageSerializer(serializers.ModelSerializer):
         data = copy.deepcopy(input_data)
         if 'image' in data and data['image'] == 'null':
             data['image'] = None
+        data['game'] = Game.objects.get(pk=data['game'])
         return data
 
     @transaction.atomic

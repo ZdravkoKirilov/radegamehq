@@ -26,5 +26,5 @@ def user_from_token(token):
         return None
 
 
-def get_header_token(header):
-    pass
+def get_header_token(request):
+    return request.META.get('HTTP_AUTHORIZATION')[7:]

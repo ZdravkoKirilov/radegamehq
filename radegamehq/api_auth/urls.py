@@ -4,7 +4,7 @@ from .views import CreateLocalUserView, GetTokenView
 
 urlpatterns = {
     url(r'local/register', CreateLocalUserView.as_view()),
-    url(r'get-token', GetTokenView.as_view())
+    url(r'local/login', GetTokenView.as_view())
 }
 
 urlpatterns = format_suffix_patterns(urlpatterns)

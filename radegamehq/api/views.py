@@ -1,17 +1,16 @@
-from rest_framework import generics
+from rest_framework import generics, permissions
 from .serializers import GameSerializer, BoardFieldSerializer, MapLocationSerializer, MapPathSerializer, \
     ResourceSerializer, FactionSerializer, ActivitySerializer, QuestSerializer, RoundSerializer, TriviaSerializer, \
     StageSerializer
 from .models import Game, BoardField, MapLocation, MapPath, Resource, Faction, Round, Activity, Quest, Trivia, \
     Stage
+from api_auth.permissions import IsAuthenticatedOrReadOnly
 
 
 class GameView(generics.ListCreateAPIView):
     queryset = Game.objects.all()
     serializer_class = GameSerializer
-
-    def perform_create(self, serializer):
-        serializer.save()
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class GameDetailsView(generics.RetrieveUpdateDestroyAPIView):

@@ -1,4 +1,4 @@
-from rest_framework.generics import CreateAPIView, RetrieveAPIView
+from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -11,9 +11,9 @@ class CreateLocalUserView(CreateAPIView):
     serializer_class = AppUserSerializer
 
     def create(self, request, *args, **kwargs):
-        if 'email' not in request.POST or 'password' not in request.POST:
+        if 'email' not in request.data or 'password' not in request.data:
             return Response('email and password are required fields', status=status.HTTP_400_BAD_REQUEST)
-        email = request.POST['email']
+        email = request.data['email']
         try:
             AppUser.objects.get(email=email)
             return Response('User with that email already exists', status=status.HTTP_400_BAD_REQUEST)
@@ -26,16 +26,17 @@ class CreateLocalUserView(CreateAPIView):
 
 
 class GetTokenView(CreateAPIView):
+    serializer_class = AppUserSerializer
 
     def create(self, request, *args, **kwargs):
-        if 'email' not in request.POST or 'password' not in request.POST:
+        if 'email' not in request.data or 'password' not in request.data:
             return Response('email and password are required fields', status=status.HTTP_400_BAD_REQUEST)
-        email = request.POST['email']
-        password = request.POST['password']
+        email = request.data['email']
+        password = request.data['password']
 
         try:
             user = AppUser.objects.get(email=email, password=password)
             token = create_token(user)
             return Response({"token": token}, status=status.HTTP_200_OK)
         except AppUser.DoesNotExist:
-            return Response('User not found', status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'error': {'message': 'User does not exist'}}, status=status.HTTP_401_UNAUTHORIZED)
