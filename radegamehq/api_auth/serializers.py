@@ -6,4 +6,4 @@ from .models import AppUser
 class AppUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = AppUser
-        fields = ('password', 'email')
+        fields = ('email', 'id')

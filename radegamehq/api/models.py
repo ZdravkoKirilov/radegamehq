@@ -1,7 +1,9 @@
 from django.db import models
+from api_auth.models import AppUser
 
 
 class Game(models.Model):
+    owner = models.ForeignKey(AppUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     image = models.FileField(upload_to='game_images', blank=True, null=True, max_length=200)
 

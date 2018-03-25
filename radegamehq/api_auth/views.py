@@ -1,10 +1,20 @@
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, permissions
 
 from .models import AppUser
 from .serializers import AppUserSerializer
 from .token import create_token
+
+
+class GetCurrentUserView(RetrieveAPIView):
+    serializer_class = AppUserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = request.user
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
 
 class CreateLocalUserView(CreateAPIView):

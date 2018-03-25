@@ -8,6 +8,7 @@ class AppUser(models.Model):
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
     date_joined = models.DateTimeField(auto_now_add=True)
+    is_authenticated = models.BooleanField(default=False)
 
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
 
@@ -32,5 +33,8 @@ class AppUser(models.Model):
         Sends an email to this User.
         '''
         send_mail(subject, message, from_email, [self.email], **kwargs)
+
+    def __str__(self):
+        return '{}'.format(self.email)
 
 

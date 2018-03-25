@@ -27,4 +27,6 @@ def user_from_token(token):
 
 
 def get_header_token(request):
-    return request.META.get('HTTP_AUTHORIZATION')[7:]
+    if 'HTTP_AUTHORIZATION' in request.META:
+        return request.META.get('HTTP_AUTHORIZATION')[7:]
+    return None

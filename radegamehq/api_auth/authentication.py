@@ -8,6 +8,7 @@ class TokenAuthentication(authentication.BaseAuthentication):
         token = get_header_token(request)
 
         user = user_from_token(token)
-        user.is_authenticated = True
+        if user is not None:
+            user.is_authenticated = True
 
         return user, None
