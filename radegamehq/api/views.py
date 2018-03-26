@@ -9,14 +9,13 @@ from api_auth.permissions import IsAuthenticatedOrReadOnly, IsOwner
 
 class GameView(generics.ListCreateAPIView):
     serializer_class = GameSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsOwner]
+
+    ##permission_classes = [IsAuthenticatedOrReadOnly, IsOwner]
 
     def get_queryset(self):
         user = self.request.user
         queryset = Game.objects.filter(owner=user.id)
         return queryset
-
-
 
 
 class GameDetailsView(generics.RetrieveUpdateDestroyAPIView):
