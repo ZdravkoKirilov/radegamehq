@@ -1,4 +1,6 @@
+asn1crypto==0.24.0
 certifi==2017.11.5
+cffi==1.11.5
 chardet==3.0.4
 coreapi==2.3.3
 coreschema==0.0.4
@@ -13,6 +15,8 @@ Jinja2==2.9.6
 MarkupSafe==1.0
 olefile==0.44
 Pillow==4.3.0
+pycparser==2.18
+PyJWT==1.6.1
 pytz==2017.3
 requests==2.18.4
 six==1.11.0

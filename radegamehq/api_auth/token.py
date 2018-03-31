@@ -1,7 +1,6 @@
 import jwt
 from .models import AppUser
 
-
 def create_token(user):
     encoded = jwt.encode({'email': user.email, 'password': user.password}, 'secret', algorithm='HS256')
     return encoded

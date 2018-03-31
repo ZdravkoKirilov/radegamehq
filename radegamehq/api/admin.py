@@ -1,9 +1,16 @@
 from django.contrib import admin
 
-from .models import Game, BoardField, MapLocation, \
-    MapPath, Resource, FieldIncome, FieldCost, Faction, FactionResource, Round, RoundActivity, RoundQuest, \
-    RoundCondition, FieldQuest, FieldActivity, Activity, ActivityConfig, Quest, QuestCost, QuestCondition, QuestAward, \
-    QuestPenalty, Trivia, TriviaAnswer, TriviaAnswerEffect, Stage
+from api.entities.Path import MapPath
+from api.entities.Location import MapLocation
+from api.entities.Stage import Stage
+from api.entities.Trivia import Trivia, TriviaAnswer, TriviaAnswerEffect
+from api.entities.Quest import Quest, QuestCost, QuestAward, QuestPenalty, QuestCondition
+from api.entities.Field import BoardField, FieldQuest, FieldActivity, FieldIncome, FieldCost
+from api.entities.Resource import Resource
+from api.entities.Activity import Activity, ActivityConfig
+from api.entities.Round import Round, RoundQuest, RoundCondition, RoundActivity
+from api.entities.Faction import Faction, FactionResource
+from .entities.Game import Game
 
 admin.site.register(Game)
 admin.site.register(BoardField)

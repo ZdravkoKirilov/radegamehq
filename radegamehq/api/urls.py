@@ -1,9 +1,16 @@
 from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
-from .views import GameView, GameDetailsView, BoardFieldView, BoardFieldDetailsView, MapLocationView, \
-    MapLocationDetailsView, MapPathView, MapPathDetailsView, ResourceView, ResourceDetailsView, \
-    FactionView, FactionDetailsView, ActivityView, ActivityDetailsView, QuestView, QuestDetailsView, RoundView, \
-    RoundDetailsView, TriviaView, TriviaDetailsView, StageView, StageDetailsView
+from api.views.Trivia import TriviaView, TriviaDetailsView
+from api.views.Stage import StageView, StageDetailsView
+from api.views.Round import RoundView, RoundDetailsView
+from api.views.Resource import ResourceView, ResourceDetailsView
+from api.views.Quest import QuestView, QuestDetailsView
+from api.views.Path import MapPathView, MapPathDetailsView
+from api.views.Location import MapLocationView, MapLocationDetailsView
+from api.views.Game import GameView, GameDetailsView
+from api.views.Field import BoardFieldView, BoardFieldDetailsView
+from api.views.Faction import FactionView, FactionDetailsView
+from api.views.Activity import ActivityView, ActivityDetailsView
 
 urlpatterns = {
 

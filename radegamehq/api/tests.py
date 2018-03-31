@@ -2,7 +2,7 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status
 from django.core.urlresolvers import reverse
-from .models import Game
+from radegamehq.api.entities.Game import Game
 
 
 class GameModelTestCase(TestCase):
