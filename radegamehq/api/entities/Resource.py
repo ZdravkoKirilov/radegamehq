@@ -9,6 +9,7 @@ class Resource(models.Model):
 
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
+    keywords = models.CharField(max_length=255, blank=True, null=True)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     image = models.FileField(upload_to='resource_images', blank=True, null=True, max_length=200)
 

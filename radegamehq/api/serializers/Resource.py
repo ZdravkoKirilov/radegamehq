@@ -8,7 +8,7 @@ from api.entities.Resource import Resource
 class ResourceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Resource
-        fields = ('id', 'name', 'description', 'image', 'game')
+        fields = ('id', 'name', 'description', 'keywords', 'image', 'game')
         read_only_fields = ('date_created', 'date_modified')
 
     def to_internal_value(self, data):
