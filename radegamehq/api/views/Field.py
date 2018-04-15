@@ -1,6 +1,6 @@
 from rest_framework import generics
 
-from api.entities.Field import BoardField
+from api.entities.Field import Field
 from api.serializers.Field import BoardFieldSerializer
 
 
@@ -11,11 +11,11 @@ class BoardFieldView(generics.ListCreateAPIView):
         serializer.save()
 
     def get_queryset(self):
-        return BoardField.objects.all().filter(game=self.kwargs['pk'])
+        return Field.objects.all().filter(game=self.kwargs['pk'])
 
 
 class BoardFieldDetailsView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = BoardFieldSerializer
 
     def get_queryset(self):
-        return BoardField.objects.all()
+        return Field.objects.all()

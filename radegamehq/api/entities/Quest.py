@@ -1,22 +1,50 @@
 from django.db import models
 
-from api.entities.Activity import Activity
-from api.entities.Field import BoardField
-from api.entities.Game import Game
-from api.entities.Resource import Resource
-from api.entities.Round import Round
+from .Activity import Activity
+from .Field import Field
+from .Game import Game
+from .Resource import Resource
+from .Round import Round
+
+CLAIM = 'CLAIM'  # field, keyword
+REACH = 'REACH'  # field, ketword
+MEET = 'MEET'  # faction, keyword
+AVOID = 'AVOID'  # faction, activity, keyword
+COMPLETE = 'COMPLETE'  # quest, keyword
+TRIGGER = 'TRIGGER'  # quest, activity, keyword
+
+PASSIVE = 'PASSIVE'
+
+TYPE_CHOICES = (
+    (CLAIM, CLAIM),
+    (REACH, REACH),
+    (MEET, MEET),
+    (AVOID, AVOID),
+    (COMPLETE, COMPLETE),
+    (TRIGGER, TRIGGER),
+)
+
+MODES = (
+    (TRIGGER, TRIGGER),
+    (PASSIVE, PASSIVE)
+)
 
 
 class Quest(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
+
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+
     name = models.CharField(max_length=255, blank=False)
     description = models.TextField(blank=True)
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    stage = models.OneToOneField('Stage', on_delete=models.SET_NULL, null=True, blank=True, related_name="quest_stage")
-    image = models.FileField(upload_to='quest_images', blank=True, null=True, max_length=200)
+    image = models.FileField(upload_to='quest_images', blank=True, null=True, max_length=255)
+    keywords = models.CharField(null=True, blank=True, max_length=255)
+    mode = models.CharField(max_length=255, choices=MODES, default=MODES[0][0])
 
-    def __str__(self):
+    stage = models.OneToOneField('Stage', on_delete=models.SET_NULL, null=True, blank=True, related_name="quest_stage")
+
+    def __str__(self) -> str:
         return "{}".format(self.name)
 
 
@@ -57,34 +85,6 @@ class QuestPenalty(models.Model):
 
 
 class QuestCondition(models.Model):
-    CLAIM_FIELD = 'CLAIM_FIELD'
-    CLAIM_ANY_FIELDS = 'CLAIM_ANY_FIELDS'
-    DEFEND_FIELD = 'DEFEND_FIELD'
-    DEFEND_ANY_FIELDS = 'DEFEND_ANY_FIELDS'
-    CLAIM_RESOURCE = 'CLAIM_RESOURCE'
-    CLAIM_ANY_RESOURCE = 'CLAIM_ANY_RESOURCE'
-    STEAL_ACTIVITY = 'STEAL_ACTIVITY'
-    STEAL_ANY_ACTIVITY = 'STEAL_ANY_ACTIVITY'
-    DISCARD_ACTIVITY = 'DISCARD_ACTIVITY'
-    DISCARD_ANY_ACTIVITY = 'DISCARD_ANY_ACTIVITY'
-    PLAY_ACTIVITY = 'PLAY_ACTIVITY'
-    PLAY_ANY_ACTIVITY = 'PLAY_ANY_ACTIVITY'
-
-    TYPE_CHOICES = (
-        (CLAIM_FIELD, 'CLAIM_FIELD'),
-        (CLAIM_ANY_FIELDS, 'CLAIM_ANY_FIELDS'),
-        (DEFEND_FIELD, 'DEFEND_FIELD'),
-        (DEFEND_ANY_FIELDS, 'DEFEND_ANY_FIELDS'),
-        (CLAIM_RESOURCE, 'CLAIM_RESOURCE'),
-        (CLAIM_ANY_RESOURCE, 'CLAIM_ANY_RESOURCE'),
-        (STEAL_ACTIVITY, 'STEAL_ACTIVITY'),
-        (STEAL_ANY_ACTIVITY, 'STEAL_ANY_ACTIVITY'),
-        (DISCARD_ACTIVITY, 'DISCARD_ACTIVITY'),
-        (DISCARD_ANY_ACTIVITY, 'DISCARD_ANY_ACTIVITY'),
-        (PLAY_ACTIVITY, 'PLAY_ACTIVITY'),
-        (PLAY_ANY_ACTIVITY, 'PLAY_ANY_ACTIVITY'),
-    )
-
     type = models.CharField(max_length=255, blank=False, choices=TYPE_CHOICES)
     owner = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_condition')
     quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_condition_quest', blank=True,
@@ -94,8 +94,9 @@ class QuestCondition(models.Model):
                                  null=True)
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='quest_cond_resource', blank=True,
                                  null=True)
-    field = models.ForeignKey(BoardField, on_delete=models.CASCADE, related_name='quest_cond_field', blank=True,
+    field = models.ForeignKey(Field, on_delete=models.CASCADE, related_name='quest_cond_field', blank=True,
                               null=True)
+    keywords = models.CharField(null=True, blank=True, max_length=255)
     byRound = models.ForeignKey(Round, blank=True, null=True, related_name='quest_cond_byRound',
                                 on_delete=models.SET_NULL)
     atRound = models.ForeignKey(Round, blank=True, null=True, related_name='quest_cond_atRound',

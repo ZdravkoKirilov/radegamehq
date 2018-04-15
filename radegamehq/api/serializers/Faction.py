@@ -20,7 +20,7 @@ class FactionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Faction
-        fields = ('id', 'name', 'description', 'image', 'game', 'resources', 'income')
+        fields = ('id', 'name', 'description', 'keywords', 'image', 'game', 'resources', 'income')
         read_only_fields = ('date_created', 'date_modified')
 
     def to_internal_value(self, data):

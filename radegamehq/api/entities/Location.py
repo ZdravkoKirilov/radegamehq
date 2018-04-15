@@ -1,6 +1,6 @@
 from django.db import models
 
-from api.entities.Field import BoardField
+from api.entities.Field import Field
 from api.entities.Game import Game
 
 
@@ -14,7 +14,7 @@ class MapLocation(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     stage = models.ForeignKey('Stage', on_delete=models.CASCADE)
     field = models.OneToOneField(
-        BoardField,
+        Field,
         on_delete=models.CASCADE
     )
 

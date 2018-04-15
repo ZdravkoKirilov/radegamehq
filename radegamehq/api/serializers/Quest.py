@@ -4,7 +4,7 @@ from django.db import transaction
 from rest_framework import serializers
 
 from api.entities.Activity import Activity
-from api.entities.Field import BoardField
+from api.entities.Field import Field
 from api.entities.Quest import QuestCost, QuestCondition, QuestAward, QuestPenalty, Quest
 from api.entities.Resource import Resource
 from api.entities.Round import Round
@@ -20,7 +20,8 @@ class QuestCostSerializer(serializers.ModelSerializer):
 class QuestConditionSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestCondition
-        fields = ('id', 'type', 'owner', 'quest', 'activity', 'resource', 'field', 'amount', 'atRound', 'byRound')
+        fields = (
+            'id', 'type', 'owner', 'quest', 'activity', 'resource', 'field', 'keywords', 'amount', 'atRound', 'byRound')
         read_only_fields = ('date_created', 'date_modified')
 
 
@@ -46,7 +47,8 @@ class QuestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Quest
-        fields = ('id', 'name', 'description', 'image', 'game', 'stage', 'cost', 'condition', 'award', 'penalty')
+        fields = (
+            'id', 'name', 'description', 'keywords', 'image', 'game', 'stage', 'cost', 'condition', 'award', 'penalty')
         read_only_fields = ('date_created', 'date_modified')
 
     def to_internal_value(self, data):
@@ -96,7 +98,7 @@ class QuestSerializer(serializers.ModelSerializer):
                 activity = Activity.objects.get(pk=item['activity'])
                 obj.activity = activity
             if 'field' in item and item['field'] is not None:
-                field = BoardField.objects.get(pk=item['field'])
+                field = Field.objects.get(pk=item['field'])
                 obj.field = field
             if 'byRound' in item and item['byRound'] is not None:
                 by_round = Round.objects.get(pk=item['byRound'])
@@ -170,7 +172,7 @@ class QuestSerializer(serializers.ModelSerializer):
                 activity = Activity.objects.get(pk=item['activity'])
                 obj.activity = activity
             if 'field' in item:
-                field = BoardField.objects.get(pk=item['field'])
+                field = Field.objects.get(pk=item['field'])
                 obj.field = field
             if 'byRound' in item and item['byRound'] is not None:
                 by_round = Round.objects.get(pk=item['byRound'])

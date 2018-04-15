@@ -4,7 +4,7 @@ from django.db import transaction
 from rest_framework import serializers
 
 from api.entities.Activity import Activity
-from api.entities.Field import FieldQuest, FieldActivity, FieldIncome, BoardField, FieldCost
+from api.entities.Field import FieldQuest, FieldActivity, FieldIncome, Field, FieldCost
 from api.entities.Quest import Quest
 from api.entities.Resource import Resource
 
@@ -37,8 +37,9 @@ class BoardFieldSerializer(serializers.ModelSerializer):
     activities = FieldActivitySerializer(many=True, source='field_activity')
 
     class Meta:
-        model = BoardField
-        fields = ('id', 'name', 'description', 'image', 'game', 'stage', 'income', 'cost', 'quests', 'activities')
+        model = Field
+        fields = (
+            'id', 'name', 'description', 'image', 'keywords', 'game', 'stage', 'income', 'cost', 'quests', 'activities')
         read_only_fields = ('date_created', 'date_modified')
 
     def to_internal_value(self, data):
@@ -56,9 +57,9 @@ class BoardFieldSerializer(serializers.ModelSerializer):
         quests = validated_data.pop('quests')
         activities = validated_data.pop('activities')
 
-        field = BoardField.objects.create(name=validated_data['name'], description=validated_data['description'],
-                                          image=validated_data['image'], game=validated_data['game'],
-                                          stage=validated_data['stage'])
+        field = Field.objects.create(name=validated_data['name'], description=validated_data['description'],
+                                     image=validated_data['image'], game=validated_data['game'],
+                                     stage=validated_data['stage'])
 
         for item in income:
             resource = Resource.objects.get(pk=item['resource'])

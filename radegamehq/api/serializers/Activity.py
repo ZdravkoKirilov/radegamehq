@@ -10,7 +10,7 @@ from api.entities.Resource import Resource
 class ActivityConfigSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActivityConfig
-        fields = ('id', 'type', 'mode', 'target', 'amount', 'resource')
+        fields = ('id', 'type', 'target', 'amount', 'resource')
         read_only_fields = ('date_created', 'date_modified')
 
 
@@ -19,7 +19,7 @@ class ActivitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Activity
-        fields = ('id', 'name', 'description', 'image', 'game', 'configs')
+        fields = ('id', 'name', 'description', 'keywords', 'mode', 'image', 'game', 'configs')
         read_only_fields = ('date_created', 'date_modified')
 
     def to_internal_value(self, data):
