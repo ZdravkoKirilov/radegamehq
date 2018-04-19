@@ -28,7 +28,7 @@ class TriviaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Trivia
-        fields = ('id', 'name', 'description', 'image', 'game', 'mode', 'answers')
+        fields = ('id', 'name', 'description', 'image', 'game', 'answers')
         read_only_fields = ('date_created', 'date_modified')
 
     def serialize_answers(self, data, nested_prop):

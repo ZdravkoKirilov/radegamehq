@@ -13,8 +13,6 @@ AVOID = 'AVOID'  # faction, activity, keyword
 COMPLETE = 'COMPLETE'  # quest, keyword
 TRIGGER = 'TRIGGER'  # quest, activity, keyword
 
-PASSIVE = 'PASSIVE'
-
 TYPE_CHOICES = (
     (CLAIM, CLAIM),
     (REACH, REACH),
@@ -22,11 +20,6 @@ TYPE_CHOICES = (
     (AVOID, AVOID),
     (COMPLETE, COMPLETE),
     (TRIGGER, TRIGGER),
-)
-
-MODES = (
-    (TRIGGER, TRIGGER),
-    (PASSIVE, PASSIVE)
 )
 
 
@@ -40,7 +33,6 @@ class Quest(models.Model):
     description = models.TextField(blank=True)
     image = models.FileField(upload_to='quest_images', blank=True, null=True, max_length=255)
     keywords = models.CharField(null=True, blank=True, max_length=255)
-    mode = models.CharField(max_length=255, choices=MODES, default=MODES[0][0])
 
     stage = models.OneToOneField('Stage', on_delete=models.SET_NULL, null=True, blank=True, related_name="quest_stage")
 

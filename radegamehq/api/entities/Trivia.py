@@ -11,7 +11,6 @@ class Trivia(models.Model):
     description = models.TextField(blank=True)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     image = models.FileField(upload_to='trivia_images', blank=True, null=True, max_length=200)
-    mode = models.CharField(max_length=255)
 
     def __str__(self):
         return "{}".format(self.name)

@@ -1,6 +1,6 @@
 from django.db import models
 
-from api.entities.Game import Game
+from .Game import Game
 from .Resource import Resource
 
 WIN_GAME = 'WIN_GAME'
@@ -13,6 +13,8 @@ STORE_RESOURCE = 'STORE_RESOURCE'
 REQUEST_HINT = 'REQUEST_HINT'
 GIVE_HINT = 'GIVE_HINT'
 DRAW = 'DRAW'
+TRIGGER_QUEST = 'TRIGGER_QUEST'
+TRIGGER_TRIVIA = 'TRIGGER_TRIVIA'
 
 TYPE_CHOICES = (
     (MOVE, MOVE),
@@ -24,7 +26,9 @@ TYPE_CHOICES = (
     (STORE_RESOURCE, STORE_RESOURCE),
     (REQUEST_HINT, REQUEST_HINT),
     (GIVE_HINT, GIVE_HINT),
-    (DRAW, DRAW)
+    (DRAW, DRAW),
+    (TRIGGER_QUEST, TRIGGER_QUEST),
+    (TRIGGER_TRIVIA, TRIGGER_TRIVIA)
 )
 
 TRIGGER = 'TRIGGER'
@@ -73,6 +77,8 @@ class ActivityConfig(models.Model):
     type = models.CharField(max_length=255, blank=False, choices=TYPE_CHOICES)
     target = models.CharField(max_length=255, blank=False, choices=TARGET_CHOICES)
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='config')
+    quest = models.ForeignKey('Quest', on_delete=models.CASCADE, related_name="activity_quest", null=True, blank=True)
+    trivia = models.ForeignKey('Trivia', on_delete=models.CASCADE, related_name="activity_trivia", null=True, blank=True)
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='config_resource', blank=True,
                                  null=True)
     amount = models.IntegerField(blank=True, null=True)
