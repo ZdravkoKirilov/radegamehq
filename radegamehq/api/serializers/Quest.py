@@ -5,16 +5,9 @@ from rest_framework import serializers
 
 from api.entities.Activity import Activity
 from api.entities.Field import Field
-from api.entities.Quest import QuestCost, QuestCondition, QuestAward, QuestPenalty, Quest
+from api.entities.Quest import QuestCondition, QuestAward, QuestPenalty, Quest
 from api.entities.Resource import Resource
 from api.entities.Round import Round
-
-
-class QuestCostSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = QuestCost
-        fields = ('id', 'activity',)
-        read_only_fields = ('date_created', 'date_modified')
 
 
 class QuestConditionSerializer(serializers.ModelSerializer):
@@ -40,7 +33,6 @@ class QuestPenaltySerializer(serializers.ModelSerializer):
 
 
 class QuestSerializer(serializers.ModelSerializer):
-    cost = QuestCostSerializer(many=True, source='quest_cost')
     condition = QuestConditionSerializer(many=True, source='quest_condition')
     award = QuestAwardSerializer(many=True, source='quest_award')
     penalty = QuestPenaltySerializer(many=True, source='quest_penalty')
@@ -48,12 +40,11 @@ class QuestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Quest
         fields = (
-            'id', 'name', 'description', 'keywords', 'image', 'game', 'stage', 'cost', 'condition', 'award', 'penalty')
+            'id', 'name', 'description', 'keywords', 'image', 'game', 'stage', 'condition', 'award', 'penalty')
         read_only_fields = ('date_created', 'date_modified')
 
     def to_internal_value(self, data):
         value = super(QuestSerializer, self).to_internal_value(data)
-        value['cost'] = json.loads(data['cost'])
         value['condition'] = json.loads(data['condition'])
         value['award'] = json.loads(data['award'])
         value['penalty'] = json.loads(data['penalty'])
@@ -61,7 +52,6 @@ class QuestSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        cost = validated_data.pop('cost')
         condition = validated_data.pop('condition')
         award = validated_data.pop('award')
         penalty = validated_data.pop('penalty')
@@ -70,10 +60,6 @@ class QuestSerializer(serializers.ModelSerializer):
                                      description=validated_data['description'],
                                      image=validated_data['image'],
                                      game=validated_data['game'])
-
-        for item in cost:
-            activity = Activity.objects.get(pk=item)
-            QuestCost.objects.create(quest=quest, activity=activity, )
 
         for item in award:
             activity = Activity.objects.get(pk=item)
@@ -117,10 +103,6 @@ class QuestSerializer(serializers.ModelSerializer):
         condition = validated_data.pop('condition')
         condition_ids = [item['id'] for item in condition if 'id' in item]
 
-        existing_cost = QuestCost.objects.filter(quest=instance)
-        existing_cost_ids = [item.activity.id for item in existing_cost]
-        cost = validated_data.pop('cost')
-
         existing_award = QuestAward.objects.filter(quest=instance)
         existing_award_ids = [item.activity.id for item in existing_award]
         award = validated_data.pop('award')
@@ -131,18 +113,12 @@ class QuestSerializer(serializers.ModelSerializer):
 
         try:
             existing_condition.exclude(pk__in=condition_ids).delete()
-            existing_cost.exclude(activity__in=cost).delete()
             existing_award.exclude(activity__in=award).delete()
             existing_penalty.exclude(activity__in=penalty).delete()
         except (
-                QuestCost.DoesNotExist, QuestCondition.DoesNotExist, QuestAward.DoesNotExist,
+                QuestCondition.DoesNotExist, QuestAward.DoesNotExist,
                 QuestPenalty.DoesNotExist) as e:
             pass
-
-        for item in cost:
-            if item not in existing_cost_ids:
-                activity = Activity.objects.get(pk=item)
-                QuestCost.objects.create(quest=instance, activity=activity)
 
         for item in award:
             if item not in existing_award_ids:

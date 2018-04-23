@@ -15,6 +15,7 @@ GIVE_HINT = 'GIVE_HINT'
 DRAW = 'DRAW'
 TRIGGER_QUEST = 'TRIGGER_QUEST'
 TRIGGER_TRIVIA = 'TRIGGER_TRIVIA'
+PLACE_ACTIVITIES = 'PLACE_ACTIVITIES'
 
 TYPE_CHOICES = (
     (MOVE, MOVE),
@@ -28,7 +29,8 @@ TYPE_CHOICES = (
     (GIVE_HINT, GIVE_HINT),
     (DRAW, DRAW),
     (TRIGGER_QUEST, TRIGGER_QUEST),
-    (TRIGGER_TRIVIA, TRIGGER_TRIVIA)
+    (TRIGGER_TRIVIA, TRIGGER_TRIVIA),
+    (PLACE_ACTIVITIES, PLACE_ACTIVITIES)
 )
 
 TRIGGER = 'TRIGGER'
@@ -44,13 +46,17 @@ PLAYER = 'PLAYER'
 ACTIVE_PLAYER = 'ACTIVE_PLAYER'
 SELF = 'SELF'
 OTHER_PLAYER = 'OTHER_PLAYER'
+FACTION = 'FACTION'
+KEYWORD = 'KEYWORD'
 
 TARGET_CHOICES = (
     (FIELD, FIELD),
     (PLAYER, PLAYER),
     (OTHER_PLAYER, OTHER_PLAYER),
     (SELF, SELF),
-    (ACTIVE_PLAYER, ACTIVE_PLAYER)
+    (ACTIVE_PLAYER, ACTIVE_PLAYER),
+    (FACTION, FACTION),
+    (KEYWORD, KEYWORD)
 )
 
 
@@ -78,9 +84,13 @@ class ActivityConfig(models.Model):
     target = models.CharField(max_length=255, blank=False, choices=TARGET_CHOICES)
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='config')
     quest = models.ForeignKey('Quest', on_delete=models.CASCADE, related_name="activity_quest", null=True, blank=True)
-    trivia = models.ForeignKey('Trivia', on_delete=models.CASCADE, related_name="activity_trivia", null=True, blank=True)
+    trivia = models.ForeignKey('Trivia', on_delete=models.CASCADE, related_name="activity_trivia", null=True,
+                               blank=True)
+    faction = models.ForeignKey('Faction', on_delete=models.CASCADE, related_name="activity_faction", null=True,
+                                blank=True)
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='config_resource', blank=True,
                                  null=True)
+    keyword = models.CharField(max_length=255, null=True, blank=True)
     amount = models.IntegerField(blank=True, null=True)
 
     def __str__(self):

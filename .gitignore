@@ -1,9 +1,10 @@
+__pycache__/
 /env
 /venv
 /.idea
 db.sqlite3
 /media
-/__pycache__/
-radegamehq/api/__pycache__/
 radegamehq/media/
 radegamehq/radegamehq/__pycache__/
+*.pyc
+*.pyo

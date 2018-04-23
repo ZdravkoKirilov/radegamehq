@@ -40,17 +40,6 @@ class Quest(models.Model):
         return "{}".format(self.name)
 
 
-class QuestCost(models.Model):
-    quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_cost')
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='quest_cost_activity')
-
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return "Cost_{}_{}".format(self.quest.name, self.activity.name)
-
-
 class QuestAward(models.Model):
     quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_award')
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='quest_award_activity')

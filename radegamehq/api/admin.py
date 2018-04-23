@@ -4,7 +4,7 @@ from api.entities.Path import MapPath
 from api.entities.Location import MapLocation
 from api.entities.Stage import Stage
 from api.entities.Trivia import Trivia, TriviaAnswer, TriviaAnswerEffect
-from api.entities.Quest import Quest, QuestCost, QuestAward, QuestPenalty, QuestCondition
+from api.entities.Quest import Quest, QuestAward, QuestPenalty, QuestCondition
 from api.entities.Field import Field, FieldQuest, FieldActivity, FieldIncome, FieldCost
 from api.entities.Resource import Resource
 from api.entities.Activity import Activity, ActivityConfig
@@ -26,7 +26,6 @@ admin.site.register(FactionResource)
 admin.site.register(Activity)
 admin.site.register(ActivityConfig)
 admin.site.register(Quest)
-admin.site.register(QuestCost)
 admin.site.register(QuestAward)
 admin.site.register(QuestCondition)
 admin.site.register(QuestPenalty)
