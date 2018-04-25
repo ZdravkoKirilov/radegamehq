@@ -69,7 +69,7 @@ class Activity(models.Model):
     name = models.CharField(max_length=255, blank=False)
     description = models.TextField(blank=True)
     keywords = models.CharField(max_length=255, blank=True, null=True)
-    image = models.FileField(upload_to='activity_images', blank=True, null=True, max_length=255)
+    image = models.ImageField(upload_to='activity_images', blank=True, null=True, max_length=None)
     mode = models.CharField(max_length=255, choices=MODE_CHOICES, default=MODE_CHOICES[0][0])
 
     def __str__(self):
@@ -82,7 +82,7 @@ class Activity(models.Model):
 class ActivityConfig(models.Model):
     type = models.CharField(max_length=255, blank=False, choices=TYPE_CHOICES)
     target = models.CharField(max_length=255, blank=False, choices=TARGET_CHOICES)
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='config')
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='configs')
     quest = models.ForeignKey('Quest', on_delete=models.CASCADE, related_name="activity_quest", null=True, blank=True)
     trivia = models.ForeignKey('Trivia', on_delete=models.CASCADE, related_name="activity_trivia", null=True,
                                blank=True)
@@ -94,7 +94,7 @@ class ActivityConfig(models.Model):
     amount = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
-        return "{}_{}".format(self.activity.name, self.type)
+        return "Config_{}_{}".format(self.activity.name, self.type)
 
 
 class ActivityCost(models.Model):

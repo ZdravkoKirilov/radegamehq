@@ -29,7 +29,8 @@ class Base64ImageField(serializers.ImageField):
             try:
                 decoded_file = base64.b64decode(data)
             except TypeError:
-                self.fail('invalid_image')
+                return None
+                # self.fail('invalid_image')
 
             # Generate file name:
             file_name = str(uuid.uuid4())[:12]  # 12 characters are more than enough.
