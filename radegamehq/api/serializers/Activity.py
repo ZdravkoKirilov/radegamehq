@@ -1,16 +1,10 @@
-import json
-
 from django.db import transaction
 from rest_framework import serializers
 from typing import Dict
 
 from .custom_serializers import Base64ImageField
-
+from ..helpers.image_sanitize import sanitize_image
 from ..entities.Activity import ActivityConfig, Activity, ActivityCost
-from ..entities.Resource import Resource
-from ..entities.Quest import Quest
-from ..entities.Trivia import Trivia
-from ..entities.Faction import Faction
 
 
 class ActivityConfigSerializer(serializers.ModelSerializer):
@@ -37,13 +31,10 @@ class ActivitySerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'description', 'keywords', 'mode', 'image', 'game', 'configs', 'cost')
         read_only_fields = ('date_created', 'date_modified')
 
-    # def to_internal_value(self, data):
-    #     value = super(ActivitySerializer, self).to_internal_value(data)
-    #     value['configs'] = json.loads(data['configs'])
-    #     value['cost'] = json.loads(data['cost'])
-    #     value['configs'] = data['configs']
-    #     value['cost'] = data['cost']
-    #     return value
+    def to_internal_value(self, data):
+        data = sanitize_image(data)
+        value = super(ActivitySerializer, self).to_internal_value(data)
+        return value
 
     @transaction.atomic
     def create(self, validated_data):
@@ -110,7 +101,7 @@ class ActivitySerializer(serializers.ModelSerializer):
     @classmethod
     def save_act_cost(cls, item: Dict[str, any], activity: Activity, obj=None) -> ActivityCost:
         if obj is None:
-            obj = ActivityCost(activity=activity, resource=item['resource'])
+            obj = ActivityCost(activity=activity)
 
         obj.__dict__.update(**item)
         obj.save()

@@ -99,7 +99,7 @@ class ActivityConfig(models.Model):
 
 class ActivityCost(models.Model):
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='cost')
-    resource = models.ForeignKey(Resource, on_delete=models.CASCADE)
+    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, blank=True, null=True)
     keyword = models.CharField(max_length=255, blank=True, null=True)
     amount = models.IntegerField(blank=True, null=True)
 
