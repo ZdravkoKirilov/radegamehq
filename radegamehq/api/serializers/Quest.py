@@ -1,41 +1,42 @@
-import json
-
 from django.db import transaction
 from rest_framework import serializers
+from typing import Dict
 
-from api.entities.Activity import Activity
-from api.entities.Field import Field
-from api.entities.Quest import QuestCondition, QuestAward, QuestPenalty, Quest
-from api.entities.Resource import Resource
-from api.entities.Round import Round
+from ..helpers.image_sanitize import sanitize_image
+from .custom_serializers import Base64ImageField
+
+from ..entities.Activity import Activity
+from ..entities.Field import Field
+from ..entities.Quest import QuestCondition, QuestAward, QuestPenalty, Quest
+from ..entities.Resource import Resource
+from ..entities.Round import Round
 
 
 class QuestConditionSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestCondition
         fields = (
-            'id', 'type', 'owner', 'quest', 'activity', 'resource', 'field', 'keywords', 'amount', 'atRound', 'byRound')
-        read_only_fields = ('date_created', 'date_modified')
+            'id', 'type', 'owner', 'quest', 'activity', 'resource', 'field', 'keyword', 'amount', 'at_round',
+            'by_round')
 
 
 class QuestAwardSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestAward
         fields = ('id', 'activity',)
-        read_only_fields = ('date_created', 'date_modified')
 
 
 class QuestPenaltySerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestPenalty
         fields = ('id', 'activity',)
-        read_only_fields = ('date_created', 'date_modified')
 
 
 class QuestSerializer(serializers.ModelSerializer):
     condition = QuestConditionSerializer(many=True, source='quest_condition')
     award = QuestAwardSerializer(many=True, source='quest_award')
     penalty = QuestPenaltySerializer(many=True, source='quest_penalty')
+    image = Base64ImageField(max_length=None, use_url=True)
 
     class Meta:
         model = Quest
@@ -44,10 +45,8 @@ class QuestSerializer(serializers.ModelSerializer):
         read_only_fields = ('date_created', 'date_modified')
 
     def to_internal_value(self, data):
+        data = sanitize_image(data)
         value = super(QuestSerializer, self).to_internal_value(data)
-        value['condition'] = json.loads(data['condition'])
-        value['award'] = json.loads(data['award'])
-        value['penalty'] = json.loads(data['penalty'])
         return value
 
     @transaction.atomic
@@ -56,45 +55,19 @@ class QuestSerializer(serializers.ModelSerializer):
         award = validated_data.pop('award')
         penalty = validated_data.pop('penalty')
 
-        quest = Quest.objects.create(name=validated_data['name'],
-                                     description=validated_data['description'],
-                                     image=validated_data['image'],
-                                     game=validated_data['game'])
+        quest = Quest.objects.create(name=validated_data['name'], game=validated_data['game'])
 
         for item in award:
-            activity = Activity.objects.get(pk=item)
-            QuestAward.objects.create(quest=quest, activity=activity, )
+            self.save_award(item, quest)
 
         for item in penalty:
-            activity = Activity.objects.get(pk=item)
-            QuestPenalty.objects.create(quest=quest, activity=activity, )
+            self.save_penalty(item, quest)
 
         for item in condition:
-            obj = QuestCondition(owner=quest, type=item['type'], )
+            self.save_condition(item, quest)
 
-            if 'resource' in item and item['resource'] is not None:
-                resource = Resource.objects.get(pk=item['resource'])
-                obj.resource = resource
-            if 'amount' in item and item['amount'] is not None:
-                obj.amount = item['amount']
-            if 'quest' in item and item['quest'] is not None:
-                quest = Quest.objects.get(pk=item['quest'])
-                obj.quest = quest
-            if 'activity' in item and item['activity'] is not None:
-                activity = Activity.objects.get(pk=item['activity'])
-                obj.activity = activity
-            if 'field' in item and item['field'] is not None:
-                field = Field.objects.get(pk=item['field'])
-                obj.field = field
-            if 'byRound' in item and item['byRound'] is not None:
-                by_round = Round.objects.get(pk=item['byRound'])
-                obj.byRound = by_round
-            if 'atRound' in item and item['atRound'] is not None:
-                at_round = Round.objects.get(pk=item['atRound'])
-                obj.atRound = at_round
-
-            obj.save()
-
+        quest.__dict__.update(**validated_data)
+        quest.save()
         return quest
 
     @transaction.atomic
@@ -122,43 +95,46 @@ class QuestSerializer(serializers.ModelSerializer):
 
         for item in award:
             if item not in existing_award_ids:
-                activity = Activity.objects.get(pk=item)
-                QuestAward.objects.create(quest=instance, activity=activity)
+                self.save_award(item, instance)
 
         for item in penalty:
             if item not in existing_penalty_ids:
-                activity = Activity.objects.get(pk=item)
-                QuestPenalty.objects.create(quest=instance, activity=activity)
+                self.save_penalty(item, instance)
 
         for item in condition:
             try:
                 obj = QuestCondition.objects.get(pk=item['id'])
-            except KeyError:
-                obj = QuestCondition.objects.create(owner=instance, type=item['type'], )
-
-            if 'resource' in item:
-                resource = Resource.objects.get(pk=item['resource'])
-                obj.resource = resource
-            if 'amount' in item:
-                obj.amount = item['amount']
-            if 'quest' in item:
-                quest = Quest.objects.get(pk=item['quest'])
-                obj.quest = quest
-            if 'activity' in item:
-                activity = Activity.objects.get(pk=item['activity'])
-                obj.activity = activity
-            if 'field' in item:
-                field = Field.objects.get(pk=item['field'])
-                obj.field = field
-            if 'byRound' in item and item['byRound'] is not None:
-                by_round = Round.objects.get(pk=item['byRound'])
-                obj.byRound = by_round
-            if 'atRound' in item and item['atRound'] is not None:
-                at_round = Round.objects.get(pk=item['atRound'])
-                obj.atRound = at_round
-
-            obj.save()
+                self.save_condition(item, instance, obj)
+            except (KeyError, QuestCondition.DoesNotExist) as e:
+                self.save_condition(item, instance)
 
         instance.__dict__.update(**validated_data)
         instance.save()
         return instance
+
+    @classmethod
+    def save_condition(cls, item: Dict[str, any], owner: Quest, obj=None) -> QuestCondition:
+        if obj is None:
+            obj = QuestCondition(owner=owner, type=item['type'], )
+
+        obj.__dict__.update(**item)
+        obj.save()
+        return obj
+
+    @classmethod
+    def save_award(cls, item: Dict[str, any], owner: Quest, obj=None) -> QuestAward:
+        if obj is None:
+            obj = QuestAward(quest=owner, activity=item['activity'])
+
+        obj.__dict__.update(**item)
+        obj.save()
+        return obj
+
+    @classmethod
+    def save_penalty(cls, item: Dict[str, any], owner: Quest, obj=None) -> QuestPenalty:
+        if obj is None:
+            obj = QuestPenalty(quest=owner, activity=item['activity'])
+
+        obj.__dict__.update(**item)
+        obj.save()
+        return obj

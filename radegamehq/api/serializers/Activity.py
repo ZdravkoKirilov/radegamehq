@@ -4,7 +4,7 @@ from typing import Dict
 
 from .custom_serializers import Base64ImageField
 from ..helpers.image_sanitize import sanitize_image
-from ..entities.Activity import ActivityConfig, Activity, ActivityCost
+from ..entities.Activity import ActivityConfig, Activity, ActivityCost, ActivityQuota
 
 
 class ActivityConfigSerializer(serializers.ModelSerializer):
@@ -19,6 +19,13 @@ class ActivityCostSerializer(serializers.ModelSerializer):
         model = ActivityConfig
         fields = ('id', 'amount', 'resource', 'keyword')
         read_only_fields = ('date_created', 'date_modified')
+
+
+class ActivityQuotaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ActivityQuota
+        fields = (
+            'id', 'activity', 'faction', 'round', 'field', 'amount', 'type', 'filter', 'renewable', 'auto_trigger')
 
 
 class ActivitySerializer(serializers.ModelSerializer):

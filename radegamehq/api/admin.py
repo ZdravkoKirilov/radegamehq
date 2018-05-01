@@ -7,7 +7,7 @@ from api.entities.Trivia import Trivia, TriviaAnswer, TriviaAnswerEffect
 from api.entities.Quest import Quest, QuestAward, QuestPenalty, QuestCondition
 from api.entities.Field import Field, FieldQuest, FieldActivity, FieldIncome, FieldCost
 from api.entities.Resource import Resource
-from api.entities.Activity import Activity, ActivityConfig
+from api.entities.Activity import Activity, ActivityConfig, ActivityQuota, ActivityCost
 from api.entities.Round import Round, RoundQuest, RoundCondition, RoundActivity
 from api.entities.Faction import Faction, FactionResource
 from .entities.Game import Game
@@ -25,6 +25,8 @@ admin.site.register(Faction)
 admin.site.register(FactionResource)
 admin.site.register(Activity)
 admin.site.register(ActivityConfig)
+admin.site.register(ActivityCost)
+admin.site.register(ActivityQuota)
 admin.site.register(Quest)
 admin.site.register(QuestAward)
 admin.site.register(QuestCondition)

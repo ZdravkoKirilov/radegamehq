@@ -12,6 +12,7 @@ MEET = 'MEET'  # faction, keyword
 AVOID = 'AVOID'  # faction, activity, keyword
 COMPLETE = 'COMPLETE'  # quest, keyword
 TRIGGER = 'TRIGGER'  # quest, activity, keyword
+GATHER = 'GATHER'  # resource, keyword
 
 TYPE_CHOICES = (
     (CLAIM, CLAIM),
@@ -20,6 +21,7 @@ TYPE_CHOICES = (
     (AVOID, AVOID),
     (COMPLETE, COMPLETE),
     (TRIGGER, TRIGGER),
+    (GATHER, GATHER)
 )
 
 
@@ -44,9 +46,6 @@ class QuestAward(models.Model):
     quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_award')
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='quest_award_activity')
 
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-
     def __str__(self):
         return "Award_{}_{}".format(self.quest.name, self.activity.name)
 
@@ -54,9 +53,6 @@ class QuestAward(models.Model):
 class QuestPenalty(models.Model):
     quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_penalty')
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='quest_pen_activity')
-
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return "Penalty_{}_{}".format(self.quest.name, self.activity.name)
@@ -77,15 +73,12 @@ class QuestCondition(models.Model):
                                  null=True)
     field = models.ForeignKey(Field, on_delete=models.CASCADE, related_name='quest_cond_field', blank=True,
                               null=True)
-    keywords = models.CharField(null=True, blank=True, max_length=255)
-    byRound = models.ForeignKey(Round, blank=True, null=True, related_name='quest_cond_byRound',
-                                on_delete=models.SET_NULL)
-    atRound = models.ForeignKey(Round, blank=True, null=True, related_name='quest_cond_atRound',
-                                on_delete=models.SET_NULL)
+    keyword = models.CharField(null=True, blank=True, max_length=255)
+    by_round = models.ForeignKey(Round, blank=True, null=True, related_name='quest_cond_byRound',
+                                 on_delete=models.SET_NULL)
+    at_round = models.ForeignKey(Round, blank=True, null=True, related_name='quest_cond_atRound',
+                                 on_delete=models.SET_NULL)
     amount = models.IntegerField(blank=True, null=True)
-
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return "Condition_{}_{}".format(self.owner.name, self.type)

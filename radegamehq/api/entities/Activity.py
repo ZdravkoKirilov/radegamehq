@@ -6,31 +6,23 @@ from .Resource import Resource
 WIN_GAME = 'WIN_GAME'
 LOSE_GAME = 'LOSE_GAME'
 MOVE = 'MOVE'
-COLLECT_RESOURCES = 'COLLECT_RESOURCES'
-ALTER_RESOURCE = 'ALTER_RESOURCE'
-PREPARE_RESOURCE = 'PREPARE_RESOURCE'
-STORE_RESOURCE = 'STORE_RESOURCE'
-REQUEST_HINT = 'REQUEST_HINT'
-GIVE_HINT = 'GIVE_HINT'
+COLLECT = 'COLLECT'
+ALTER = 'ALTER'
 DRAW = 'DRAW'
 TRIGGER_QUEST = 'TRIGGER_QUEST'
 TRIGGER_TRIVIA = 'TRIGGER_TRIVIA'
-PLACE_ACTIVITIES = 'PLACE_ACTIVITIES'
+CANCEL = 'CANCEL'
 
 TYPE_CHOICES = (
     (MOVE, MOVE),
     (WIN_GAME, WIN_GAME),
     (LOSE_GAME, LOSE_GAME),
-    (COLLECT_RESOURCES, COLLECT_RESOURCES),
-    (ALTER_RESOURCE, ALTER_RESOURCE),
-    (PREPARE_RESOURCE, PREPARE_RESOURCE),
-    (STORE_RESOURCE, STORE_RESOURCE),
-    (REQUEST_HINT, REQUEST_HINT),
-    (GIVE_HINT, GIVE_HINT),
+    (COLLECT, COLLECT),
+    (ALTER, ALTER),
     (DRAW, DRAW),
     (TRIGGER_QUEST, TRIGGER_QUEST),
     (TRIGGER_TRIVIA, TRIGGER_TRIVIA),
-    (PLACE_ACTIVITIES, PLACE_ACTIVITIES)
+    (CANCEL, CANCEL)
 )
 
 TRIGGER = 'TRIGGER'
@@ -41,7 +33,6 @@ MODE_CHOICES = (
     (PASSIVE, PASSIVE),
 )
 
-FIELD = 'FIELD'
 PLAYER = 'PLAYER'
 ACTIVE_PLAYER = 'ACTIVE_PLAYER'
 SELF = 'SELF'
@@ -50,13 +41,20 @@ FACTION = 'FACTION'
 KEYWORD = 'KEYWORD'
 
 TARGET_CHOICES = (
-    (FIELD, FIELD),
     (PLAYER, PLAYER),
     (OTHER_PLAYER, OTHER_PLAYER),
     (SELF, SELF),
     (ACTIVE_PLAYER, ACTIVE_PLAYER),
     (FACTION, FACTION),
     (KEYWORD, KEYWORD)
+)
+
+DISTRIBUTED = 'DISTRIBUTED'
+LIMITED = 'LIMITED'
+
+QUOTA_TYPES = (
+    (DISTRIBUTED, DISTRIBUTED),
+    (LIMITED, LIMITED)
 )
 
 
@@ -105,3 +103,18 @@ class ActivityCost(models.Model):
 
     def __str__(self):
         return "Cost_{}_{}".format(self.activity.name, self.resource.name)
+
+
+class ActivityQuota(models.Model):
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='quota')
+    faction = models.ForeignKey('Faction', on_delete=models.CASCADE, related_name='faction_quota', null=True,
+                                blank=True)
+    field = models.ForeignKey('Field', on_delete=models.CASCADE, related_name='field_quota', null=True,
+                              blank=True)
+    round = models.ForeignKey('Round', on_delete=models.CASCADE, related_name='round_quota', null=True,
+                              blank=True)
+    filter = models.CharField(max_length=255, null=True, blank=True)
+    renewable = models.BooleanField(default=False)
+    auto_trigger = models.BooleanField(default=False)
+    amount = models.IntegerField(blank=True, null=True)
+    type = models.CharField(choices=QUOTA_TYPES, max_length=255, default=QUOTA_TYPES[0][0])
