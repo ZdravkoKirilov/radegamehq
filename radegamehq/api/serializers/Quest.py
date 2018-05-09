@@ -13,29 +13,35 @@ from ..entities.Round import Round
 
 
 class QuestConditionSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+
     class Meta:
         model = QuestCondition
         fields = (
-            'id', 'type', 'owner', 'quest', 'activity', 'resource', 'field', 'keyword', 'amount', 'at_round',
+            'id', 'type', 'quest', 'activity', 'resource', 'field', 'keyword', 'amount', 'at_round',
             'by_round')
 
 
 class QuestAwardSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+
     class Meta:
         model = QuestAward
         fields = ('id', 'activity',)
 
 
 class QuestPenaltySerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+
     class Meta:
         model = QuestPenalty
         fields = ('id', 'activity',)
 
 
 class QuestSerializer(serializers.ModelSerializer):
-    condition = QuestConditionSerializer(many=True, source='quest_condition')
-    award = QuestAwardSerializer(many=True, source='quest_award')
-    penalty = QuestPenaltySerializer(many=True, source='quest_penalty')
+    condition = QuestConditionSerializer(many=True)
+    award = QuestAwardSerializer(many=True)
+    penalty = QuestPenaltySerializer(many=True)
     image = Base64ImageField(max_length=None, use_url=True)
 
     class Meta:
@@ -67,6 +73,7 @@ class QuestSerializer(serializers.ModelSerializer):
             self.save_condition(item, quest)
 
         quest.__dict__.update(**validated_data)
+        quest.stage = validated_data['stage']
         quest.save()
         return quest
 
@@ -86,8 +93,8 @@ class QuestSerializer(serializers.ModelSerializer):
 
         try:
             existing_condition.exclude(pk__in=condition_ids).delete()
-            existing_award.exclude(activity__in=award).delete()
-            existing_penalty.exclude(activity__in=penalty).delete()
+            existing_award.exclude(activity__in=existing_award_ids).delete()
+            existing_penalty.exclude(activity__in=existing_penalty_ids).delete()
         except (
                 QuestCondition.DoesNotExist, QuestAward.DoesNotExist,
                 QuestPenalty.DoesNotExist) as e:
@@ -109,6 +116,7 @@ class QuestSerializer(serializers.ModelSerializer):
                 self.save_condition(item, instance)
 
         instance.__dict__.update(**validated_data)
+        instance.stage = validated_data['stage']
         instance.save()
         return instance
 
@@ -118,6 +126,12 @@ class QuestSerializer(serializers.ModelSerializer):
             obj = QuestCondition(owner=owner, type=item['type'], )
 
         obj.__dict__.update(**item)
+        obj.resource = item['resource']
+        obj.quest = item['quest']
+        obj.field = item['field']
+        obj.at_round = item['at_round']
+        obj.by_round = item['by_round']
+        obj.activity = item['activity']
         obj.save()
         return obj
 

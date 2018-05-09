@@ -11,14 +11,12 @@ class ActivityConfigSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActivityConfig
         fields = ('id', 'type', 'target', 'quest', 'trivia', 'faction', 'keyword', 'amount', 'resource')
-        read_only_fields = ('date_created', 'date_modified')
 
 
 class ActivityCostSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActivityConfig
         fields = ('id', 'amount', 'resource', 'keyword')
-        read_only_fields = ('date_created', 'date_modified')
 
 
 class ActivityQuotaSerializer(serializers.ModelSerializer):

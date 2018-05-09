@@ -7,7 +7,7 @@ from .Resource import Resource
 from .Round import Round
 
 CLAIM = 'CLAIM'  # field, keyword
-REACH = 'REACH'  # field, ketword
+REACH = 'REACH'  # field, keyword
 MEET = 'MEET'  # faction, keyword
 AVOID = 'AVOID'  # faction, activity, keyword
 COMPLETE = 'COMPLETE'  # quest, keyword
@@ -36,34 +36,16 @@ class Quest(models.Model):
     image = models.FileField(upload_to='quest_images', blank=True, null=True, max_length=255)
     keywords = models.CharField(null=True, blank=True, max_length=255)
 
-    stage = models.OneToOneField('Stage', on_delete=models.SET_NULL, null=True, blank=True, related_name="quest_stage")
+    stage = models.ForeignKey('Stage', on_delete=models.SET_NULL, null=True, blank=True, related_name="quest_stage")
 
     def __str__(self) -> str:
         return "{}".format(self.name)
 
 
-class QuestAward(models.Model):
-    quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_award')
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='quest_award_activity')
-
-    def __str__(self):
-        return "Award_{}_{}".format(self.quest.name, self.activity.name)
-
-
-class QuestPenalty(models.Model):
-    quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_penalty')
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='quest_pen_activity')
-
-    def __str__(self):
-        return "Penalty_{}_{}".format(self.quest.name, self.activity.name)
-
-    class Meta:
-        verbose_name_plural = 'Quest penalties'
-
-
 class QuestCondition(models.Model):
+    owner = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='condition')
+
     type = models.CharField(max_length=255, blank=False, choices=TYPE_CHOICES)
-    owner = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_condition')
     quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='quest_condition_quest', blank=True,
                               null=True)
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='quest_condition_activity',
@@ -82,3 +64,24 @@ class QuestCondition(models.Model):
 
     def __str__(self):
         return "Condition_{}_{}".format(self.owner.name, self.type)
+
+
+class QuestAward(models.Model):
+    quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='award')
+
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='quest_award_activity')
+
+    def __str__(self):
+        return "Award_{}_{}".format(self.quest.name, self.activity.name)
+
+
+class QuestPenalty(models.Model):
+    quest = models.ForeignKey(Quest, on_delete=models.CASCADE, related_name='penalty')
+
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='quest_pen_activity')
+
+    def __str__(self):
+        return "Penalty_{}_{}".format(self.quest.name, self.activity.name)
+
+    class Meta:
+        verbose_name_plural = 'Quest penalties'

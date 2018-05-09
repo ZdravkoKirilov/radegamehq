@@ -78,9 +78,9 @@ class Activity(models.Model):
 
 
 class ActivityConfig(models.Model):
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='configs')
     type = models.CharField(max_length=255, blank=False, choices=TYPE_CHOICES)
     target = models.CharField(max_length=255, blank=False, choices=TARGET_CHOICES)
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='configs')
     quest = models.ForeignKey('Quest', on_delete=models.CASCADE, related_name="activity_quest", null=True, blank=True)
     trivia = models.ForeignKey('Trivia', on_delete=models.CASCADE, related_name="activity_trivia", null=True,
                                blank=True)
