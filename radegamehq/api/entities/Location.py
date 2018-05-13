@@ -9,8 +9,8 @@ class MapLocation(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
     width = models.FloatField()
     height = models.FloatField()
-    left = models.FloatField()
-    top = models.FloatField()
+    x = models.FloatField()
+    y = models.FloatField()
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     stage = models.ForeignKey('Stage', on_delete=models.CASCADE)
     field = models.OneToOneField(

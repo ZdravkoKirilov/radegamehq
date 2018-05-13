@@ -5,15 +5,11 @@ from typing import Dict
 from ..helpers.image_sanitize import sanitize_image
 from .custom_serializers import Base64ImageField
 
-from ..entities.Activity import Activity
-from ..entities.Field import Field
 from ..entities.Quest import QuestCondition, QuestAward, QuestPenalty, Quest
-from ..entities.Resource import Resource
-from ..entities.Round import Round
 
 
 class QuestConditionSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField()
+    id = serializers.IntegerField(allow_null=True)
 
     class Meta:
         model = QuestCondition
@@ -23,7 +19,6 @@ class QuestConditionSerializer(serializers.ModelSerializer):
 
 
 class QuestAwardSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField()
 
     class Meta:
         model = QuestAward
@@ -31,7 +26,6 @@ class QuestAwardSerializer(serializers.ModelSerializer):
 
 
 class QuestPenaltySerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField()
 
     class Meta:
         model = QuestPenalty
@@ -84,12 +78,12 @@ class QuestSerializer(serializers.ModelSerializer):
         condition_ids = [item['id'] for item in condition if 'id' in item]
 
         existing_award = QuestAward.objects.filter(quest=instance)
-        existing_award_ids = [item.activity.id for item in existing_award]
         award = validated_data.pop('award')
+        existing_award_ids = [item['activity'].id for item in award]
 
         existing_penalty = QuestPenalty.objects.filter(quest=instance)
-        existing_penalty_ids = [item.activity.id for item in existing_penalty]
         penalty = validated_data.pop('penalty')
+        existing_penalty_ids = [item['activity'].id for item in penalty]
 
         try:
             existing_condition.exclude(pk__in=condition_ids).delete()

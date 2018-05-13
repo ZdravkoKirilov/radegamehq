@@ -33,7 +33,7 @@ class Quest(models.Model):
 
     name = models.CharField(max_length=255, blank=False)
     description = models.TextField(blank=True)
-    image = models.FileField(upload_to='quest_images', blank=True, null=True, max_length=255)
+    image = models.ImageField(upload_to='quest_images', blank=True, null=True, max_length=255)
     keywords = models.CharField(null=True, blank=True, max_length=255)
 
     stage = models.ForeignKey('Stage', on_delete=models.SET_NULL, null=True, blank=True, related_name="quest_stage")

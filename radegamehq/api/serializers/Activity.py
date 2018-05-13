@@ -108,6 +108,7 @@ class ActivitySerializer(serializers.ModelSerializer):
         if obj is None:
             obj = ActivityCost(activity=activity)
 
+        obj.resource = item['resource']
         obj.__dict__.update(**item)
         obj.save()
         return obj
