@@ -1,41 +1,32 @@
 from django.contrib import admin
 
-from api.entities.Path import MapPath
-from api.entities.Location import MapLocation
+from api.entities.Path import Path
+from api.entities.Location import Location
 from api.entities.Stage import Stage
-from api.entities.Trivia import Trivia, TriviaAnswer, TriviaAnswerEffect
-from api.entities.Quest import Quest, QuestAward, QuestPenalty, QuestCondition
-from api.entities.Field import Field, FieldQuest, FieldActivity, FieldIncome, FieldCost
+from api.entities.Choice import Choice, ChoiceOption
+from api.entities.Condition import Condition, ConditionClause
+from api.entities.Field import Field
 from api.entities.Resource import Resource
-from api.entities.Activity import Activity, ActivityConfig, ActivityQuota, ActivityCost
-from api.entities.Round import Round, RoundQuest, RoundCondition, RoundActivity
-from api.entities.Faction import Faction, FactionResource
+from api.entities.Action import Action, ActionConfig
+from api.entities.Round import Round
+from api.entities.Faction import Faction
+from api.entities.EffectStack import EffectStack
+from api.entities.EffectGroup import EffectGroup
 from .entities.Game import Game
 
 admin.site.register(Game)
 admin.site.register(Field)
-admin.site.register(FieldQuest)
-admin.site.register(FieldActivity)
-admin.site.register(MapLocation)
-admin.site.register(MapPath)
+admin.site.register(Location)
+admin.site.register(Path)
 admin.site.register(Resource)
-admin.site.register(FieldIncome)
-admin.site.register(FieldCost)
 admin.site.register(Faction)
-admin.site.register(FactionResource)
-admin.site.register(Activity)
-admin.site.register(ActivityConfig)
-admin.site.register(ActivityCost)
-admin.site.register(ActivityQuota)
-admin.site.register(Quest)
-admin.site.register(QuestAward)
-admin.site.register(QuestCondition)
-admin.site.register(QuestPenalty)
+admin.site.register(Action)
+admin.site.register(ActionConfig)
+admin.site.register(Condition)
+admin.site.register(ConditionClause)
 admin.site.register(Round)
-admin.site.register(RoundActivity)
-admin.site.register(RoundQuest)
-admin.site.register(RoundCondition)
-admin.site.register(Trivia)
-admin.site.register(TriviaAnswer)
-admin.site.register(TriviaAnswerEffect)
+admin.site.register(Choice)
+admin.site.register(ChoiceOption)
 admin.site.register(Stage)
+admin.site.register(EffectStack)
+admin.site.register(EffectGroup)

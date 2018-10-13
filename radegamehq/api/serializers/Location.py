@@ -1,10 +1,9 @@
 from rest_framework import serializers
 
-from api.entities.Location import MapLocation
+from api.entities.Location import Location
 
 
 class MapLocationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MapLocation
+        model = Location
         fields = ('id', 'width', 'height', 'y', 'x', 'game', 'stage', 'field')
-        read_only_fields = ('date_created', 'date_modified')

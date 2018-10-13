@@ -1,55 +1,24 @@
 from django.db import models
 
-from api.entities.Game import Game
+from api.mixins.EntityBase import EntityBase
+
+from .EffectGroup import EffectGroup
+from .EffectStack import EffectStack
 
 
-class Round(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
+class Round(models.Model, EntityBase):
+    stage = models.ForeignKey('Stage', on_delete=models.SET_NULL, blank=True, null=True, related_name="round_stage")
 
-    name = models.CharField(max_length=255, blank=False)
-    description = models.TextField(blank=True)
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    stage = models.OneToOneField('Stage', on_delete=models.SET_NULL, blank=True, null=True, related_name="round_stage")
-    image = models.FileField(upload_to='round_images', blank=True, null=True, max_length=200)
-    replay = models.IntegerField(null=True, blank=True)
+    image = models.ImageField(upload_to='round_images', blank=True, null=True, max_length=255)
+
+    replay_count = models.IntegerField(null=True, blank=True)
     order = models.IntegerField(null=True, blank=True)
+
+    condition = models.ManyToManyField(EffectStack, related_name='round_condition')
+    penalty = models.ManyToManyField(EffectStack, related_name='round_penalty')
+    award = models.ManyToManyField(EffectStack, related_name='round_award')
+
+    effect_pool = models.ManyToManyField(EffectGroup, related_name='round_effect_pool')
 
     def __str__(self):
         return "{}".format(self.name)
-
-
-class RoundQuest(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-
-    round = models.ForeignKey(Round, on_delete=models.CASCADE, related_name='round_quest')
-    quest = models.ForeignKey('Quest', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return "{}_{}".format(self.round.name, self.quest.name)
-
-
-class RoundCondition(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-
-    round = models.ForeignKey(Round, on_delete=models.CASCADE, related_name='round_condition')
-    quest = models.ForeignKey('Quest', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return "{}_{}".format(self.round.name, self.quest.name)
-
-
-class RoundActivity(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-
-    round = models.ForeignKey(Round, on_delete=models.CASCADE, related_name='round_activity')
-    activity = models.ForeignKey('Activity', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return "{}_{}".format(self.round.name, self.activity.name)
-
-    class Meta:
-        verbose_name_plural = 'Round activities'

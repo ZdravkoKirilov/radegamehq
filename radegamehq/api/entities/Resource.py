@@ -1,16 +1,9 @@
 from django.db import models
 
-from api.entities.Game import Game
+from api.mixins.EntityBase import EntityBase
 
 
-class Resource(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-
-    name = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
-    keywords = models.CharField(max_length=255, blank=True, null=True)
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+class Resource(models.Model, EntityBase):
     image = models.FileField(upload_to='resource_images', blank=True, null=True, max_length=200)
 
     def __str__(self):

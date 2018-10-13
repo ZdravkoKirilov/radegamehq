@@ -1,6 +1,6 @@
 from rest_framework import generics
 
-from api.entities.Location import MapLocation
+from api.entities.Location import Location
 from api.serializers.Location import MapLocationSerializer
 
 
@@ -11,11 +11,11 @@ class MapLocationView(generics.ListCreateAPIView):
         serializer.save()
 
     def get_queryset(self):
-        return MapLocation.objects.all()
+        return Location.objects.all()
 
 
 class MapLocationDetailsView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MapLocationSerializer
 
     def get_queryset(self):
-        return MapLocation.objects.all()
+        return Location.objects.all()

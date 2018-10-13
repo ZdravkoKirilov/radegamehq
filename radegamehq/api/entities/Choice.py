@@ -1,0 +1,23 @@
+from django.db import models
+
+from api.mixins.EntityBase import EntityBase
+from .EffectStack import EffectStack
+
+
+class Choice(models.Model, EntityBase):
+    image = models.ImageField(upload_to='choice_images', blank=True, null=True, max_length=200)
+
+    def __str__(self):
+        return "{}".format(self.name)
+
+
+class ChoiceOption(models.Model):
+    owner = models.ForeignKey(Choice, on_delete=models.CASCADE, related_name='choice_options')
+
+    description = models.TextField(blank=False)
+    image = models.ImageField(upload_to='choice_option_images', blank=True, null=True, max_length=200)
+
+    effect = models.ManyToManyField(EffectStack, related_name='choice_option_effects')
+
+    def __str__(self):
+        return "Option_{}_{}".format(self.id, self.owner.name)

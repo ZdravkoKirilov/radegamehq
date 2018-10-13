@@ -1,10 +1,9 @@
 from rest_framework import serializers
 
-from api.entities.Path import MapPath
+from api.entities.Path import Path
 
 
 class MapPathSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MapPath
-        fields = ('id', 'game', 'stage', 'fromLoc', 'toLoc')
-        read_only_fields = ('date_created', 'date_modified')
+        model = Path
+        fields = ('id', 'game', 'stage', 'from_loc', 'to_loc')

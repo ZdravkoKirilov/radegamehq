@@ -1,27 +1,23 @@
 from django.db import models
 
 from api.entities.Game import Game
-from api.entities.Location import MapLocation
+from api.entities.Location import Location
 
 
-class MapPath(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-    fromLoc = models.ForeignKey(
-        MapLocation,
-        related_name='from_loc+',
-        on_delete=models.CASCADE,
-    )
-    toLoc = models.ForeignKey(
-        MapLocation,
-        related_name='to_loc+',
-        on_delete=models.CASCADE,
-    )
+class Path(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     stage = models.ForeignKey('Stage', on_delete=models.CASCADE)
 
-    class Meta:
-        pass
+    from_loc = models.ForeignKey(
+        Location,
+        related_name='path_from_loc',
+        on_delete=models.CASCADE,
+    )
+    to_loc = models.ForeignKey(
+        Location,
+        related_name='path_to_loc',
+        on_delete=models.CASCADE,
+    )
 
     def __str__(self):
-        return "{}".format('From: ' + self.fromLoc.field.name + ' To: ' + self.toLoc.field.name)
+        return "{}".format('From: ' + self.from_loc.field.name + ' To: ' + self.to_loc.field.name)

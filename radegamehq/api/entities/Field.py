@@ -1,71 +1,21 @@
 from django.db import models
 
-from api.entities.Game import Game
-from api.entities.Resource import Resource
+from api.mixins.EntityBase import EntityBase
+
+from .EffectStack import EffectStack
+from .EffectGroup import EffectGroup
 
 
-class Field(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
-
-    name = models.CharField(max_length=255, blank=False)
-    description = models.TextField(blank=True)
+class Field(models.Model, EntityBase):
     image = models.FileField(upload_to='field_images', blank=True, null=True, max_length=255)
-    keywords = models.CharField(null=True, blank=True, max_length=255)
 
-    stage = models.ForeignKey('Stage', on_delete=models.CASCADE)
+    stage = models.ForeignKey('Stage', on_delete=models.CASCADE, null=True, blank=True)
 
-    income = models.ManyToManyField(Resource, blank=True, through='FieldIncome', related_name='_income')
-    cost = models.ManyToManyField(Resource, blank=True, through='FieldCost', related_name='_cost')
+    cost = models.ManyToManyField(EffectStack, related_name='field_cost')
+    award = models.ManyToManyField(EffectStack, related_name='field_award')
+    penalty = models.ManyToManyField(EffectStack, related_name='field_penalty')
+
+    effect_pool = models.ManyToManyField(EffectGroup, related_name='field_effect_pool')
 
     def __str__(self):
         return "{}".format(self.name)
-
-
-class FieldQuest(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-
-    field = models.ForeignKey(Field, on_delete=models.CASCADE, related_name='field_quest')
-    quest = models.ForeignKey('Quest', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return "{}_{}".format(self.field.name, self.quest.name)
-
-
-class FieldActivity(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-
-    field = models.ForeignKey(Field, on_delete=models.CASCADE, related_name='field_activity')
-    activity = models.ForeignKey('Activity', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return "{}_{}".format(self.field.name, self.activity.name)
-
-    class Meta:
-        verbose_name_plural = 'Field activities'
-
-
-class FieldIncome(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-    field = models.ForeignKey(Field, on_delete=models.CASCADE, related_name='field_income')
-    resource = models.ForeignKey(Resource, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
-
-    def __str__(self):
-        return "{}_{}".format(self.field.name, self.resource.name)
-
-
-class FieldCost(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
-    field = models.ForeignKey(Field, on_delete=models.CASCADE, related_name='field_cost')
-    resource = models.ForeignKey(Resource, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
-
-    def __str__(self):
-        return "{}_{}".format(self.field.name, self.resource.name)
