@@ -12,7 +12,7 @@ class BoardFieldSerializer(serializers.ModelSerializer):
     class Meta:
         model = Field
         fields = (
-            'id', 'name', 'description', 'image', 'keywords', 'game', 'stage', 'income', 'cost', 'quests', 'activities')
+            'id', 'name', 'description', 'image', 'keywords', 'game', 'stage', 'award', 'cost', 'penalty', 'effect_pool')
 
     def to_internal_value(self, data):
         value = super(BoardFieldSerializer, self).to_internal_value(data)

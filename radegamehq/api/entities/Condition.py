@@ -16,6 +16,13 @@ COMPLETE = 'COMPLETE'  # condition, keyword
 TRIGGER = 'TRIGGER'  # condition, action, keyword
 GATHER = 'GATHER'  # resource, keyword
 
+# ROUND_IS
+# ROUND_IS_AFTER
+# ROUND_IS_BEFORE
+# TAG_ROUND_IS
+# TAG_ROUND_IS_NOT
+# HAVE (resource, condition etc)
+
 TYPE_CHOICES = (
     (CLAIM, CLAIM),
     (REACH, REACH),
@@ -27,13 +34,16 @@ TYPE_CHOICES = (
 )
 
 
-class Condition(models.Model, EntityBase):
+class Condition(EntityBase):
     image = models.ImageField(upload_to='condition_images', blank=True, null=True, max_length=255)
 
     stage = models.ForeignKey('Stage', on_delete=models.SET_NULL, null=True, blank=True, related_name="condition_stage")
 
     award = models.ManyToManyField(EffectStack, related_name='condition_award')
     penalty = models.ManyToManyField(EffectStack, related_name='condition_penalty')
+
+    restriction = models.ManyToManyField(EffectStack, related_name='condition_restriction')
+    trap_mode = models.BooleanField(null=True, default=False)
 
     def __str__(self) -> str:
         return "{}".format(self.name)
@@ -61,6 +71,8 @@ class ConditionClause(models.Model):
                                  on_delete=models.SET_NULL)
     at_round = models.ForeignKey(Round, blank=True, null=True, related_name='condition_clause_atround',
                                  on_delete=models.SET_NULL)
+    at_keyword_round = models.TextField(blank=True, null=True)
+    by_keyword_round = models.TextField(blank=True, null=True)
 
     amount = models.IntegerField(blank=True, null=True)
 

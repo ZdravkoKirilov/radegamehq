@@ -6,7 +6,7 @@ from .EffectGroup import EffectGroup
 from .EffectStack import EffectStack
 
 
-class Round(models.Model, EntityBase):
+class Round(EntityBase):
     stage = models.ForeignKey('Stage', on_delete=models.SET_NULL, blank=True, null=True, related_name="round_stage")
 
     image = models.ImageField(upload_to='round_images', blank=True, null=True, max_length=255)

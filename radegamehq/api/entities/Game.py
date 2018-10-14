@@ -4,7 +4,7 @@ from api_auth.models import AppUser
 
 
 class Game(models.Model):
-    owner = models.ForeignKey(AppUser, on_delete=models.CASCADE)
+    owner = models.ForeignKey(AppUser, on_delete=models.CASCADE, blank=True, null=True)
 
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)

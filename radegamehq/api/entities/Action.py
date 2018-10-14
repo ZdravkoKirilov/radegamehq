@@ -29,9 +29,6 @@ TYPE_CHOICES = (
     (REDIRECT, REDIRECT)
 )
 
-TRIGGER = 'TRIGGER'
-PASSIVE = 'PASSIVE'
-
 PLAYER = 'PLAYER'
 ACTIVE_PLAYER = 'ACTIVE_PLAYER'
 SELF = 'SELF'
@@ -49,13 +46,14 @@ TARGET_CHOICES = (
 )
 
 
-class Action(models.Model, EntityBase):
+class Action(EntityBase):
     image = models.ImageField(upload_to='action_images', blank=True, null=True, max_length=None)
 
-    cost = models.ManyToManyField(EffectStack, related_name='action_cost')
-    restriction = models.TextField(null=True, blank=True)
-    trap_mode = models.BooleanField(null=True, default=False)
-    limitation = models.ManyToManyField(EffectStack, related_name='action_limitation')
+    cost = models.ManyToManyField(EffectStack, related_name='action_cost', null=True, blank=True)
+    limitation = models.ManyToManyField(EffectStack, related_name='action_limitation', null=True, blank=True)
+
+    restriction = models.ManyToManyField(EffectStack, related_name='action_restriction', null=True, blank=True)
+    trap_mode = models.NullBooleanField(default=False)
 
     def __str__(self):
         return "{}".format(self.name)

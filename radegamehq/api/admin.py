@@ -11,7 +11,7 @@ from api.entities.Action import Action, ActionConfig
 from api.entities.Round import Round
 from api.entities.Faction import Faction
 from api.entities.EffectStack import EffectStack
-from api.entities.EffectGroup import EffectGroup
+from api.entities.EffectGroup import EffectGroup, EffectGroupItem
 from .entities.Game import Game
 
 admin.site.register(Game)
@@ -30,3 +30,4 @@ admin.site.register(ChoiceOption)
 admin.site.register(Stage)
 admin.site.register(EffectStack)
 admin.site.register(EffectGroup)
+admin.site.register(EffectGroupItem)

@@ -15,8 +15,7 @@ class FactionSerializer(serializers.ModelSerializer):
         model = Faction
         fields = (
             'id', 'name', 'description', 'keywords', 'image', 'game', 'start', 'type', 'activity_limit',
-            'resource_limit', 'resources', 'income', 'activities')
-        read_only_fields = ('date_created', 'date_modified')
+            'resource_limit', 'effect_pool')
 
     def to_internal_value(self, data):
         data = sanitize_image(data)

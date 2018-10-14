@@ -6,7 +6,7 @@ from .EffectStack import EffectStack
 from .EffectGroup import EffectGroup
 
 
-class Field(models.Model, EntityBase):
+class Field(EntityBase):
     image = models.FileField(upload_to='field_images', blank=True, null=True, max_length=255)
 
     stage = models.ForeignKey('Stage', on_delete=models.CASCADE, null=True, blank=True)

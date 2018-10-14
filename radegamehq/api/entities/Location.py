@@ -14,10 +14,7 @@ class Location(models.Model):
     y = models.FloatField()
 
     stage = models.ForeignKey('Stage', on_delete=models.CASCADE)
-    field = models.ForeignKey(
-        Field,
-        on_delete=models.CASCADE
-    )
+    field = models.ForeignKey(Field, on_delete=models.CASCADE)
 
     def __str__(self):
         return "{}".format(self.field.name)

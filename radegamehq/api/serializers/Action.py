@@ -1,26 +1,36 @@
 from django.db import transaction
 from rest_framework import serializers
-from typing import Dict
 
 from .custom_serializers import Base64ImageField
 from ..helpers.image_sanitize import sanitize_image
 from ..entities.Action import ActionConfig, Action
+from api.mixins.NestedSerializing import NestedSerializer
+from api.entities.EffectStack import EffectStack
 
 
 class ActionConfigSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActionConfig
-        fields = ('id', 'type', 'target', 'quest', 'trivia', 'faction', 'keyword', 'amount', 'resource')
+        fields = ('id', 'type', 'target', 'condition', 'choice', 'faction', 'keywords', 'amount', 'resource')
 
 
-class ActionSerializer(serializers.ModelSerializer):
+class ActionSerializer(serializers.ModelSerializer, NestedSerializer):
     configs = ActionConfigSerializer(many=True)
-    image = Base64ImageField(max_length=None, use_url=True)
+
+    # image = Base64ImageField(max_length=None, use_url=True)
 
     class Meta:
         model = Action
-        fields = ('id', 'name', 'description', 'keywords', 'mode', 'image', 'game', 'configs', 'cost')
-        read_only_fields = ('date_created', 'date_modified')
+        fields = ('id', 'name', 'description', 'keywords', 'image', 'game', 'configs', 'cost', 'limitation',
+                  'restriction', 'trap_mode')
+
+    def nested_entities(self):
+        return [
+            {'name': 'configs', 'model': ActionConfig, 'm2m': False},
+            {'name': 'cost', 'model': EffectStack, 'm2m': True},
+            {'name': 'limitation', 'model': EffectStack, 'm2m': True},
+            {'name': 'restriction', 'model': EffectStack, 'm2m': True},
+        ]
 
     def to_internal_value(self, data):
         data = sanitize_image(data)
@@ -29,50 +39,10 @@ class ActionSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        configs = validated_data.pop('configs')
-        cost = validated_data.pop('cost')
-
-        activity = Action.objects.create(name=validated_data['name'],
-                                         description=validated_data['description'],
-                                         image=validated_data['image'],
-                                         game=validated_data['game'],
-                                         mode=validated_data['mode'],
-                                         keywords=validated_data['keywords'])
-
-        for item in configs:
-            self.save_act_config(item, activity)
-        for item in cost:
-            self.save_act_cost(item, activity)
-
-        return activity
+        action = self.update_all_items(validated_data, Action)
+        return action
 
     @transaction.atomic
     def update(self, instance, validated_data):
-        existing_configs = ActionConfig.objects.filter(activity=instance)
-        configs = validated_data.pop('configs')
-        config_ids = [item['id'] for item in configs if 'id' in item]
-
-        try:
-            existing_configs.exclude(pk__in=config_ids).delete()
-        except ActionConfig.DoesNotExist:
-            pass
-
-        for item in configs:
-            try:
-                obj = ActionConfig.objects.get(pk=item['id'])
-                self.save_act_config(item, instance, obj)
-            except (KeyError, ActionConfig.DoesNotExist) as e:
-                self.save_act_config(item, instance)
-
-        instance.__dict__.update(**validated_data)
-        instance.save()
+        instance = self.update_all_items(validated_data, Action, instance)
         return instance
-
-    @classmethod
-    def save_act_config(cls, item: Dict[str, any], activity: Action, obj=None) -> ActionConfig:
-        if obj is None:
-            obj = ActionConfig(activity=activity, target=item['target'], type=item['type'], )
-
-        obj.__dict__.update(**item)
-        obj.save()
-        return obj

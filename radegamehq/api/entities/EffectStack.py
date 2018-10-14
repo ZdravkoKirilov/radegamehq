@@ -4,7 +4,8 @@ from .Game import Game
 
 RELATIONS = (
     ('AND', 'AND'),
-    ('OR', 'OR')
+    ('OR', 'OR'),
+    ('NOT', 'NOT')
 )
 
 

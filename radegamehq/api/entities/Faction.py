@@ -16,7 +16,7 @@ TYPE_CHOICES = (
 )
 
 
-class Faction(models.Model, EntityBase):
+class Faction(EntityBase):
     image = models.FileField(upload_to='faction_images', blank=True, null=True, max_length=255)
 
     start = models.ForeignKey(Location, on_delete=models.SET_NULL, blank=True, null=True)

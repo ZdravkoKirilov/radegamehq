@@ -4,8 +4,10 @@ from api.mixins.EntityBase import EntityBase
 from .EffectStack import EffectStack
 
 
-class Choice(models.Model, EntityBase):
+class Choice(EntityBase):
     image = models.ImageField(upload_to='choice_images', blank=True, null=True, max_length=200)
+
+    options = models.ManyToManyField('ChoiceOption', related_name='choice_options')
 
     def __str__(self):
         return "{}".format(self.name)
