@@ -14,7 +14,7 @@ class QuestConditionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ConditionClause
         fields = (
-            'id', 'type', 'quest', 'activity', 'resource', 'field', 'keyword', 'amount', 'at_round',
+            'id', 'type', 'condition', 'action', 'resource', 'field', 'keyword', 'amount', 'at_round',
             'by_round')
 
 

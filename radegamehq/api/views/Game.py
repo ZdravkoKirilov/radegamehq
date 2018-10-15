@@ -11,7 +11,7 @@ class GameView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        queryset = Game.objects.filter(owner=user.id)
+        queryset = Game.objects.filter(owner=user.id) if user else None
         return queryset
 
 
