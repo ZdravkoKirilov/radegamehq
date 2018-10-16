@@ -49,25 +49,23 @@ class NestedSerializer:
     @classmethod
     def remove_items(cls, items: List[DefaultDict], existing: QuerySet, entity_model: Model, m2m: Manager):
 
-        item_ids = [item['id'] for item in items if 'id' in item]
-        redundant = existing.exclude(pk__in=item_ids) if existing is not None else list()
+        item_ids = [item.id for item in items] if m2m is not None else [item['id'] for item in items if 'id' in item]
+        redundant = existing.exclude(pk__in=item_ids) if existing is not None else None
 
         try:
             if m2m is not None:
-                for item in redundant:
-                    m2m.remove(item)
+                m2m.clear()
             else:
                 redundant.delete()
         except (entity_model.DoesNotExist, AttributeError):
             pass
 
     @classmethod
-    def upsert_item(cls, item: DefaultDict, parent: Model, entity_model: Model, m2m: Manager):
+    def upsert_item(cls, item: Union[DefaultDict, Model], parent: Model, entity_model: Model, m2m: Manager):
         if m2m is not None:
-            entity = entity_model.objects.get(pk=item['id'])
-            m2m.add(entity)
+            m2m.add(item)
         else:
             item_id = item['id'] if 'id' in item else None
             entity, created = entity_model.objects.update_or_create(pk=item_id,
                                                                     defaults=dict(**item, **{'owner': parent}))
-        entity.save()
+            entity.save()
