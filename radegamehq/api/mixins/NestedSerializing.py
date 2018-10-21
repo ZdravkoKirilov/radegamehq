@@ -1,6 +1,7 @@
 from django.db.models import Model, base, Manager, QuerySet
 from typing import DefaultDict, List, Union
 import copy
+from rest_framework.serializers import ModelSerializer
 
 
 class NestedSerializer:
@@ -26,14 +27,16 @@ class NestedSerializer:
         for item in self.nested_entities():
             items = data[item['name']]
             entity_model = item['model']
+            serializer = item['serializer'] if 'serializer' in item else None
             m2m = getattr(instance, item['name']) if item['m2m'] is True else None
 
-            self.update_items(items, entity_model, instance, m2m)
+            self.update_items(items, entity_model, serializer, instance, m2m)
 
         instance.save()
         return instance
 
-    def update_items(self, items: List[Union[DefaultDict, int]], entity_model: base, parent: Model = None,
+    def update_items(self, items: List[Union[DefaultDict, int]], entity_model: base, serializer: ModelSerializer,
+                     parent: Model = None,
                      m2m: Manager = None):
 
         try:
@@ -44,7 +47,7 @@ class NestedSerializer:
         self.remove_items(items, existing, entity_model, m2m)
 
         for item in items:
-            self.upsert_item(item, parent, entity_model, m2m)
+            self.upsert_item(item, parent, serializer, m2m)
 
     @classmethod
     def remove_items(cls, items: List[DefaultDict], existing: QuerySet, entity_model: Model, m2m: Manager):
@@ -61,11 +64,14 @@ class NestedSerializer:
             pass
 
     @classmethod
-    def upsert_item(cls, item: Union[DefaultDict, Model], parent: Model, entity_model: Model, m2m: Manager):
+    def upsert_item(cls, item: Union[DefaultDict, Model], parent: Model,
+                    serializer: ModelSerializer, m2m: Manager):
         if m2m is not None:
             m2m.add(item)
         else:
-            item_id = item['id'] if 'id' in item else None
-            entity, created = entity_model.objects.update_or_create(pk=item_id,
-                                                                    defaults=dict(**item, **{'owner': parent}))
-            entity.save()
+            data: DefaultDict = copy.deepcopy(item)
+            validated = serializer(data=data)
+            if validated.is_valid():
+                instance = validated.save()
+                instance.owner = parent
+                instance.save()

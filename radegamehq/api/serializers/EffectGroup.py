@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.db import transaction
 
 from api.entities.EffectGroup import EffectGroup, EffectGroupItem
+from api.helpers.image_sanitize import sanitize_image
 
 
 class EffectGroupItemSerializer(serializers.ModelSerializer):
@@ -11,11 +12,20 @@ class EffectGroupItemSerializer(serializers.ModelSerializer):
 
 
 class EffectGroupSerializer(serializers.ModelSerializer):
+    # image = Base64ImageField(max_length=None, use_url=True)
     items = EffectGroupItemSerializer(many=True)
 
     class Meta:
         model = EffectGroup
-        fields = ('id', 'game', 'mode', 'pick', 'quota', 'min_cap', 'max_cap', 'random_cap', 'allow_same_pick', 'items')
+        fields = (
+            'id', 'game', 'name', 'description', 'image', 'keywords', 'mode', 'pick', 'quota', 'min_cap', 'max_cap',
+            'random_cap',
+            'allow_same_pick', 'items')
+
+    def to_internal_value(self, data):
+        data = sanitize_image(data)
+        value = super(EffectGroupSerializer, self).to_internal_value(data)
+        return value
 
     @transaction.atomic
     def create(self, validated_data):

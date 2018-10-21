@@ -45,22 +45,31 @@ TARGET_CHOICES = (
     (KEYWORD, KEYWORD)
 )
 
+ACTION_MODES = (
+    ('TRAP', 'TRAP'),
+    ('TRIGGER', 'TRIGGER'),
+    ('HYBRID', 'HYBRID')
+)
+
 
 class Action(EntityBase):
     image = models.ImageField(upload_to='action_images', blank=True, null=True, max_length=None)
 
     cost = models.ManyToManyField(EffectStack, related_name='action_cost', null=True, blank=True)
-    limitation = models.ManyToManyField(EffectStack, related_name='action_limitation', null=True, blank=True)
+    condition = models.ManyToManyField(EffectStack, related_name='action_condition', null=True,
+                                       blank=True)  # enables you to play it
 
-    restriction = models.ManyToManyField(EffectStack, related_name='action_restriction', null=True, blank=True)
-    trap_mode = models.NullBooleanField(default=False)
+    restriction = models.ManyToManyField(EffectStack, related_name='action_restriction', null=True,
+                                         blank=True)  # condition to have it at all: IS_FACTION
+
+    mode = models.CharField(choices=ACTION_MODES, default=ACTION_MODES[0][1], max_length=255)
 
     def __str__(self):
         return "{}".format(self.name)
 
 
 class ActionConfig(models.Model):
-    owner = models.ForeignKey(Action, on_delete=models.CASCADE, related_name='configs')
+    owner = models.ForeignKey(Action, blank=True, null=True, on_delete=models.CASCADE, related_name='configs')
 
     type = models.CharField(max_length=255, blank=False, choices=TYPE_CHOICES)
     target = models.CharField(max_length=255, blank=False, choices=TARGET_CHOICES)
@@ -73,6 +82,8 @@ class ActionConfig(models.Model):
                                 blank=True)
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='action_config_resource', blank=True,
                                  null=True)
+    action = models.ForeignKey(Action, on_delete=models.CASCADE, related_name='action_config_action', blank=True,
+                               null=True)
 
     keywords = models.CharField(max_length=255, null=True, blank=True)
     amount = models.IntegerField(blank=True, null=True)

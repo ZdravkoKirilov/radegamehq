@@ -9,6 +9,7 @@ from api.entities.EffectStack import EffectStack
 
 
 class ActionConfigSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = ActionConfig
         fields = ('id', 'type', 'target', 'condition', 'choice', 'faction', 'keywords', 'amount', 'resource')
@@ -17,16 +18,16 @@ class ActionConfigSerializer(serializers.ModelSerializer):
 class ActionSerializer(serializers.ModelSerializer, NestedSerializer):
     configs = ActionConfigSerializer(many=True)
 
-    # image = Base64ImageField(max_length=None, use_url=True)
+    image = Base64ImageField(max_length=None, use_url=True)
 
     class Meta:
         model = Action
-        fields = ('id', 'name', 'description', 'keywords', 'image', 'game', 'configs', 'cost', 'limitation',
-                  'restriction', 'trap_mode')
+        fields = ('id', 'name', 'description', 'keywords', 'image', 'game', 'configs', 'cost', 'condition',
+                  'restriction', 'mode')
 
     def nested_entities(self):
         return [
-            {'name': 'configs', 'model': ActionConfig, 'm2m': False},
+            {'name': 'configs', 'model': ActionConfig, 'm2m': False, 'serializer': ActionConfigSerializer},
             {'name': 'cost', 'model': EffectStack, 'm2m': True},
             {'name': 'limitation', 'model': EffectStack, 'm2m': True},
             {'name': 'restriction', 'model': EffectStack, 'm2m': True},

@@ -55,13 +55,13 @@ urlpatterns = {
     url(r'games/(?P<gameid>[0-9]+)/fields/(?P<pk>[0-9]+)/$', BoardFieldDetailsView.as_view(), name="field.details"),
     url(r'games/(?P<pk>[0-9]+)/fields/$', BoardFieldView.as_view(), name="field.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/effect_stacks/(?P<pk>[0-9]+)/$', EffectStackDetailsView.as_view(),
+    url(r'games/(?P<gameid>[0-9]+)/effect-stacks/(?P<pk>[0-9]+)/$', EffectStackDetailsView.as_view(),
         name="effect_stack.details"),
-    url(r'games/(?P<pk>[0-9]+)/effect_stacks/$', EffectStackView.as_view(), name="effect_stack.list"),
+    url(r'games/(?P<pk>[0-9]+)/effect-stacks/$', EffectStackView.as_view(), name="effect_stack.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/effect_groups/(?P<pk>[0-9]+)/$', EffectGroupDetailsView.as_view(),
+    url(r'games/(?P<gameid>[0-9]+)/effect-groups/(?P<pk>[0-9]+)/$', EffectGroupDetailsView.as_view(),
         name="effect_group.details"),
-    url(r'games/(?P<pk>[0-9]+)/effect_groups/$', EffectGroupView.as_view(), name="effect_group.list"),
+    url(r'games/(?P<pk>[0-9]+)/effect-groups/$', EffectGroupView.as_view(), name="effect_group.list"),
 
     url(r'games/(?P<pk>[0-9]+)/$', GameDetailsView.as_view(), name="game.details"),
     url(r'^games/$', GameView.as_view(), name="game.list"),

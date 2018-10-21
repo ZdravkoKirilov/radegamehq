@@ -1,6 +1,6 @@
 from django.db import models
 
-from .Game import Game
+from api.mixins.EntityBase import EntityBase
 
 RELATIONS = (
     ('AND', 'AND'),
@@ -9,8 +9,8 @@ RELATIONS = (
 )
 
 
-class EffectStack(models.Model):
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+class EffectStack(EntityBase):
+    image = models.ImageField(upload_to='stack_images', null=True, blank=True, max_length=None)
 
     action = models.ForeignKey('Action', on_delete=models.CASCADE, null=True, blank=True)
     condition = models.ForeignKey('Condition', on_delete=models.CASCADE, null=True, blank=True)

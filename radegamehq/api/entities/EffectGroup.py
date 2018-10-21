@@ -1,11 +1,11 @@
 from django.db import models
 
-from api.entities.Game import Game
 from .EffectStack import EffectStack
+from api.mixins.EntityBase import EntityBase
 
 MODE_CHOICES = (
     ('DRAW', 'DRAW'),
-    ('AUTO_TRIGGER', 'AUTO_TRIGGER')
+    ('TRIGGER', 'TRIGGER')
 )
 
 PICK_CHOICES = (
@@ -19,8 +19,9 @@ QUOTA_CHOICES = (
 )
 
 
-class EffectGroup(models.Model):
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+class EffectGroup(EntityBase):
+
+    image = models.ImageField(upload_to='group_images', null=True, blank=True, max_length=None)
 
     mode = models.TextField(choices=MODE_CHOICES, default=MODE_CHOICES[0][0])
 
@@ -41,6 +42,6 @@ class EffectGroupItem(models.Model):
     action = models.ForeignKey('Action', on_delete=models.CASCADE, null=True, blank=True)
     condition = models.ForeignKey('Condition', on_delete=models.CASCADE, null=True, blank=True)
 
-    cost = models.ForeignKey(EffectStack, on_delete=models.SET_NULL, null=True, blank=True)  # price to buy
+    cost = models.ManyToManyField(EffectStack, related_name='effect_item_cost')  # price to buy
     quota = models.IntegerField(default=1)  # how many will be available
     restriction = models.ManyToManyField(EffectStack, related_name='effect_item_restriction')
