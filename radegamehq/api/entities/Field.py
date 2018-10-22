@@ -2,8 +2,8 @@ from django.db import models
 
 from api.mixins.EntityBase import EntityBase
 
-from .EffectStack import EffectStack
-from .EffectGroup import EffectGroup
+from .Stack import EffectStack
+from .Pool import Pool
 
 
 class Field(EntityBase):
@@ -15,7 +15,7 @@ class Field(EntityBase):
     award = models.ManyToManyField(EffectStack, related_name='field_award')
     penalty = models.ManyToManyField(EffectStack, related_name='field_penalty')
 
-    effect_pool = models.ManyToManyField(EffectGroup, related_name='field_effect_pool')
+    effect_pool = models.ManyToManyField(Pool, related_name='field_effect_pool')
 
     def __str__(self):
         return "{}".format(self.name)

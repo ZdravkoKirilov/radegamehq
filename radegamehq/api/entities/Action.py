@@ -1,7 +1,7 @@
 from django.db import models
 
 from .Resource import Resource
-from .EffectStack import EffectStack
+from .Stack import EffectStack
 
 from api.mixins.EntityBase import EntityBase
 

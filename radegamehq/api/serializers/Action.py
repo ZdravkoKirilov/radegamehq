@@ -5,7 +5,7 @@ from .custom_serializers import Base64ImageField
 from ..helpers.image_sanitize import sanitize_image
 from ..entities.Action import ActionConfig, Action
 from api.mixins.NestedSerializing import NestedSerializer
-from api.entities.EffectStack import EffectStack
+from api.entities.Stack import EffectStack
 
 
 class ActionConfigSerializer(serializers.ModelSerializer):

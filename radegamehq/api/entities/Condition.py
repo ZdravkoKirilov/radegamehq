@@ -2,7 +2,7 @@ from django.db import models
 
 from .Action import Action
 from .Field import Field
-from .EffectStack import EffectStack
+from .Stack import EffectStack
 from .Resource import Resource
 from .Round import Round
 

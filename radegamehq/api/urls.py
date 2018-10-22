@@ -11,8 +11,8 @@ from api.views.Game import GameView, GameDetailsView
 from api.views.Field import BoardFieldView, BoardFieldDetailsView
 from api.views.Faction import FactionView, FactionDetailsView
 from api.views.Action import ActionView, ActionDetailsView
-from api.views.EffectStack import EffectStackView, EffectStackDetailsView
-from api.views.EffectGroup import EffectGroupView, EffectGroupDetailsView
+from api.views.Stack import StackView, StackDetailsView
+from api.views.Pool import PoolView, PoolDetailsView
 
 urlpatterns = {
 
@@ -55,13 +55,13 @@ urlpatterns = {
     url(r'games/(?P<gameid>[0-9]+)/fields/(?P<pk>[0-9]+)/$', BoardFieldDetailsView.as_view(), name="field.details"),
     url(r'games/(?P<pk>[0-9]+)/fields/$', BoardFieldView.as_view(), name="field.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/effect-stacks/(?P<pk>[0-9]+)/$', EffectStackDetailsView.as_view(),
-        name="effect_stack.details"),
-    url(r'games/(?P<pk>[0-9]+)/effect-stacks/$', EffectStackView.as_view(), name="effect_stack.list"),
+    url(r'games/(?P<gameid>[0-9]+)/stacks/(?P<pk>[0-9]+)/$', StackDetailsView.as_view(),
+        name="stack.details"),
+    url(r'games/(?P<pk>[0-9]+)/stacks/$', StackView.as_view(), name="stack.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/effect-groups/(?P<pk>[0-9]+)/$', EffectGroupDetailsView.as_view(),
-        name="effect_group.details"),
-    url(r'games/(?P<pk>[0-9]+)/effect-groups/$', EffectGroupView.as_view(), name="effect_group.list"),
+    url(r'games/(?P<gameid>[0-9]+)/pools/(?P<pk>[0-9]+)/$', PoolDetailsView.as_view(),
+        name="pool.details"),
+    url(r'games/(?P<pk>[0-9]+)/pools/$', PoolView.as_view(), name="pool.list"),
 
     url(r'games/(?P<pk>[0-9]+)/$', GameDetailsView.as_view(), name="game.details"),
     url(r'^games/$', GameView.as_view(), name="game.list"),

@@ -1,7 +1,7 @@
 from django.db import models
 
 from api.mixins.EntityBase import EntityBase
-from .EffectStack import EffectStack
+from .Stack import EffectStack
 
 
 class Choice(EntityBase):

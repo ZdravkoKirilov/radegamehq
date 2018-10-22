@@ -1,10 +1,10 @@
 from rest_framework import serializers
 
-from api.entities.EffectStack import EffectStack
+from api.entities.Stack import EffectStack
 from api.helpers.image_sanitize import sanitize_image
 
 
-class EffectStackSerializer(serializers.ModelSerializer):
+class StackSerializer(serializers.ModelSerializer):
     # image = Base64ImageField(max_length=None, use_url=True)
     class Meta:
         model = EffectStack
@@ -12,5 +12,5 @@ class EffectStackSerializer(serializers.ModelSerializer):
 
     def to_internal_value(self, data):
         data = sanitize_image(data)
-        value = super(EffectStackSerializer, self).to_internal_value(data)
+        value = super(StackSerializer, self).to_internal_value(data)
         return value

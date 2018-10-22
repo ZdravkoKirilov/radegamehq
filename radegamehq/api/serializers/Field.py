@@ -4,8 +4,8 @@ from django.db import transaction
 from rest_framework import serializers
 
 from api.entities.Field import Field
-from api.entities.EffectStack import EffectStack
-from api.entities.EffectGroup import EffectGroup
+from api.entities.Stack import EffectStack
+from api.entities.Pool import Pool
 
 
 class BoardFieldSerializer(serializers.ModelSerializer):

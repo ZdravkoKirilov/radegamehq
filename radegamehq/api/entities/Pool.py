@@ -1,6 +1,6 @@
 from django.db import models
 
-from .EffectStack import EffectStack
+from .Stack import EffectStack
 from api.mixins.EntityBase import EntityBase
 
 MODE_CHOICES = (
@@ -19,9 +19,9 @@ QUOTA_CHOICES = (
 )
 
 
-class EffectGroup(EntityBase):
+class Pool(EntityBase):
 
-    image = models.ImageField(upload_to='group_images', null=True, blank=True, max_length=None)
+    image = models.ImageField(upload_to='pool_images', null=True, blank=True, max_length=None)
 
     mode = models.TextField(choices=MODE_CHOICES, default=MODE_CHOICES[0][0])
 
@@ -36,12 +36,12 @@ class EffectGroup(EntityBase):
     allow_same_pick = models.BooleanField(default=False)
 
 
-class EffectGroupItem(models.Model):
-    owner = models.ForeignKey(EffectGroup, on_delete=models.CASCADE)
+class PoolItem(models.Model):
+    owner = models.ForeignKey(Pool, on_delete=models.CASCADE)
 
     action = models.ForeignKey('Action', on_delete=models.CASCADE, null=True, blank=True)
     condition = models.ForeignKey('Condition', on_delete=models.CASCADE, null=True, blank=True)
 
-    cost = models.ManyToManyField(EffectStack, related_name='effect_item_cost')  # price to buy
+    cost = models.ManyToManyField(EffectStack, related_name='pool_item_cost')  # price to buy
     quota = models.IntegerField(default=1)  # how many will be available
-    restriction = models.ManyToManyField(EffectStack, related_name='effect_item_restriction')
+    restriction = models.ManyToManyField(EffectStack, related_name='pool_item_restriction')

@@ -8,10 +8,10 @@ from api.entities.Condition import Condition, ConditionClause
 from api.entities.Field import Field
 from api.entities.Resource import Resource
 from api.entities.Action import Action, ActionConfig
-from api.entities.Round import Round
+from api.entities.Round import Round, Phase
 from api.entities.Faction import Faction
-from api.entities.EffectStack import EffectStack
-from api.entities.EffectGroup import EffectGroup, EffectGroupItem
+from api.entities.Stack import EffectStack
+from api.entities.Pool import Pool, PoolItem
 from .entities.Game import Game
 
 admin.site.register(Game)
@@ -25,9 +25,10 @@ admin.site.register(ActionConfig)
 admin.site.register(Condition)
 admin.site.register(ConditionClause)
 admin.site.register(Round)
+admin.site.register(Phase)
 admin.site.register(Choice)
 admin.site.register(ChoiceOption)
 admin.site.register(Stage)
 admin.site.register(EffectStack)
-admin.site.register(EffectGroup)
-admin.site.register(EffectGroupItem)
+admin.site.register(Pool)
+admin.site.register(PoolItem)
