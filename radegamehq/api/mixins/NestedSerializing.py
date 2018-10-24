@@ -1,4 +1,5 @@
 from django.db.models import Model, base, Manager, QuerySet
+from django.db import transaction
 from typing import DefaultDict, List, Union
 import copy
 from rest_framework.serializers import ModelSerializer
@@ -75,3 +76,13 @@ class NestedSerializer:
                 instance = validated.save()
                 instance.owner = parent
                 instance.save()
+
+    @transaction.atomic
+    def create(self, validated_data):
+        action = self.update_all_items(validated_data, self.Meta.model)
+        return action
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        instance = self.update_all_items(validated_data, self.Meta.model, instance)
+        return instance

@@ -10,7 +10,7 @@ from api.entities.Resource import Resource
 from api.entities.Action import Action, ActionConfig
 from api.entities.Round import Round, Phase
 from api.entities.Faction import Faction
-from api.entities.Stack import EffectStack
+from api.entities.Stack import EffectStack, StackItem
 from api.entities.Pool import Pool, PoolItem
 from .entities.Game import Game
 
@@ -30,5 +30,6 @@ admin.site.register(Choice)
 admin.site.register(ChoiceOption)
 admin.site.register(Stage)
 admin.site.register(EffectStack)
+admin.site.register(StackItem)
 admin.site.register(Pool)
 admin.site.register(PoolItem)

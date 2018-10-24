@@ -41,6 +41,7 @@ class PoolItem(models.Model):
 
     action = models.ForeignKey('Action', on_delete=models.CASCADE, null=True, blank=True)
     condition = models.ForeignKey('Condition', on_delete=models.CASCADE, null=True, blank=True)
+    choice = models.ForeignKey('Choice', on_delete=models.CASCADE, null=True, blank=True)
 
     cost = models.ManyToManyField(EffectStack, related_name='pool_item_cost')  # price to buy
     quota = models.IntegerField(default=1)  # how many will be available
