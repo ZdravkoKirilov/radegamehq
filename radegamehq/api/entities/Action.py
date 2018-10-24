@@ -16,6 +16,8 @@ TRIGGER_TRIVIA = 'TRIGGER_TRIVIA'
 CANCEL = 'CANCEL'
 REDIRECT = 'REDIRECT'
 
+# RESTRICT/ENFORCE: for internal logic
+
 TYPE_CHOICES = (
     (MOVE, MOVE),
     (WIN_GAME, WIN_GAME),
@@ -48,7 +50,8 @@ TARGET_CHOICES = (
 ACTION_MODES = (
     ('TRAP', 'TRAP'),
     ('TRIGGER', 'TRIGGER'),
-    ('HYBRID', 'HYBRID')
+    ('HYBRID', 'HYBRID'),
+    ('AUTO', 'AUTO') # for internal, 'hidden' logic
 )
 
 

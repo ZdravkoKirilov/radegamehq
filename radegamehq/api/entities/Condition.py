@@ -4,7 +4,6 @@ from .Action import Action
 from .Field import Field
 from .Stack import EffectStack
 from .Resource import Resource
-from .Round import Round
 
 from api.mixins.EntityBase import EntityBase
 
@@ -22,6 +21,11 @@ GATHER = 'GATHER'  # resource, keyword
 # TAG_ROUND_IS
 # TAG_ROUND_IS_NOT
 # HAVE (resource, condition etc)
+# HAVE_MAX
+# PLAY_MAX
+# IS_FACTION
+# IS_TOKEN
+# IS_KEYWORD
 
 TYPE_CHOICES = (
     (CLAIM, CLAIM),
@@ -31,6 +35,12 @@ TYPE_CHOICES = (
     (COMPLETE, COMPLETE),
     (TRIGGER, TRIGGER),
     (GATHER, GATHER)
+)
+
+RELATIONS = (
+    ('AND', 'AND'),
+    ('OR', 'OR'),
+    ('NOT', 'NOT')
 )
 
 
@@ -67,14 +77,11 @@ class ConditionClause(models.Model):
                               null=True)
     keyword = models.CharField(null=True, blank=True, max_length=255)
 
-    by_round = models.ForeignKey(Round, blank=True, null=True, related_name='condition_clause_byround',
-                                 on_delete=models.SET_NULL)
-    at_round = models.ForeignKey(Round, blank=True, null=True, related_name='condition_clause_atround',
-                                 on_delete=models.SET_NULL)
-    at_keyword_round = models.TextField(blank=True, null=True)
-    by_keyword_round = models.TextField(blank=True, null=True)
-
     amount = models.IntegerField(blank=True, null=True)
+
+    relation = models.TextField(choices=RELATIONS, default=RELATIONS[0][0])
 
     def __str__(self):
         return "Condition_{}_{}".format(self.owner.name, self.type)
+
+# Do something at X round => can be done by composing 2 clauses: 1) the doing and 2) the circumstance
