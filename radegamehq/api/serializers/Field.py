@@ -4,7 +4,7 @@ from django.db import transaction
 from rest_framework import serializers
 
 from api.entities.Field import Field
-from api.entities.Stack import EffectStack
+from api.entities.Stack import Stack
 from api.entities.Pool import Pool
 
 

@@ -1,7 +1,7 @@
 from django.db import models
 
 from api.mixins.EntityBase import EntityBase
-from .Stack import EffectStack
+from .Stack import Stack
 
 
 class Choice(EntityBase):
@@ -19,7 +19,7 @@ class ChoiceOption(models.Model):
     description = models.TextField(blank=False)
     image = models.ImageField(upload_to='choice_option_images', blank=True, null=True, max_length=200)
 
-    effect = models.ManyToManyField(EffectStack, related_name='choice_option_effects')
+    effect = models.ManyToManyField(Stack, related_name='choice_option_effects')
 
     def __str__(self):
         return "Option_{}_{}".format(self.id, self.owner.name)

@@ -3,7 +3,7 @@ from django.db import models
 from api.mixins.EntityBase import EntityBase
 
 from .Pool import Pool
-from .Stack import EffectStack
+from .Stack import Stack
 
 
 class Round(EntityBase):
@@ -14,9 +14,9 @@ class Round(EntityBase):
     replay_count = models.IntegerField(null=True, blank=True)
     order = models.IntegerField(null=True, blank=True)
 
-    condition = models.ManyToManyField(EffectStack, related_name='round_condition')
-    penalty = models.ManyToManyField(EffectStack, related_name='round_penalty')
-    award = models.ManyToManyField(EffectStack, related_name='round_award')
+    condition = models.ManyToManyField(Stack, related_name='round_condition')
+    penalty = models.ManyToManyField(Stack, related_name='round_penalty')
+    award = models.ManyToManyField(Stack, related_name='round_award')
 
     effect_pool = models.ManyToManyField(Pool, related_name='round_effect_pool')
 

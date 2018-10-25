@@ -2,7 +2,7 @@ from django.db import models
 
 from api.mixins.EntityBase import EntityBase
 
-from .Stack import EffectStack
+from .Stack import Stack
 from .Pool import Pool
 
 
@@ -11,9 +11,9 @@ class Field(EntityBase):
 
     stage = models.ForeignKey('Stage', on_delete=models.CASCADE, null=True, blank=True)
 
-    cost = models.ManyToManyField(EffectStack, related_name='field_cost')
-    award = models.ManyToManyField(EffectStack, related_name='field_award')
-    penalty = models.ManyToManyField(EffectStack, related_name='field_penalty')
+    cost = models.ManyToManyField(Stack, related_name='field_cost')
+    award = models.ManyToManyField(Stack, related_name='field_award')
+    penalty = models.ManyToManyField(Stack, related_name='field_penalty')
 
     effect_pool = models.ManyToManyField(Pool, related_name='field_effect_pool')
 

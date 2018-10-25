@@ -1,6 +1,6 @@
 from django.db import models
 
-from .Stack import EffectStack
+from .Stack import Stack
 from api.mixins.EntityBase import EntityBase
 
 MODE_CHOICES = (
@@ -43,6 +43,6 @@ class PoolItem(models.Model):
     condition = models.ForeignKey('Condition', on_delete=models.CASCADE, null=True, blank=True)
     choice = models.ForeignKey('Choice', on_delete=models.CASCADE, null=True, blank=True)
 
-    cost = models.ManyToManyField(EffectStack, related_name='pool_item_cost')  # price to buy
+    cost = models.ManyToManyField(Stack, related_name='pool_item_cost')  # price to buy
     quota = models.IntegerField(default=1)  # how many will be available
-    restriction = models.ManyToManyField(EffectStack, related_name='pool_item_restriction')
+    restriction = models.ManyToManyField(Stack, related_name='pool_item_restriction')

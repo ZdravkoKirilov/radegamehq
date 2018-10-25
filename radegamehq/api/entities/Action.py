@@ -1,7 +1,7 @@
 from django.db import models
 
 from .Resource import Resource
-from .Stack import EffectStack
+from .Stack import Stack
 
 from api.mixins.EntityBase import EntityBase
 
@@ -58,11 +58,11 @@ ACTION_MODES = (
 class Action(EntityBase):
     image = models.ImageField(upload_to='action_images', blank=True, null=True, max_length=None)
 
-    cost = models.ManyToManyField(EffectStack, related_name='action_cost', null=True, blank=True)
-    condition = models.ManyToManyField(EffectStack, related_name='action_condition', null=True,
+    cost = models.ManyToManyField(Stack, related_name='action_cost', null=True, blank=True)
+    condition = models.ManyToManyField(Stack, related_name='action_condition', null=True,
                                        blank=True)  # enables you to play it
 
-    restriction = models.ManyToManyField(EffectStack, related_name='action_restriction', null=True,
+    restriction = models.ManyToManyField(Stack, related_name='action_restriction', null=True,
                                          blank=True)  # condition to have it at all: IS_FACTION
 
     mode = models.CharField(choices=ACTION_MODES, default=ACTION_MODES[0][1], max_length=255)
@@ -89,7 +89,7 @@ class ActionConfig(models.Model):
                                null=True)
 
     keywords = models.CharField(max_length=255, null=True, blank=True)
-    amount = models.IntegerField(blank=True, null=True)
+    amount = models.IntegerField(blank=True, null=True, default=0)
 
     def __str__(self):
         return "Config_{}_{}".format(self.owner.name, self.type)

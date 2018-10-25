@@ -8,29 +8,28 @@ from .custom_serializers import Base64ImageField
 from ..entities.Condition import ConditionClause, Condition
 
 
-class QuestConditionSerializer(serializers.ModelSerializer):
+class ConditionClauseSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(allow_null=True)
 
     class Meta:
         model = ConditionClause
         fields = (
-            'id', 'type', 'condition', 'action', 'resource', 'field', 'keyword', 'amount', 'at_round',
-            'by_round')
+            'id', 'type', 'condition', 'action', 'resource', 'field', 'keyword', 'amount')
 
 
-class QuestSerializer(serializers.ModelSerializer):
-    condition = QuestConditionSerializer(many=True)
+class ConditionSerializer(serializers.ModelSerializer):
+    condition = ConditionClauseSerializer(many=True)
     image = Base64ImageField(max_length=None, use_url=True)
 
     class Meta:
         model = Condition
         fields = (
-            'id', 'name', 'description', 'keywords', 'image', 'game', 'stage', 'condition', 'award', 'penalty')
-        read_only_fields = ('date_created', 'date_modified')
+            'id', 'name', 'description', 'keywords', 'image', 'game', 'stage', 'restriction', 'award', 'penalty',
+            'trap_mode', 'rule_mode')
 
     def to_internal_value(self, data):
         data = sanitize_image(data)
-        value = super(QuestSerializer, self).to_internal_value(data)
+        value = super(ConditionSerializer, self).to_internal_value(data)
         return value
 
     @transaction.atomic

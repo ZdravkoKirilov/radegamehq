@@ -12,21 +12,21 @@ class NestedSerializer:
         raise NotImplementedError
 
     def update_all_items(self, data: DefaultDict, owner: base, instance: Model = None):
-
-        data_copy = copy.deepcopy(data)
+        nested_data = dict()
 
         for item in self.nested_entities():
-            data_copy.pop(item['name'])
+            coll = data.pop(item['name'])
+            nested_data[item['name']] = coll
 
         if instance is None:
-            instance = owner(**data_copy)
+            instance = owner(**data)
         else:
-            instance.__dict__.update(**data_copy)
+            instance.__dict__.update(**data)
 
         instance.save()
 
         for item in self.nested_entities():
-            items = data[item['name']]
+            items = nested_data[item['name']]
             entity_model = item['model']
             serializer = item['serializer'] if 'serializer' in item else None
             m2m = getattr(instance, item['name']) if item['m2m'] is True else None

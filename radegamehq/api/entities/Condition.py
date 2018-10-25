@@ -2,7 +2,7 @@ from django.db import models
 
 from .Action import Action
 from .Field import Field
-from .Stack import EffectStack
+from .Stack import Stack
 from .Resource import Resource
 
 from api.mixins.EntityBase import EntityBase
@@ -49,11 +49,12 @@ class Condition(EntityBase):
 
     stage = models.ForeignKey('Stage', on_delete=models.SET_NULL, null=True, blank=True, related_name="condition_stage")
 
-    award = models.ManyToManyField(EffectStack, related_name='condition_award')
-    penalty = models.ManyToManyField(EffectStack, related_name='condition_penalty')
+    award = models.ManyToManyField(Stack, related_name='condition_award')
+    penalty = models.ManyToManyField(Stack, related_name='condition_penalty')
 
-    restriction = models.ManyToManyField(EffectStack, related_name='condition_restriction')
+    restriction = models.ManyToManyField(Stack, related_name='condition_restriction')
     trap_mode = models.BooleanField(null=True, default=False)
+    rule_mode = models.BooleanField(null=True, default=False)
 
     def __str__(self) -> str:
         return "{}".format(self.name)
