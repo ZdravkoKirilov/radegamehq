@@ -3,6 +3,7 @@ from django.db import transaction
 from typing import DefaultDict, List, Union
 import copy
 from rest_framework.serializers import ModelSerializer
+from rest_framework.exceptions import ValidationError
 
 
 class NestedSerializer:
@@ -70,12 +71,14 @@ class NestedSerializer:
         if m2m is not None:
             m2m.add(item)
         else:
-            data: DefaultDict = copy.deepcopy(item)
+            data = cls.clean_data(item)
             validated = serializer(data=data)
             if validated.is_valid():
                 instance = validated.save()
                 instance.owner = parent
                 instance.save()
+            else:
+                raise ValidationError(validated.errors)
 
     @transaction.atomic
     def create(self, validated_data):
@@ -86,3 +89,14 @@ class NestedSerializer:
     def update(self, instance, validated_data):
         instance = self.update_all_items(validated_data, self.Meta.model, instance)
         return instance
+
+    @classmethod
+    def clean_data(cls, _data: DefaultDict):
+        data = copy.deepcopy(_data)
+        for prop in data:
+            try:
+                data[prop] = data[prop].pk
+            except AttributeError:
+                pass
+
+        return data
