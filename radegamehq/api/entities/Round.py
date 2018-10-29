@@ -24,9 +24,4 @@ class Round(EntityBase):
         return "{}".format(self.name)
 
 
-class Phase(models.Model):
 
-    owner = models.ForeignKey(Round, on_delete=models.CASCADE, null=True, blank=True)
-
-    image = models.ImageField(upload_to='phase_images', blank=True, null=True, max_length=None)
-    name = models.CharField(max_length=255)

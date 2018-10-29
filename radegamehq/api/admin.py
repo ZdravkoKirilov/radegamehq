@@ -8,10 +8,12 @@ from api.entities.Condition import Condition, ConditionClause
 from api.entities.Field import Field
 from api.entities.Resource import Resource
 from api.entities.Action import Action, ActionConfig
-from api.entities.Round import Round, Phase
+from api.entities.Round import Round
+from api.entities.Phase import Phase
 from api.entities.Faction import Faction
 from api.entities.Stack import Stack, StackItem
 from api.entities.Pool import Pool, PoolItem
+from api.entities.Token import Token
 from .entities.Game import Game
 
 admin.site.register(Game)
@@ -20,6 +22,7 @@ admin.site.register(Location)
 admin.site.register(Path)
 admin.site.register(Resource)
 admin.site.register(Faction)
+admin.site.register(Token)
 admin.site.register(Action)
 admin.site.register(ActionConfig)
 admin.site.register(Condition)

@@ -13,6 +13,8 @@ from api.views.Faction import FactionView, FactionDetailsView
 from api.views.Action import ActionView, ActionDetailsView
 from api.views.Stack import StackView, StackDetailsView
 from api.views.Pool import PoolView, PoolDetailsView
+from .views.Token import TokenView, TokenDetailsView
+from .views.Phase import PhaseView, PhaseDetailsView
 
 urlpatterns = {
 
@@ -62,6 +64,14 @@ urlpatterns = {
     url(r'games/(?P<gameid>[0-9]+)/pools/(?P<pk>[0-9]+)/$', PoolDetailsView.as_view(),
         name="pool.details"),
     url(r'games/(?P<pk>[0-9]+)/pools/$', PoolView.as_view(), name="pool.list"),
+
+    url(r'games/(?P<gameid>[0-9]+)/tokens/(?P<pk>[0-9]+)/$', TokenDetailsView.as_view(),
+        name="token.details"),
+    url(r'games/(?P<pk>[0-9]+)/tokens/$', TokenView.as_view(), name="token.list"),
+
+    url(r'games/(?P<gameid>[0-9]+)/phases/(?P<pk>[0-9]+)/$', PhaseDetailsView.as_view(),
+        name="phase.details"),
+    url(r'games/(?P<pk>[0-9]+)/phases/$', PhaseView.as_view(), name="phase.list"),
 
     url(r'games/(?P<pk>[0-9]+)/$', GameDetailsView.as_view(), name="game.details"),
     url(r'^games/$', GameView.as_view(), name="game.list"),
