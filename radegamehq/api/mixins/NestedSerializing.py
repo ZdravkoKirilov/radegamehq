@@ -1,7 +1,6 @@
 from django.db.models import Model, base, Manager, QuerySet
 from django.db import transaction
 from typing import DefaultDict, List, Union
-import copy
 from rest_framework.serializers import ModelSerializer
 from rest_framework.exceptions import ValidationError
 
@@ -74,6 +73,10 @@ class NestedSerializer:
             data = cls.clean_data(item)
             validated = serializer(data=data)
             if validated.is_valid():
+                try:
+                    validated.instance = serializer.Meta.model.objects.get(pk=data['id'])
+                except (KeyError, serializer.Meta.model.DoesNotExist):
+                    pass
                 instance = validated.save()
                 instance.owner = parent
                 instance.save()
@@ -91,12 +94,23 @@ class NestedSerializer:
         return instance
 
     @classmethod
-    def clean_data(cls, _data: DefaultDict):
-        data = copy.deepcopy(_data)
+    def clean_data(cls, data: DefaultDict):
         for prop in data:
             try:
-                data[prop] = data[prop].pk
+                if isinstance(data[prop], list):
+                    data[prop] = cls.clean_list(data[prop])
+                else:
+                    data[prop] = data[prop].id
             except AttributeError:
                 pass
 
         return data
+
+    @classmethod
+    def clean_list(cls, data: List):
+        try:
+            result = [item.id for item in data ]
+        except AttributeError:
+            result = data
+        return result
+

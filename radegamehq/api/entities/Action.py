@@ -41,13 +41,13 @@ ACTION_MODES = (
 class Action(EntityBase):
     image = models.ImageField(upload_to='action_images', blank=True, null=True, max_length=None)
 
-    cost = models.ManyToManyField(Stack, related_name='action_cost', null=True, blank=True)
-    condition = models.ManyToManyField(Stack, related_name='action_condition', null=True,
+    cost = models.ManyToManyField(Stack, related_name='action_cost', blank=True)  #  cost to play
+    condition = models.ManyToManyField(Stack, related_name='action_condition',
                                        blank=True)  # enables you to play it
 
-    restricted = models.ManyToManyField(Stack, related_name='action_restricted', null=True,
+    restricted = models.ManyToManyField(Stack, related_name='action_restricted',
                                         blank=True)  # who cant have it in hand: IS_FACTION, others implicitly can
-    allowed = models.ManyToManyField(Stack, related_name='action_allowed', null=True,
+    allowed = models.ManyToManyField(Stack, related_name='action_allowed',
                                      blank=True)  # who can have it in hand: IS_FACTION, others implicitly cant
 
     mode = models.CharField(choices=ACTION_MODES, default=ACTION_MODES[0][1], max_length=255)
@@ -62,15 +62,15 @@ class ActionConfig(models.Model):
     type = models.CharField(max_length=255, blank=False, choices=TYPE_CHOICES)
     target = models.CharField(max_length=255, blank=False, choices=TARGET_CHOICES)
 
-    condition = models.ForeignKey('Condition', on_delete=models.CASCADE, related_name="action_condition", null=True,
+    condition = models.ForeignKey('Condition', on_delete=models.CASCADE, null=True,
                                   blank=True)
-    choice = models.ForeignKey('Choice', on_delete=models.CASCADE, related_name="action_choice", null=True,
+    choice = models.ForeignKey('Choice', on_delete=models.CASCADE, null=True,
                                blank=True)
-    faction = models.ForeignKey('Faction', on_delete=models.CASCADE, related_name="action_faction", null=True,
+    faction = models.ForeignKey('Faction', on_delete=models.CASCADE, null=True,
                                 blank=True)
-    token = models.ForeignKey('Token', on_delete=models.CASCADE, related_name="action_token", null=True,
+    token = models.ForeignKey('Token', on_delete=models.CASCADE, null=True,
                               blank=True)
-    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='action_config_resource', blank=True,
+    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, blank=True,
                                  null=True)
     action = models.ForeignKey(Action, on_delete=models.CASCADE, related_name='action_config_action', blank=True,
                                null=True)

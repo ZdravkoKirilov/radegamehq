@@ -42,7 +42,12 @@ class PoolItem(models.Model):
     action = models.ForeignKey('Action', on_delete=models.CASCADE, null=True, blank=True)
     condition = models.ForeignKey('Condition', on_delete=models.CASCADE, null=True, blank=True)
     choice = models.ForeignKey('Choice', on_delete=models.CASCADE, null=True, blank=True)
+    token = models.ForeignKey('Token', on_delete=models.CASCADE, null=True, blank=True)
+    resource = models.ForeignKey('Resource', on_delete=models.CASCADE, blank=True, null=True)
 
-    cost = models.ManyToManyField(Stack, related_name='pool_item_cost')  # price to buy
+    cost = models.ManyToManyField(Stack, related_name='pool.item.cost+')  # price to buy
     quota = models.IntegerField(default=1)  # how many will be available
-    restriction = models.ManyToManyField(Stack, related_name='pool_item_restriction')
+    restricted = models.ManyToManyField(Stack, related_name='pool.item.restricted+')
+
+    def __str__(self):
+        return 'Pool_{}_Item_{}'.format(self.owner.name, self.id)

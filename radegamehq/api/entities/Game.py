@@ -16,5 +16,7 @@ class Game(models.Model):
     max_players = models.IntegerField(blank=True, null=True)
     recommended_age = models.CharField(max_length=255, blank=True, null=True)
 
+    round_order = models.TextField(null=True, blank=True)
+
     def __str__(self):
         return "{}".format(self.title)

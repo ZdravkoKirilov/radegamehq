@@ -1,7 +1,7 @@
 from django.db import models
 
-from api.entities.Field import Field
-from api.entities.Game import Game
+from ..entities.Field import Field
+from ..entities.Game import Game
 
 
 class Location(models.Model):
@@ -14,7 +14,7 @@ class Location(models.Model):
     y = models.FloatField()
 
     stage = models.ForeignKey('Stage', on_delete=models.CASCADE)
-    field = models.ForeignKey(Field, on_delete=models.CASCADE)
+    field = models.OneToOneField(Field, on_delete=models.CASCADE)
 
     def __str__(self):
         return "{}".format(self.field.name)

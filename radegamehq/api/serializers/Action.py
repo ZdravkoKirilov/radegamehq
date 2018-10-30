@@ -8,6 +8,8 @@ from api.helpers.image_sanitize import sanitize_image
 
 
 class ActionConfigSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(allow_null=True)
+
     class Meta:
         model = ActionConfig
         fields = (

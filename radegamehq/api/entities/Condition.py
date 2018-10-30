@@ -34,6 +34,7 @@ CONDITION_MODES = (
     ('TRAP', 'TRAP'),
     ('TRIGGER', 'TRIGGER'),
     ('HYBRID', 'HYBRID'),  # both trap and trigger
+    ('PASSIVE', 'PASSIVE'),
     ('AUTO', 'AUTO')  # for internal, 'hidden' logic
 )
 
@@ -43,13 +44,13 @@ class Condition(EntityBase):
 
     mode = models.CharField(max_length=255, choices=CONDITION_MODES, default=CONDITION_MODES[1][1])
 
-    stage = models.ForeignKey('Stage', on_delete=models.CASCADE, related_name='condition_stage', blank=True, null=True)
+    stage = models.ForeignKey('Stage', on_delete=models.CASCADE, blank=True, null=True)
 
     award = models.ManyToManyField(Stack, related_name='condition_award')
     penalty = models.ManyToManyField(Stack, related_name='condition_penalty')
 
     restricted = models.ManyToManyField(Stack, related_name='condition_restricted')
-    allowed = models.ManyToManyField(Stack, related_name='condition_allowed', null=True,
+    allowed = models.ManyToManyField(Stack, related_name='condition_allowed',
                                      blank=True)
 
     def __str__(self) -> str:
@@ -61,20 +62,20 @@ class ConditionClause(models.Model):
 
     type = models.CharField(max_length=255, blank=False, choices=TYPE_CHOICES)
 
-    condition = models.ForeignKey(Condition, on_delete=models.CASCADE, related_name='condition_clause_condition',
+    condition = models.ForeignKey(Condition, on_delete=models.CASCADE, related_name='clause_condition',
                                   blank=True, null=True)
-    action = models.ForeignKey(Action, on_delete=models.CASCADE, related_name='condition_clause_action',
+    action = models.ForeignKey(Action, on_delete=models.CASCADE,
                                blank=True, null=True)
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE,
                                  blank=True, null=True)
-    token = models.ForeignKey('Token', on_delete=models.CASCADE, related_name='clause_token', blank=True, null=True)
-    choice = models.ForeignKey('Choice', on_delete=models.CASCADE, related_name='clause_choice', blank=True, null=True)
-    faction = models.ForeignKey('Faction', on_delete=models.CASCADE, related_name='clause_faction', blank=True,
+    token = models.ForeignKey('Token', on_delete=models.CASCADE, blank=True, null=True)
+    choice = models.ForeignKey('Choice', on_delete=models.CASCADE, blank=True, null=True)
+    faction = models.ForeignKey('Faction', on_delete=models.CASCADE, blank=True,
                                 null=True)
-    field = models.ForeignKey(Field, on_delete=models.CASCADE, related_name='condition_clause_field', blank=True,
+    field = models.ForeignKey(Field, on_delete=models.CASCADE, blank=True,
                               null=True)
-    round = models.ForeignKey('Round', on_delete=models.CASCADE, related_name='clause_round', blank=True, null=True)
-    stage = models.ForeignKey('Stage', on_delete=models.CASCADE, related_name='clause_stage', blank=True, null=True)
+    round = models.ForeignKey('Round', on_delete=models.CASCADE, blank=True, null=True)
+    stage = models.ForeignKey('Stage', on_delete=models.CASCADE, blank=True, null=True)
     keywords = models.CharField(null=True, blank=True, max_length=255)
 
     amount = models.IntegerField(blank=True, null=True)
