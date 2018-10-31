@@ -24,7 +24,7 @@ class Faction(EntityBase):
 
     # limit fields are not needed: enforced via effect_pool conditions instead
 
-    effect_pool = models.ManyToManyField(Pool, related_name='faction.effect.pool+')
+    effect_pool = models.ManyToManyField(Pool, related_name='faction_effect_pool', blank=True)
 
     def __str__(self):
         return self.name

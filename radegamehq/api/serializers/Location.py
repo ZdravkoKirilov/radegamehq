@@ -6,4 +6,4 @@ from api.entities.Location import Location
 class MapLocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
-        fields = ('id', 'width', 'height', 'y', 'x', 'game', 'stage', 'field')
+        fields = ('id', 'game', 'stage', 'field'  'width', 'height', 'y', 'x',)
