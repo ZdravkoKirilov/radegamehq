@@ -15,6 +15,7 @@ from api.views.Stack import StackView, StackDetailsView
 from api.views.Pool import PoolView, PoolDetailsView
 from .views.Token import TokenView, TokenDetailsView
 from .views.Phase import PhaseView, PhaseDetailsView
+from .views.Team import TeamView, TeamDetailsView
 
 urlpatterns = {
 
@@ -72,6 +73,10 @@ urlpatterns = {
     url(r'games/(?P<gameid>[0-9]+)/phases/(?P<pk>[0-9]+)/$', PhaseDetailsView.as_view(),
         name="phase.details"),
     url(r'games/(?P<pk>[0-9]+)/phases/$', PhaseView.as_view(), name="phase.list"),
+
+    url(r'games/(?P<gameid>[0-9]+)/teams/(?P<pk>[0-9]+)/$', TeamDetailsView.as_view(),
+        name="team.details"),
+    url(r'games/(?P<pk>[0-9]+)/teams/$', TeamView.as_view(), name="team.list"),
 
     url(r'games/(?P<pk>[0-9]+)/$', GameDetailsView.as_view(), name="game.details"),
     url(r'^games/$', GameView.as_view(), name="game.list"),

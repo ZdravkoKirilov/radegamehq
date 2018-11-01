@@ -15,8 +15,11 @@ class NestedSerializer:
         nested_data = dict()
 
         for item in self.nested_entities():
-            coll = data.pop(item['name'])
-            nested_data[item['name']] = coll
+            try:
+                coll = data.pop(item['name'])
+                nested_data[item['name']] = coll
+            except KeyError:
+                pass
 
         if instance is None:
             instance = owner(**data)

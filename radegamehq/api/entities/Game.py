@@ -18,6 +18,8 @@ class Game(models.Model):
 
     fixed_teams = models.BooleanField(default=False)
 
+    round_cycles = models.IntegerField(null=True, blank=True)
+
     round_order = models.TextField(null=True, blank=True)
 
     def __str__(self):
