@@ -46,10 +46,10 @@ class Condition(EntityBase):
 
     stage = models.ForeignKey('Stage', on_delete=models.CASCADE, blank=True, null=True)
 
-    award = models.ManyToManyField(Stack, related_name='condition_award')
-    penalty = models.ManyToManyField(Stack, related_name='condition_penalty')
+    award = models.ManyToManyField(Stack, related_name='condition_award', blank=True)
+    penalty = models.ManyToManyField(Stack, related_name='condition_penalty', blank=True)
 
-    restricted = models.ManyToManyField(Stack, related_name='condition_restricted')
+    restricted = models.ManyToManyField(Stack, related_name='condition_restricted', blank=True)
     allowed = models.ManyToManyField(Stack, related_name='condition_allowed',
                                      blank=True)
 

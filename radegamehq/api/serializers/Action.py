@@ -14,7 +14,7 @@ class ActionConfigSerializer(serializers.ModelSerializer):
         model = ActionConfig
         fields = (
             'id', 'type', 'target', 'condition', 'choice', 'token', 'faction', 'keywords', 'resource', 'amount',
-            'random_amount', 'max_amount', 'min_amount', 'value')
+            'max_amount', 'min_amount', 'value')
 
 
 class ActionSerializer(NestedSerializer, serializers.ModelSerializer):

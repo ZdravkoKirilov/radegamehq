@@ -8,7 +8,17 @@ RELATIONS = (
     ('NOT', 'NOT')
 )
 
-PICK_CHOICES = (
+STACK_MODE = (
+    ('PICK', 'PICK'),
+    ('AUTO', 'AUTO')
+)
+
+QUOTA_CHOICES = (
+    ('REPEATING', 'REPEATING'),
+    ('ONCE', 'ONCE')
+)
+
+PICK_MODE = (
     ('RANDOM', 'RANDOM'),
     ('CHOICE', 'CHOICE')
 )
@@ -16,7 +26,12 @@ PICK_CHOICES = (
 
 class Stack(EntityBase):
     image = models.ImageField(upload_to='stack_images', null=True, blank=True, max_length=None)
-    pick = models.CharField(choices=PICK_CHOICES, max_length=255, default=PICK_CHOICES[0][0])
+
+    pick = models.CharField(choices=PICK_MODE, max_length=255, default=PICK_MODE[0][1])
+
+    quota = models.CharField(choices=QUOTA_CHOICES, max_length=255, default=QUOTA_CHOICES[0][0])
+
+    mode = models.CharField(choices=STACK_MODE, max_length=255, default=STACK_MODE[0][1])
 
 
 class StackItem(models.Model):
@@ -27,6 +42,10 @@ class StackItem(models.Model):
     choice = models.ForeignKey('Choice', on_delete=models.CASCADE, null=True, blank=True)
     token = models.ForeignKey('Token', on_delete=models.CASCADE, null=True, blank=True)
     resource = models.ForeignKey('Resource', on_delete=models.CASCADE, blank=True, null=True)
+
+    amount = models.IntegerField(default=1, null=True, blank=True)
+    max_amount = models.IntegerField(null=True, blank=True)
+    min_amount = models.IntegerField(null=True, blank=True)
 
     relation = models.TextField(choices=RELATIONS, default=RELATIONS[0][0])
 

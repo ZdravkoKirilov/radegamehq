@@ -42,12 +42,13 @@ class Action(EntityBase):
     image = models.ImageField(upload_to='action_images', blank=True, null=True, max_length=None)
 
     cost = models.ManyToManyField(Stack, related_name='action_cost', blank=True)  #  cost to play
-    condition = models.ManyToManyField(Stack, related_name='action_condition',
+
+    condition = models.ManyToManyField('Stack', related_name='action_condition',
                                        blank=True)  # enables you to play it
 
-    restricted = models.ManyToManyField(Stack, related_name='action_restricted',
+    restricted = models.ManyToManyField('Stack', related_name='action_restricted',
                                         blank=True)  # who cant have it in hand: IS_FACTION, others implicitly can
-    allowed = models.ManyToManyField(Stack, related_name='action_allowed',
+    allowed = models.ManyToManyField('Stack', related_name='action_allowed',
                                      blank=True)  # who can have it in hand: IS_FACTION, others implicitly cant
 
     mode = models.CharField(choices=ACTION_MODES, default=ACTION_MODES[0][1], max_length=255)
@@ -82,7 +83,6 @@ class ActionConfig(models.Model):
     amount = models.IntegerField(blank=True, null=True, default=0)
     max_amount = models.IntegerField(blank=True, null=True, default=0)
     min_amount = models.IntegerField(blank=True, null=True, default=0)
-    random_amount = models.NullBooleanField(default=False)
 
     def __str__(self):
         return "Config_{}_{}".format(self.owner.name, self.type)

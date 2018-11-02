@@ -22,7 +22,7 @@ class Faction(EntityBase):
 
     type = models.CharField(max_length=255, choices=TYPE_CHOICES, default=TYPE_CHOICES[0][0])
 
-    # limit fields are not needed: enforced via effect_pool conditions instead
+    income = models.ManyToManyField('Stack', blank=True)
 
     effect_pool = models.ManyToManyField(Pool, related_name='faction_effect_pool', blank=True)
 

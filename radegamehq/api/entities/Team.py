@@ -13,5 +13,7 @@ class Team(EntityBase):
 
     effect_pool = models.ManyToManyField(Pool, related_name='team_effect_pool', blank=True)
 
+    income = models.ManyToManyField('Stack', blank=True)
+
     def __str__(self):
         return self.name
