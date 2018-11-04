@@ -5,6 +5,7 @@ from ..entities.Game import Game
 
 
 class Location(models.Model):
+    owner = models.ForeignKey('Stage', on_delete=models.CASCADE)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
 
     width = models.FloatField()
@@ -13,8 +14,10 @@ class Location(models.Model):
     x = models.FloatField()
     y = models.FloatField()
 
-    stage = models.ForeignKey('Stage', on_delete=models.CASCADE)
-    field = models.OneToOneField(Field, on_delete=models.CASCADE)
+    field = models.ForeignKey(Field, on_delete=models.SET_NULL, null=True, blank=True)
+    token = models.ForeignKey('Token', on_delete=models.SET_NULL, null=True, blank=True)
+
+    allowed = models.ManyToManyField('Stack', blank=True)
 
     def __str__(self):
         return "{}".format(self.field.name)

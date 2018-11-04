@@ -12,7 +12,7 @@ class PoolItemSerializer(NestedSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = PoolItem
-        fields = ('id', 'action', 'condition', 'token', 'resource', 'cost', 'quota', 'restricted', 'allowed')
+        fields = ('id', 'action', 'condition', 'choice', 'cost', 'quota', 'restricted', 'allowed')
 
     def nested_entities(self):
         return [

@@ -14,7 +14,7 @@ class FieldSerializer(NestedSerializer, serializers.ModelSerializer):
     class Meta:
         model = Field
         fields = (
-            'id', 'game', 'name', 'description', 'image', 'keywords', 'award', 'cost', 'penalty',
+            'id', 'game', 'name', 'description', 'image', 'keywords', 'award', 'income', 'cost', 'penalty',
             'effect_pool')
 
     def nested_entities(self):

@@ -17,7 +17,7 @@ class Round(EntityBase):
     phases = models.ManyToManyField('Phase', related_name='round_phases')
     phase_order = models.TextField(null=True, blank=True)
 
-    condition = models.ManyToManyField('Condition', related_name='round_condition')
+    condition = models.ManyToManyField('Stack', related_name='round_condition')
 
     penalty = models.ManyToManyField(Stack, related_name='round_penalty')
     award = models.ManyToManyField(Stack, related_name='round_award')
