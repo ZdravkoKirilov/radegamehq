@@ -8,6 +8,7 @@ class Token(EntityBase):
     effect_pool = models.ManyToManyField('Pool', related_name='token_effect_pool', blank=True)
 
     income = models.ManyToManyField('Stack', related_name='token_income', blank=True)
+    cost = models.ManyToManyField('Stack', related_name='token_cost', blank=True)
 
     restricted = models.ManyToManyField('Condition', related_name='token_restricted', blank=True)
     allowed = models.ManyToManyField('Condition', related_name='token_allowed', blank=True)

@@ -38,6 +38,21 @@ CONDITION_MODES = (
     ('AUTO', 'AUTO')  # for internal, 'hidden' logic
 )
 
+ENTITY_TYPES = (
+    ('FACTION', 'FACTION'),
+    ('TOKEN', 'TOKEN'),
+    ('CONDITION', 'CONDITION'),
+    ('ACTION', 'ACTION'),
+    ('ROUND', 'ROUND'),
+    ('PHASE', 'PHASE'),
+    ('CHOICE', 'CHOICE'),
+    ('FIELD', 'FIELD'),
+    ('STAGE', 'STAGE'),
+    ('TEAM', 'TEAM'),
+    ('RESOURCE', 'RESOURCE'),
+    ('LOCATION', 'LOCATION'),
+)
+
 
 class Condition(EntityBase):
     image = models.ImageField(upload_to='condition_images', blank=True, null=True, max_length=255)
@@ -62,6 +77,8 @@ class ConditionClause(models.Model):
 
     type = models.CharField(max_length=255, blank=False, choices=TYPE_CHOICES)
 
+    target_entity: models.CharField(max_length=255, blank=True, null=True, choices=ENTITY_TYPES)
+
     condition = models.ForeignKey(Condition, on_delete=models.CASCADE, related_name='clause_condition',
                                   blank=True, null=True)
     action = models.ForeignKey(Action, on_delete=models.CASCADE,
@@ -74,8 +91,10 @@ class ConditionClause(models.Model):
                                 null=True)
     field = models.ForeignKey(Field, on_delete=models.CASCADE, blank=True,
                               null=True)
+    phase = models.ForeignKey('Phase', on_delete=models.CASCADE, blank=True, null=True)
     round = models.ForeignKey('Round', on_delete=models.CASCADE, blank=True, null=True)
     stage = models.ForeignKey('Stage', on_delete=models.CASCADE, blank=True, null=True)
+
     keywords = models.CharField(null=True, blank=True, max_length=255)
 
     amount = models.IntegerField(blank=True, null=True)

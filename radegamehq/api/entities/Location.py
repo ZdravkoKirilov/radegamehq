@@ -17,7 +17,8 @@ class Location(models.Model):
     field = models.ForeignKey(Field, on_delete=models.SET_NULL, null=True, blank=True)
     token = models.ForeignKey('Token', on_delete=models.SET_NULL, null=True, blank=True)
 
-    allowed = models.ManyToManyField('Stack', blank=True)
+    allowed = models.ManyToManyField('Stack', blank=True, related_name='allowed')
+    restricted = models.ManyToManyField('Stack', blank=True)
 
     def __str__(self):
         return "{}".format(self.field.name)

@@ -9,12 +9,12 @@ from api.mixins.NestedSerializing import NestedSerializer
 
 
 class ConditionClauseSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = ConditionClause
         fields = (
-            'id', 'type', 'condition', 'action', 'resource', 'field', 'faction', 'token', 'choice', 'keywords',
-            'amount', 'round', 'stage', 'relation')
+            'id', 'type', 'target_entity', 'condition', 'action', 'resource', 'field', 'faction', 'token', 'choice',
+            'keywords',
+            'amount', 'round', 'phase', 'stage', 'relation')
 
 
 class ConditionSerializer(NestedSerializer, serializers.ModelSerializer):

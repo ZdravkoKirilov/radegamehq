@@ -14,12 +14,15 @@ class TokenSerializer(NestedSerializer, serializers.ModelSerializer):
     class Meta:
         model = Token
         fields = (
-            'id', 'game', 'name', 'description', 'image', 'keywords', 'start', 'effect_pool', 'restricted', 'allowed')
+            'id', 'game', 'name', 'description', 'image', 'keywords', 'effect_pool', 'restricted', 'allowed', 'income',
+            'cost')
 
     def nested_entities(self):
         return [
             {'name': 'restricted', 'model': Stack, 'm2m': True},
             {'name': 'allowed', 'model': Stack, 'm2m': True},
+            {'name': 'income', 'model': Stack, 'm2m': True},
+            {'name': 'cost', 'model': Stack, 'm2m': True},
             {'name': 'effect_pool', 'model': Pool, 'm2m': True},
         ]
 

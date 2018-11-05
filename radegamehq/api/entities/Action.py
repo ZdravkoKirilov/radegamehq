@@ -45,6 +45,7 @@ class Action(EntityBase):
 
     condition = models.ManyToManyField('Stack', related_name='action_condition',
                                        blank=True)  # enables you to play it
+    limit = models.IntegerField(default=1, null=True, blank=True)
 
     restricted = models.ManyToManyField('Stack', related_name='action_restricted',
                                         blank=True)  # who cant have it in hand: IS_FACTION, others implicitly can

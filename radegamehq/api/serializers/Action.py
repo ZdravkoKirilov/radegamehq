@@ -24,7 +24,7 @@ class ActionSerializer(NestedSerializer, serializers.ModelSerializer):
     class Meta:
         model = Action
         fields = ('id', 'name', 'description', 'keywords', 'image', 'game', 'configs', 'cost', 'condition',
-                  'restricted', 'allowed', 'mode')
+                  'restricted', 'allowed', 'mode', 'limit')
 
     def nested_entities(self):
         return [
