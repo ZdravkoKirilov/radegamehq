@@ -22,6 +22,8 @@ class Faction(EntityBase):
 
     type = models.CharField(max_length=255, choices=TYPE_CHOICES, default=TYPE_CHOICES[0][0])
 
+    stage = models.ForeignKey('Stage', on_delete=models.SET_NULL, null=True, blank=True)
+
     income = models.ManyToManyField('Stack', blank=True)
 
     effect_pool = models.ManyToManyField(Pool, related_name='faction_effect_pool', blank=True)

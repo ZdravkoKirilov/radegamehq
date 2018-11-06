@@ -13,7 +13,7 @@ class FactionSerializer(NestedSerializer, serializers.ModelSerializer):
     class Meta:
         model = Faction
         fields = (
-            'id', 'name', 'description', 'keywords', 'image', 'game', 'type', 'effect_pool')
+            'id', 'name', 'description', 'keywords', 'image', 'game', 'type', 'income', 'stage', 'effect_pool')
 
     def nested_entities(self):
         return [
