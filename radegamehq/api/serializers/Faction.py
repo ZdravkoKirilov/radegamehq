@@ -5,6 +5,7 @@ from ..helpers.image_sanitize import sanitize_image
 from .custom_serializers import Base64ImageField
 from ..entities.Pool import Pool
 from ..mixins.NestedSerializing import NestedSerializer
+from ..entities.Stage import Stage
 
 
 class FactionSerializer(NestedSerializer, serializers.ModelSerializer):
@@ -13,11 +14,12 @@ class FactionSerializer(NestedSerializer, serializers.ModelSerializer):
     class Meta:
         model = Faction
         fields = (
-            'id', 'name', 'description', 'keywords', 'image', 'game', 'type', 'income', 'stage', 'effect_pool')
+            'id', 'name', 'description', 'keywords', 'image', 'game', 'type', 'income', 'boards', 'effect_pool')
 
     def nested_entities(self):
         return [
             {'name': 'effect_pool', 'model': Pool, 'm2m': True},
+            {'name': 'boards', 'model': Stage, 'm2m': True},
         ]
 
     def to_internal_value(self, data):
