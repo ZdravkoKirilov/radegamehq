@@ -20,4 +20,4 @@ class Path(models.Model):
     )
 
     def __str__(self):
-        return "{}".format('From: ' + self.from_loc.field.name + ' To: ' + self.to_loc.field.name)
+        return "{}".format('From: ' + self.from_loc.name + ' To: ' + self.to_loc.name)
