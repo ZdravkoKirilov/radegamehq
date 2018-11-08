@@ -22,4 +22,4 @@ class Location(EntityBase):
     restricted = models.ManyToManyField('Stack', blank=True)
 
     def __str__(self):
-        return "{}".format(self.field.name)
+        return "{}".format(self.name)
