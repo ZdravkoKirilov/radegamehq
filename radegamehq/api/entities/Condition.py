@@ -1,10 +1,5 @@
 from django.db import models
 
-from .Action import Action
-from .Field import Field
-from .Stack import Stack
-from .Resource import Resource
-
 from api.mixins.EntityBase import EntityBase
 
 TYPE_CHOICES = (
@@ -61,11 +56,11 @@ class Condition(EntityBase):
 
     stage = models.ForeignKey('Stage', on_delete=models.CASCADE, blank=True, null=True)
 
-    award = models.ManyToManyField(Stack, related_name='condition_award', blank=True)
-    penalty = models.ManyToManyField(Stack, related_name='condition_penalty', blank=True)
+    done = models.ManyToManyField('Source', related_name='condition_award', blank=True)
+    undone = models.ManyToManyField('Source', related_name='condition_penalty', blank=True)
 
-    restricted = models.ManyToManyField(Stack, related_name='condition_restricted', blank=True)
-    allowed = models.ManyToManyField(Stack, related_name='condition_allowed',
+    restricted = models.ManyToManyField('Condition', related_name='condition_restricted', blank=True)
+    allowed = models.ManyToManyField('Condition', related_name='condition_allowed',
                                      blank=True)
 
     def __str__(self) -> str:
@@ -81,15 +76,13 @@ class ConditionClause(models.Model):
 
     condition = models.ForeignKey(Condition, on_delete=models.CASCADE, related_name='clause_condition',
                                   blank=True, null=True)
-    action = models.ForeignKey(Action, on_delete=models.CASCADE,
+    action = models.ForeignKey('Action', on_delete=models.CASCADE,
                                blank=True, null=True)
-    resource = models.ForeignKey(Resource, on_delete=models.CASCADE,
-                                 blank=True, null=True)
     token = models.ForeignKey('Token', on_delete=models.CASCADE, blank=True, null=True)
     choice = models.ForeignKey('Choice', on_delete=models.CASCADE, blank=True, null=True)
     faction = models.ForeignKey('Faction', on_delete=models.CASCADE, blank=True,
                                 null=True)
-    field = models.ForeignKey(Field, on_delete=models.CASCADE, blank=True,
+    field = models.ForeignKey('Field', on_delete=models.CASCADE, blank=True,
                               null=True)
     phase = models.ForeignKey('Phase', on_delete=models.CASCADE, blank=True, null=True)
     round = models.ForeignKey('Round', on_delete=models.CASCADE, blank=True, null=True)

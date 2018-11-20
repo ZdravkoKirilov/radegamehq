@@ -2,8 +2,10 @@ from rest_framework import serializers
 
 from .custom_serializers import Base64ImageField
 from ..entities.Action import ActionConfig, Action
+from ..entities.Source import Source
+from ..entities.Condition import Condition
+
 from api.mixins.NestedSerializing import NestedSerializer
-from api.entities.Stack import Stack
 from api.helpers.image_sanitize import sanitize_image
 
 
@@ -29,10 +31,10 @@ class ActionSerializer(NestedSerializer, serializers.ModelSerializer):
     def nested_entities(self):
         return [
             {'name': 'configs', 'model': ActionConfig, 'm2m': False, 'serializer': ActionConfigSerializer},
-            {'name': 'cost', 'model': Stack, 'm2m': True},
-            {'name': 'condition', 'model': Stack, 'm2m': True},
-            {'name': 'restricted', 'model': Stack, 'm2m': True},
-            {'name': 'allowed', 'model': Stack, 'm2m': True},
+            {'name': 'cost', 'model': Source, 'm2m': True},
+            {'name': 'condition', 'model': Condition, 'm2m': True},
+            {'name': 'restricted', 'model': Condition, 'm2m': True},
+            {'name': 'allowed', 'model': Condition, 'm2m': True},
         ]
 
     def to_internal_value(self, data):

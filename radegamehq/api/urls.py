@@ -3,16 +3,14 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from api.views.Choice import ChoiceView, ChoiceDetailsView
 from api.views.Stage import StageView, StageDetailsView
 from api.views.Round import RoundView, RoundDetailsView
-from api.views.Resource import ResourceView, ResourceDetailsView
 from api.views.Condition import ConditionView, ConditionDetailsView
 from api.views.Path import MapPathView, MapPathDetailsView
-from api.views.Location import MapLocationView, MapLocationDetailsView
+from api.views.Slot import SlotView, SlotDetailsView
 from api.views.Game import GameView, GameDetailsView
 from api.views.Field import BoardFieldView, BoardFieldDetailsView
 from api.views.Faction import FactionView, FactionDetailsView
 from api.views.Action import ActionView, ActionDetailsView
-from api.views.Stack import StackView, StackDetailsView
-from api.views.Pool import PoolView, PoolDetailsView
+from api.views.Source import SourceView, SourceDetailsView
 from .views.Token import TokenView, TokenDetailsView
 from .views.Phase import PhaseView, PhaseDetailsView
 from .views.Team import TeamView, TeamDetailsView
@@ -43,28 +41,20 @@ urlpatterns = {
         name="faction.details"),
     url(r'games/(?P<pk>[0-9]+)/factions/$', FactionView.as_view(), name="faction.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/resources/(?P<pk>[0-9]+)/$', ResourceDetailsView.as_view(),
-        name="resource.details"),
-    url(r'games/(?P<pk>[0-9]+)/resources/$', ResourceView.as_view(), name="resource.list"),
-
     url(r'games/(?P<gameid>[0-9]+)/paths/(?P<pk>[0-9]+)/$', MapPathDetailsView.as_view(),
         name="mappath.details"),
     url(r'games/(?P<pk>[0-9]+)/paths/$', MapPathView.as_view(), name="mappath.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/locations/(?P<pk>[0-9]+)/$', MapLocationDetailsView.as_view(),
+    url(r'games/(?P<gameid>[0-9]+)/slots/(?P<pk>[0-9]+)/$', SlotDetailsView.as_view(),
         name="location.details"),
-    url(r'games/(?P<pk>[0-9]+)/locations/$', MapLocationView.as_view(), name="location.list"),
+    url(r'games/(?P<pk>[0-9]+)/slots/$', SlotView.as_view(), name="location.list"),
 
     url(r'games/(?P<gameid>[0-9]+)/fields/(?P<pk>[0-9]+)/$', BoardFieldDetailsView.as_view(), name="field.details"),
     url(r'games/(?P<pk>[0-9]+)/fields/$', BoardFieldView.as_view(), name="field.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/stacks/(?P<pk>[0-9]+)/$', StackDetailsView.as_view(),
-        name="stack.details"),
-    url(r'games/(?P<pk>[0-9]+)/stacks/$', StackView.as_view(), name="stack.list"),
-
-    url(r'games/(?P<gameid>[0-9]+)/pools/(?P<pk>[0-9]+)/$', PoolDetailsView.as_view(),
+    url(r'games/(?P<gameid>[0-9]+)/sources/(?P<pk>[0-9]+)/$', SourceDetailsView.as_view(),
         name="pool.details"),
-    url(r'games/(?P<pk>[0-9]+)/pools/$', PoolView.as_view(), name="pool.list"),
+    url(r'games/(?P<pk>[0-9]+)/sources/$', SourceView.as_view(), name="pool.list"),
 
     url(r'games/(?P<gameid>[0-9]+)/tokens/(?P<pk>[0-9]+)/$', TokenDetailsView.as_view(),
         name="token.details"),

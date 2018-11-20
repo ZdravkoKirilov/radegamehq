@@ -3,8 +3,8 @@ from rest_framework import serializers
 from ..entities.Team import Team
 from ..helpers.image_sanitize import sanitize_image
 from .custom_serializers import Base64ImageField
-from ..entities.Pool import Pool
-from ..entities.Stack import Stack
+from ..entities.Source import Source
+
 from ..mixins.NestedSerializing import NestedSerializer
 
 
@@ -19,8 +19,8 @@ class TeamSerializer(NestedSerializer, serializers.ModelSerializer):
 
     def nested_entities(self):
         return [
-            {'name': 'effect_pool', 'model': Pool, 'm2m': True},
-            {'name': 'income', 'model': Stack, 'm2m': True}
+            {'name': 'effect_pool', 'model': Source, 'm2m': True},
+            {'name': 'income', 'model': Source, 'm2m': True}
         ]
 
     def to_internal_value(self, data):

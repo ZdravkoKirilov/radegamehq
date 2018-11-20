@@ -1,7 +1,6 @@
 from django.db import models
 
 from api.mixins.EntityBase import EntityBase
-from .Stack import Stack
 
 CHOICE_MODES = (
     ('TRAP', 'TRAP'),
@@ -14,13 +13,14 @@ CHOICE_MODES = (
 class Choice(EntityBase):
     image = models.ImageField(upload_to='choice_images', blank=True, null=True, max_length=None)
 
-    cost = models.ManyToManyField(Stack, related_name='choice_cost', blank=True)  # cost to play
-    condition = models.ManyToManyField(Stack, related_name='choice_condition',
+    cost = models.ManyToManyField('Source', related_name='choice_cost', blank=True)  # cost to play
+
+    condition = models.ManyToManyField('Condition', related_name='choice_condition',
                                        blank=True)  # enables you to play it
 
-    restricted = models.ManyToManyField(Stack, related_name='choice_restricted',
+    restricted = models.ManyToManyField('Condition', related_name='choice_restricted',
                                         blank=True)  # who cant have it in hand: IS_FACTION, others implicitly can
-    allowed = models.ManyToManyField(Stack, related_name='choice_allowed',
+    allowed = models.ManyToManyField('Condition', related_name='choice_allowed',
                                      blank=True)  # who can have it in hand: IS_FACTION, others implicitly cant
 
     mode = models.CharField(choices=CHOICE_MODES, default=CHOICE_MODES[0][1], max_length=255)
@@ -38,7 +38,7 @@ class ChoiceOption(models.Model):
 
     image = models.ImageField(upload_to='choice_option_images', blank=True, null=True, max_length=None)
 
-    effect = models.ManyToManyField(Stack)
+    effect = models.ManyToManyField('Source')
 
     def __str__(self):
         return "Option_{}_{}".format(self.id, self.owner.name)

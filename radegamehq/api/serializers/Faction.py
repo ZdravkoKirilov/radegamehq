@@ -3,7 +3,7 @@ from rest_framework import serializers
 from ..entities.Faction import Faction
 from ..helpers.image_sanitize import sanitize_image
 from .custom_serializers import Base64ImageField
-from ..entities.Pool import Pool
+from ..entities.Source import Source
 from ..mixins.NestedSerializing import NestedSerializer
 from ..entities.Stage import Stage
 
@@ -18,7 +18,7 @@ class FactionSerializer(NestedSerializer, serializers.ModelSerializer):
 
     def nested_entities(self):
         return [
-            {'name': 'effect_pool', 'model': Pool, 'm2m': True},
+            {'name': 'effect_pool', 'model': Source, 'm2m': True},
             {'name': 'boards', 'model': Stage, 'm2m': True},
         ]
 

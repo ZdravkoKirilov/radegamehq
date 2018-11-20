@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
 from ..entities.Round import Round
-from ..entities.Stack import Stack
-from ..entities.Pool import Pool
+from ..entities.Source import Source
 from ..entities.Phase import Phase
+from ..entities.Condition import Condition
 from ..helpers.image_sanitize import sanitize_image
 from ..mixins.NestedSerializing import NestedSerializer
 from .custom_serializers import Base64ImageField
@@ -20,10 +20,9 @@ class RoundSerializer(NestedSerializer, serializers.ModelSerializer):
 
     def nested_entities(self):
         return [
-            {'name': 'condition', 'model': Stack, 'm2m': True},
-            {'name': 'award', 'model': Stack, 'm2m': True},
-            {'name': 'penalty', 'model': Stack, 'm2m': True},
-            {'name': 'effect_pool', 'model': Pool, 'm2m': True},
+            {'name': 'condition', 'model': Condition, 'm2m': True},
+            {'name': 'done', 'model': Source, 'm2m': True},
+            {'name': 'undone', 'model': Source, 'm2m': True},
             {'name': 'phases', 'model': Phase, 'm2m': True}
         ]
 

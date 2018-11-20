@@ -1,11 +1,12 @@
 from rest_framework import serializers
 
 from ..entities.Choice import ChoiceOption, Choice
+from ..entities.Source import Source
+from ..entities.Condition import Condition
 
 from ..helpers.image_sanitize import sanitize_image
 from .custom_serializers import Base64ImageField
 from ..mixins.NestedSerializing import NestedSerializer
-from ..entities.Stack import Stack
 
 
 class ChoiceOptionSerializer(NestedSerializer, serializers.ModelSerializer):
@@ -14,7 +15,7 @@ class ChoiceOptionSerializer(NestedSerializer, serializers.ModelSerializer):
 
     def nested_entities(self):
         return [
-            {'name': 'effect', 'model': Stack, 'm2m': True},
+            {'name': 'effect', 'model': Source, 'm2m': True},
         ]
 
     def to_internal_value(self, data):
@@ -34,10 +35,10 @@ class ChoiceSerializer(NestedSerializer, serializers.ModelSerializer):
     def nested_entities(self):
         return [
             {'name': 'options', 'model': ChoiceOption, 'm2m': False, 'serializer': ChoiceOptionSerializer},
-            {'name': 'cost', 'model': Stack, 'm2m': True},
-            {'name': 'condition', 'model': Stack, 'm2m': True},
-            {'name': 'restricted', 'model': Stack, 'm2m': True},
-            {'name': 'allowed', 'model': Stack, 'm2m': True},
+            {'name': 'cost', 'model': Source, 'm2m': True},
+            {'name': 'condition', 'model': Condition, 'm2m': True},
+            {'name': 'restricted', 'model': Condition, 'm2m': True},
+            {'name': 'allowed', 'model': Condition, 'm2m': True},
         ]
 
     class Meta:
@@ -48,7 +49,5 @@ class ChoiceSerializer(NestedSerializer, serializers.ModelSerializer):
 
     def to_internal_value(self, data):
         data = sanitize_image(data)
-        # for item in data['options']:
-        #     sanitize_image(item)
         value = super(ChoiceSerializer, self).to_internal_value(data)
         return value

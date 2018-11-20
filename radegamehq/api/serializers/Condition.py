@@ -4,7 +4,8 @@ from ..helpers.image_sanitize import sanitize_image
 from .custom_serializers import Base64ImageField
 
 from ..entities.Condition import ConditionClause, Condition
-from ..entities.Stack import Stack
+from ..entities.Source import Source
+
 from api.mixins.NestedSerializing import NestedSerializer
 
 
@@ -30,10 +31,10 @@ class ConditionSerializer(NestedSerializer, serializers.ModelSerializer):
     def nested_entities(self):
         return [
             {'name': 'clauses', 'model': ConditionClause, 'm2m': False, 'serializer': ConditionClauseSerializer},
-            {'name': 'award', 'model': Stack, 'm2m': True},
-            {'name': 'penalty', 'model': Stack, 'm2m': True},
-            {'name': 'restricted', 'model': Stack, 'm2m': True},
-            {'name': 'allowed', 'model': Stack, 'm2m': True},
+            {'name': 'done', 'model': Source, 'm2m': True},
+            {'name': 'undone', 'model': Source, 'm2m': True},
+            {'name': 'restricted', 'model': Condition, 'm2m': True},
+            {'name': 'allowed', 'model': Condition, 'm2m': True},
         ]
 
     def to_internal_value(self, data):

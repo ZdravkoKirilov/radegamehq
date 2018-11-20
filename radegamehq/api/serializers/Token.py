@@ -3,8 +3,9 @@ from ..entities.Token import Token
 
 from ..helpers.image_sanitize import sanitize_image
 from .custom_serializers import Base64ImageField
-from ..entities.Stack import Stack
-from ..entities.Pool import Pool
+from ..entities.Source import Source
+from ..entities.Condition import Condition
+
 from ..mixins.NestedSerializing import NestedSerializer
 
 
@@ -14,16 +15,14 @@ class TokenSerializer(NestedSerializer, serializers.ModelSerializer):
     class Meta:
         model = Token
         fields = (
-            'id', 'game', 'name', 'description', 'image', 'keywords', 'effect_pool', 'restricted', 'allowed', 'income',
+            'id', 'game', 'name', 'description', 'image', 'keywords', 'restricted', 'allowed',
             'cost')
 
     def nested_entities(self):
         return [
-            {'name': 'restricted', 'model': Stack, 'm2m': True},
-            {'name': 'allowed', 'model': Stack, 'm2m': True},
-            {'name': 'income', 'model': Stack, 'm2m': True},
-            {'name': 'cost', 'model': Stack, 'm2m': True},
-            {'name': 'effect_pool', 'model': Pool, 'm2m': True},
+            {'name': 'restricted', 'model': Condition, 'm2m': True},
+            {'name': 'allowed', 'model': Condition, 'm2m': True},
+            {'name': 'cost', 'model': Source, 'm2m': True},
         ]
 
     def to_internal_value(self, data):

@@ -1,6 +1,6 @@
 from django.db import models
 
-from .Pool import Pool
+from .Source import Source
 
 from api.mixins.EntityBase import EntityBase
 
@@ -26,7 +26,7 @@ class Faction(EntityBase):
 
     income = models.ManyToManyField('Stack', blank=True)
 
-    effect_pool = models.ManyToManyField(Pool, related_name='faction_effect_pool', blank=True)
+    effect_pool = models.ManyToManyField(Source, related_name='faction_effect_pool', blank=True)
 
     def __str__(self):
         return self.name

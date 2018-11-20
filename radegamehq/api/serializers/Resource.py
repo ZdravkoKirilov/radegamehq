@@ -1,12 +1,12 @@
 from rest_framework import serializers
 
-from api.entities.Resource import Resource
+from api.entities.Slot import Slot
 from api.helpers.image_sanitize import sanitize_image
 
 
 class ResourceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Resource
+        model = Slot
         fields = ('id', 'name', 'description', 'keywords', 'image', 'game')
 
     def to_internal_value(self, data):
