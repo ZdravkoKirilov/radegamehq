@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 from ..entities.Field import Field
 from ..entities.Source import Source
-from ..entities.Condition import Condition
 
 from ..mixins.NestedSerializing import NestedSerializer
 from ..helpers.image_sanitize import sanitize_image
@@ -14,14 +13,14 @@ class FieldSerializer(NestedSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = Field
-        fields = (
-            'id', 'game', 'name', 'description', 'image', 'keywords', 'done', 'cost', 'undone',)
+        fields = '__all__'
 
     def nested_entities(self):
         return [
             {'name': 'cost', 'model': Source, 'm2m': True},
-            {'name': 'done', 'model': Condition, 'm2m': True},
-            {'name': 'undone', 'model': Condition, 'm2m': True},
+            {'name': 'done', 'model': Source, 'm2m': True},
+            {'name': 'undone', 'model': Source, 'm2m': True},
+            {'name': 'risk', 'model': Source, 'm2m': True},
         ]
 
     def to_internal_value(self, data):

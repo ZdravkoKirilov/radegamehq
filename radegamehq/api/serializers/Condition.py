@@ -6,16 +6,13 @@ from .custom_serializers import Base64ImageField
 from ..entities.Condition import ConditionClause, Condition
 from ..entities.Source import Source
 
-from api.mixins.NestedSerializing import NestedSerializer
+from ..mixins.NestedSerializing import NestedSerializer
 
 
 class ConditionClauseSerializer(serializers.ModelSerializer):
     class Meta:
         model = ConditionClause
-        fields = (
-            'id', 'type', 'target_entity', 'condition', 'action', 'resource', 'field', 'faction', 'token', 'choice',
-            'keywords',
-            'amount', 'round', 'phase', 'stage', 'relation')
+        fields = '__all__'
 
 
 class ConditionSerializer(NestedSerializer, serializers.ModelSerializer):
@@ -24,17 +21,17 @@ class ConditionSerializer(NestedSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = Condition
-        fields = (
-            'id', 'game', 'name', 'description', 'keywords', 'image', 'stage', 'restricted', 'allowed', 'award',
-            'penalty', 'mode', 'clauses')
+        fields = '__all__'
 
     def nested_entities(self):
         return [
             {'name': 'clauses', 'model': ConditionClause, 'm2m': False, 'serializer': ConditionClauseSerializer},
             {'name': 'done', 'model': Source, 'm2m': True},
             {'name': 'undone', 'model': Source, 'm2m': True},
-            {'name': 'restricted', 'model': Condition, 'm2m': True},
-            {'name': 'allowed', 'model': Condition, 'm2m': True},
+            {'name': 'disable', 'model': Condition, 'm2m': True},
+            {'name': 'enable', 'model': Condition, 'm2m': True},
+            {'name': 'reveal_cost', 'model': Source, 'm2m': True},
+            {'name': 'cost', 'model': Source, 'm2m': True},
         ]
 
     def to_internal_value(self, data):

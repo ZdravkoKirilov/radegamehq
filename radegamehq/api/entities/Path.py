@@ -3,19 +3,20 @@ from django.db import models
 from .Game import Game
 from .Slot import Slot
 
+from ..mixins.EntityBase import EntityBase, WithPermissions, WithRisk, WithStakes, WithBoard, WithCost
 
-class Path(models.Model):
+
+class Path(EntityBase, WithPermissions, WithRisk, WithStakes, WithBoard, WithCost):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    stage = models.ForeignKey('Stage', on_delete=models.CASCADE)
+    owner = models.ForeignKey('Stage', on_delete=models.CASCADE, related_name='path_owner')
 
     from_slot = models.ForeignKey(
         Slot,
-        related_name='path_from_loc',
+        related_name='from_slot',
         on_delete=models.CASCADE,
     )
     to_slot = models.ForeignKey(
         Slot,
-        related_name='path_to_loc',
         on_delete=models.CASCADE,
     )
 

@@ -1,6 +1,6 @@
 from django.db import models
 
-from api.mixins.EntityBase import EntityBase
+from api.mixins.EntityBase import EntityBase, WithPermissions, WithCost, WithCondition, WithReveal
 
 TYPE_CHOICES = (
     ('WIN_GAME', 'WIN_GAME'),
@@ -53,9 +53,7 @@ TARGET_TYPES = (
 
 ACTION_MODES = (
     ('TRIGGER', 'TRIGGER'),
-    ('HYBRID', 'HYBRID'),  # both trap and trigger
     ('AUTO', 'AUTO'),  # for internal, 'hidden' logic
-    ('PASSIVE', 'PASSIVE'),
 )
 
 COMPUTED = (
@@ -64,25 +62,10 @@ COMPUTED = (
 )
 
 
-class Action(EntityBase):
+class Action(EntityBase, WithPermissions, WithCost, WithCondition, WithReveal):
     image = models.ImageField(upload_to='action_images', blank=True, null=True, max_length=None)
 
-    cost = models.ManyToManyField('Source', related_name='action_cost', blank=True)  # cost to play
-
-    condition = models.ManyToManyField('Condition', related_name='action_condition',
-                                       blank=True)  # enables you to play it
-
-    restricted = models.ManyToManyField('Condition', related_name='action_restricted',
-                                        blank=True)  # who cant have it in hand: IS_FACTION, others implicitly can
-    allowed = models.ManyToManyField('Condition', related_name='action_allowed',
-                                     blank=True)  # who can have it in hand: IS_FACTION, others implicitly cant
-
-    settings = models.ManyToManyField('Condition', related_name='action_settings', blank=True)
-
     mode = models.CharField(choices=ACTION_MODES, default=ACTION_MODES[0][1], max_length=255)
-
-    reveal_cost = models.ManyToManyField('Source', null=True, blank=True)
-    reveal_slots = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return "{}".format(self.name)
@@ -92,7 +75,7 @@ class ActionConfig(models.Model):
     owner = models.ForeignKey(Action, blank=True, null=True, on_delete=models.CASCADE, related_name='configs')
 
     type = models.CharField(max_length=255, blank=False, choices=TYPE_CHOICES)
-    target = models.CharField(max_length=255, blank=False, choices=TARGET_CHOICES)
+    target = models.CharField(max_length=255, blank=False)
     target_type = models.CharField(max_length=255, blank=True, null=True, choices=TARGET_TYPES)
 
     condition = models.ForeignKey('Condition', on_delete=models.CASCADE, null=True,

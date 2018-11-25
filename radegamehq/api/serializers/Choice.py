@@ -16,6 +16,7 @@ class ChoiceOptionSerializer(NestedSerializer, serializers.ModelSerializer):
     def nested_entities(self):
         return [
             {'name': 'effect', 'model': Source, 'm2m': True},
+            {'name': 'settings', 'model': Condition, 'm2m': True},
         ]
 
     def to_internal_value(self, data):
@@ -25,7 +26,7 @@ class ChoiceOptionSerializer(NestedSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = ChoiceOption
-        fields = ('id', 'name', 'description', 'keywords', 'image', 'effect')
+        fields = '__all__'
 
 
 class ChoiceSerializer(NestedSerializer, serializers.ModelSerializer):
@@ -37,15 +38,16 @@ class ChoiceSerializer(NestedSerializer, serializers.ModelSerializer):
             {'name': 'options', 'model': ChoiceOption, 'm2m': False, 'serializer': ChoiceOptionSerializer},
             {'name': 'cost', 'model': Source, 'm2m': True},
             {'name': 'condition', 'model': Condition, 'm2m': True},
-            {'name': 'restricted', 'model': Condition, 'm2m': True},
-            {'name': 'allowed', 'model': Condition, 'm2m': True},
+            {'name': 'disable', 'model': Condition, 'm2m': True},
+            {'name': 'enable', 'model': Condition, 'm2m': True},
+            {'name': 'reveal_cost', 'model': Source, 'm2m': True},
+            {'name': 'done', 'model': Source, 'm2m': True},
+            {'name': 'undone', 'model': Source, 'm2m': True},
         ]
 
     class Meta:
         model = Choice
-        fields = (
-            'id', 'game', 'mode', 'name', 'description', 'image', 'options', 'keywords', 'cost', 'condition',
-            'restricted', 'allowed')
+        fields = '__all__'
 
     def to_internal_value(self, data):
         data = sanitize_image(data)

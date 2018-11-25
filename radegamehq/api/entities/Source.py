@@ -1,6 +1,6 @@
 from django.db import models
 
-from ..mixins.EntityBase import EntityBase
+from ..mixins.EntityBase import EntityBase, WithCost, WithPermissions
 
 MODE_CHOICES = (
     ('DRAW', 'DRAW'),
@@ -37,7 +37,7 @@ class Source(EntityBase):
     quota = models.CharField(choices=QUOTA_CHOICES, max_length=255, default=QUOTA_CHOICES[0][0])
 
 
-class SourceItem(models.Model):
+class SourceItem(WithCost, WithPermissions):
     owner = models.ForeignKey(Source, on_delete=models.CASCADE, related_name="items")
 
     action = models.ForeignKey('Action', on_delete=models.CASCADE, null=True, blank=True)
@@ -47,11 +47,6 @@ class SourceItem(models.Model):
     source = models.ForeignKey(Source, on_delete=models.CASCADE, null=True, blank=True)
 
     amount = models.IntegerField(default=1)
-
-    cost = models.ManyToManyField(Source, related_name='source_item_cost')  # price to buy
-
-    restricted = models.ManyToManyField('Condition', related_name='source_item_restricted')
-    allowed = models.ManyToManyField('Condition', related_name='source_item_allowed')
 
     relation = models.CharField(choices=RELATIONS, max_length=255, default=RELATIONS[0][0])
 

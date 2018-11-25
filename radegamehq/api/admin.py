@@ -13,6 +13,7 @@ from api.entities.Faction import Faction
 from api.entities.Source import Source, SourceItem
 from api.entities.Token import Token
 from .entities.Game import Game
+from .entities.Setup import Setup
 
 admin.site.register(Game)
 admin.site.register(Field)
@@ -29,7 +30,6 @@ admin.site.register(Phase)
 admin.site.register(Choice)
 admin.site.register(ChoiceOption)
 admin.site.register(Stage)
-admin.site.register(Stack)
-admin.site.register(StackItem)
 admin.site.register(Source)
 admin.site.register(SourceItem)
+admin.site.register(Setup)
