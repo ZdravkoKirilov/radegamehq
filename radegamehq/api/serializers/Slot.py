@@ -4,7 +4,7 @@ from ..entities.Slot import Slot
 from ..entities.Condition import Condition
 from ..mixins.NestedSerializing import NestedSerializer
 from ..helpers.image_sanitize import sanitize_image
-from ..entities.Token import Token
+from ..entities.Source import Source
 from .custom_serializers import Base64ImageField
 
 
@@ -13,15 +13,14 @@ class SlotSerializer(NestedSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = Slot
-        fields = (
-            'id', 'game', 'owner', 'name', 'description', 'image', 'keywords', 'field', 'tokens', 'width', 'height',
-            'y', 'x', 'allowed', 'restricted')
+        fields = '__all__'
 
     def nested_entities(self):
         return [
-            {'name': 'allowed', 'model': Condition, 'm2m': True},
-            {'name': 'restricted', 'model': Condition, 'm2m': True},
-            {'name': 'tokens', 'model': Token, 'm2m': True},
+            {'name': 'enable', 'model': Condition, 'm2m': True},
+            {'name': 'disable', 'model': Condition, 'm2m': True},
+            {'name': 'settings', 'model': Source, 'm2m': True},
+            {'name': 'risk', 'model': Source, 'm2m': True},
         ]
 
     def to_internal_value(self, data):
