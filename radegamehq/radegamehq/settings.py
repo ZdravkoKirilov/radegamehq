@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_cleanup',
     'debug_toolbar',
+    'sorl.thumbnail',
+    'sorl_thumbnail_serializer',
 ]
 
 REST_FRAMEWORK = {
@@ -138,6 +140,13 @@ DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.logging.LoggingPanel',
     'debug_toolbar.panels.redirects.RedirectsPanel',
 ]
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
 
 LANGUAGE_CODE = 'en-us'
 

@@ -14,6 +14,7 @@ from api.entities.Source import Source, SourceItem
 from api.entities.Token import Token
 from .entities.Game import Game
 from .entities.Setup import Setup
+from .entities.ImageAsset import ImageAsset
 
 admin.site.register(Game)
 admin.site.register(Field)
@@ -33,3 +34,4 @@ admin.site.register(Stage)
 admin.site.register(Source)
 admin.site.register(SourceItem)
 admin.site.register(Setup)
+admin.site.register(ImageAsset)

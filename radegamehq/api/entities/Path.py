@@ -7,7 +7,7 @@ from ..mixins.EntityBase import EntityBase, WithPermissions, WithRisk, WithStake
 
 
 class Path(EntityBase, WithPermissions, WithRisk, WithStakes, WithBoard, WithCost):
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='path_images', blank=True, null=True, max_length=None)
     owner = models.ForeignKey('Stage', on_delete=models.CASCADE, related_name='path_owner')
 
     from_slot = models.ForeignKey(

@@ -14,6 +14,7 @@ from api.views.Source import SourceView, SourceDetailsView
 from .views.Token import TokenView, TokenDetailsView
 from .views.Phase import PhaseView, PhaseDetailsView
 from .views.Team import TeamView, TeamDetailsView
+from .views.ImageAsset import ImageAssetView, ImageAssetDetailsView
 
 urlpatterns = {
 
@@ -70,6 +71,10 @@ urlpatterns = {
 
     url(r'games/(?P<pk>[0-9]+)/$', GameDetailsView.as_view(), name="game.details"),
     url(r'^games/$', GameView.as_view(), name="game.list"),
+
+    url(r'games/(?P<gameid>[0-9]+)/imageassets/(?P<pk>[0-9]+)/$', ImageAssetDetailsView.as_view(),
+        name="imageasset.details"),
+    url(r'games/(?P<pk>[0-9]+)/imageassets/$', ImageAssetView.as_view(), name="imageasset.list"),
 }
 
 urlpatterns = format_suffix_patterns(urlpatterns)
