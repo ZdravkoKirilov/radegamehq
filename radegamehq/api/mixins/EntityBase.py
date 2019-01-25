@@ -1,6 +1,7 @@
 from django.db import models
 
-from api.entities.Game import Game
+from ..entities.Game import Game
+from ..entities.ImageAsset import ImageAsset
 
 
 class EntityBase(models.Model):
@@ -8,7 +9,11 @@ class EntityBase(models.Model):
 
     name = models.CharField(max_length=255, blank=False)
     description = models.TextField(blank=True, null=True)
+    image = models.ForeignKey(ImageAsset, blank=True, null=True, on_delete=models.SET_NULL)
     keywords = models.CharField(null=True, blank=True, max_length=255)
+
+    def __str__(self):
+        return "{}".format(self.name)
 
     class Meta:
         abstract = True

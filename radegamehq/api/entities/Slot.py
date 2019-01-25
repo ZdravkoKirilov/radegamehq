@@ -4,7 +4,7 @@ from api.mixins.EntityBase import EntityBase, WithPermissions, WithBoard, WithRi
 
 
 class Slot(EntityBase, WithPermissions, WithBoard, WithRisk, WithSettings):
-    image = models.ImageField(upload_to='slot_images', blank=True, null=True, max_length=255)
+
     owner = models.ForeignKey('Stage', on_delete=models.CASCADE)
 
     field = models.ForeignKey('Field', null=True, blank=True, on_delete=models.SET_NULL)

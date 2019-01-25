@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from ..helpers.image_sanitize import sanitize_image
-from .custom_serializers import Base64ImageField
 
 from ..entities.Condition import ConditionClause, Condition
 from ..entities.Source import Source
@@ -17,7 +16,6 @@ class ConditionClauseSerializer(serializers.ModelSerializer):
 
 class ConditionSerializer(NestedSerializer, serializers.ModelSerializer):
     clauses = ConditionClauseSerializer(many=True)
-    image = Base64ImageField(max_length=None, use_url=True)
 
     class Meta:
         model = Condition

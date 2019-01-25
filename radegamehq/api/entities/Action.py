@@ -63,8 +63,6 @@ COMPUTED = (
 
 
 class Action(EntityBase, WithPermissions, WithCost, WithCondition, WithReveal):
-    image = models.ImageField(upload_to='action_images', blank=True, null=True, max_length=None)
-
     mode = models.CharField(choices=ACTION_MODES, default=ACTION_MODES[0][1], max_length=255)
 
     def __str__(self):

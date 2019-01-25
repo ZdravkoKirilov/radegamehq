@@ -1,6 +1,5 @@
 from rest_framework import serializers
 
-from .custom_serializers import Base64ImageField
 from ..entities.Action import ActionConfig, Action
 from ..entities.Source import Source
 from ..entities.Condition import Condition
@@ -19,7 +18,6 @@ class ActionConfigSerializer(serializers.ModelSerializer):
 
 class ActionSerializer(NestedSerializer, serializers.ModelSerializer):
     configs = ActionConfigSerializer(many=True)
-    image = Base64ImageField(max_length=None, use_url=True)
 
     class Meta:
         model = Action

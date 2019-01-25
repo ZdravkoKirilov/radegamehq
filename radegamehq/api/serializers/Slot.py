@@ -5,11 +5,9 @@ from ..entities.Condition import Condition
 from ..mixins.NestedSerializing import NestedSerializer
 from ..helpers.image_sanitize import sanitize_image
 from ..entities.Source import Source
-from .custom_serializers import Base64ImageField
 
 
 class SlotSerializer(NestedSerializer, serializers.ModelSerializer):
-    image = Base64ImageField(max_length=None, use_url=True)
 
     class Meta:
         model = Slot

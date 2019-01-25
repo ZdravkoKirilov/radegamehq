@@ -1,12 +1,11 @@
 from django.db import models
 
-from api.mixins.EntityBase import EntityBase, WithCost, WithCondition, WithPermissions, WithReveal, WithStakes, \
+from ..mixins.EntityBase import EntityBase, WithCost, WithCondition, WithPermissions, WithReveal, WithStakes, \
     WithSettings
+from ..entities.ImageAsset import ImageAsset
 
 
 class Choice(EntityBase, WithPermissions, WithCondition, WithCost, WithReveal, WithStakes):
-    image = models.ImageField(upload_to='choice_images', blank=True, null=True, max_length=None)
-
     mode = models.CharField(max_length=255)
     random = models.BooleanField(null=True, blank=True)
 
@@ -21,7 +20,7 @@ class ChoiceOption(WithSettings):
     description = models.TextField(blank=True, null=True)
     keywords = models.CharField(null=True, blank=True, max_length=255)
 
-    image = models.ImageField(upload_to='choice_option_images', blank=True, null=True, max_length=None)
+    image = models.ForeignKey(ImageAsset, blank=True, null=True, on_delete=models.SET_NULL)
 
     effect = models.ManyToManyField('Source', blank=True)
     value = models.CharField(null=True, blank=True, max_length=255)

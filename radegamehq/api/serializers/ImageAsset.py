@@ -6,7 +6,7 @@ from sorl_thumbnail_serializer.fields import HyperlinkedSorlImageField
 class ImageAssetSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ImageAsset
-        fields = ('image', 'id', 'thumbnail', 'game')
+        fields = ('image', 'id', 'name', 'thumbnail', 'game')
 
     thumbnail = HyperlinkedSorlImageField(
         '128x128',

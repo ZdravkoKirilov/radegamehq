@@ -8,3 +8,6 @@ class ImageAsset(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='game')
     name = models.CharField(max_length=255)
     image = ImageField(upload_to='images')
+
+    def __str__(self):
+        return "{}".format(self.name)

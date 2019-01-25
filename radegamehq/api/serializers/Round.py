@@ -6,17 +6,13 @@ from ..entities.Phase import Phase
 from ..entities.Condition import Condition
 from ..helpers.image_sanitize import sanitize_image
 from ..mixins.NestedSerializing import NestedSerializer
-from .custom_serializers import Base64ImageField
 
 
 class RoundSerializer(NestedSerializer, serializers.ModelSerializer):
-    image = Base64ImageField(use_url=True, allow_empty_file=True, allow_null=True)
 
     class Meta:
         model = Round
-        fields = (
-            'id', 'game', 'name', 'description', 'image', 'replay_count', 'stage', 'award', 'penalty',
-            'condition', 'effect_pool', 'phases', 'phase_order')
+        fields = '__all__'
 
     def nested_entities(self):
         return [

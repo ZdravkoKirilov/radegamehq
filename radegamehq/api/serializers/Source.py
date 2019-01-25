@@ -3,7 +3,6 @@ from rest_framework import serializers
 from ..entities.Source import Source, SourceItem
 from ..entities.Condition import Condition
 from ..helpers.image_sanitize import sanitize_image
-from .custom_serializers import Base64ImageField
 from ..mixins.NestedSerializing import NestedSerializer
 
 
@@ -12,7 +11,7 @@ class SourceItemSerializer(NestedSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = SourceItem
-        fields = ('id', 'action', 'condition', 'choice', 'token', 'source', 'cost', 'amount', 'restricted', 'allowed')
+        fields = '__all__'
 
     def nested_entities(self):
         return [
@@ -23,13 +22,11 @@ class SourceItemSerializer(NestedSerializer, serializers.ModelSerializer):
 
 
 class SourceSerializer(NestedSerializer, serializers.ModelSerializer):
-    image = Base64ImageField(max_length=None, use_url=True)
     items = SourceItemSerializer(many=True)
 
     class Meta:
         model = Source
-        fields = (
-            'id', 'game', 'name', 'description', 'image', 'keywords', 'mode', 'pick', 'items')
+        fields = '__all__'
 
     def to_internal_value(self, data):
         data = sanitize_image(data)

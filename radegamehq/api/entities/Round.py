@@ -4,7 +4,6 @@ from api.mixins.EntityBase import EntityBase, WithBoard, WithCondition, WithStak
 
 
 class Round(EntityBase, WithBoard, WithCondition, WithStakes):
-    image = models.ImageField(upload_to='round_images', blank=True, null=True, max_length=None)
 
     replay_count = models.IntegerField(null=True, blank=True)  # how many tries to pass the condition
     repeat = models.IntegerField(null=True, blank=True)  # repeat X times before going to the next round

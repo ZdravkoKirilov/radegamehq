@@ -5,12 +5,10 @@ from ..entities.Condition import Condition
 from ..entities.Source import Source
 
 from ..mixins.NestedSerializing import NestedSerializer
-from .custom_serializers import Base64ImageField
 from ..helpers.image_sanitize import sanitize_image
 
 
 class MapPathSerializer(NestedSerializer, serializers.ModelSerializer):
-    image = Base64ImageField(max_length=None, use_url=True)
 
     class Meta:
         model = Path

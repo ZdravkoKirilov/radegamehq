@@ -1,5 +1,3 @@
-from django.db import models
-
 from api.mixins.EntityBase import EntityBase, WithBoard, WithSettings, WithSetups
 
 
@@ -8,7 +6,6 @@ from api.mixins.EntityBase import EntityBase, WithBoard, WithSettings, WithSetup
 
 
 class Faction(EntityBase, WithBoard, WithSettings, WithSetups):
-    image = models.FileField(upload_to='faction_images', blank=True, null=True, max_length=None)
 
     def __str__(self):
         return self.name

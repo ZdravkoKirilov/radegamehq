@@ -28,7 +28,6 @@ RELATIONS = (
 
 
 class Source(EntityBase):
-    image = models.ImageField(upload_to='source_images', null=True, blank=True, max_length=None)
 
     mode = models.TextField(choices=MODE_CHOICES, default=MODE_CHOICES[0][0])
 

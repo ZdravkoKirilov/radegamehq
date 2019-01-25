@@ -2,11 +2,9 @@ from rest_framework import serializers
 
 from ..entities.Stage import Stage
 from ..helpers.image_sanitize import sanitize_image
-from .custom_serializers import Base64ImageField
 
 
 class StageSerializer(serializers.ModelSerializer):
-    image = Base64ImageField(max_length=None, use_url=True, allow_empty_file=True)
 
     class Meta:
         model = Stage

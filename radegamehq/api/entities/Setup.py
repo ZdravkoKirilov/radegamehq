@@ -7,8 +7,6 @@ class Setup(models.Model):
     name = models.CharField(max_length=255, blank=False)
     description = models.TextField(blank=True)
 
-    image = models.ImageField(upload_to='setup_images', blank=True, null=True, max_length=None)
-
     min_players = models.IntegerField(null=True, blank=True)
     max_players = models.IntegerField(null=True, blank=True)
     recommended_age = models.IntegerField(null=True, blank=True)

@@ -2,7 +2,6 @@ from rest_framework import serializers
 from ..entities.Token import Token
 
 from ..helpers.image_sanitize import sanitize_image
-from .custom_serializers import Base64ImageField
 from ..entities.Source import Source
 from ..entities.Condition import Condition
 
@@ -10,13 +9,10 @@ from ..mixins.NestedSerializing import NestedSerializer
 
 
 class TokenSerializer(NestedSerializer, serializers.ModelSerializer):
-    image = Base64ImageField(max_length=None, use_url=True, allow_empty_file=True)
 
     class Meta:
         model = Token
-        fields = (
-            'id', 'game', 'name', 'description', 'image', 'keywords', 'restricted', 'allowed',
-            'cost')
+        fields = '__all__'
 
     def nested_entities(self):
         return [

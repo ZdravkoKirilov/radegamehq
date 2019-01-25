@@ -5,11 +5,9 @@ from ..entities.Source import Source
 
 from ..mixins.NestedSerializing import NestedSerializer
 from ..helpers.image_sanitize import sanitize_image
-from .custom_serializers import Base64ImageField
 
 
 class FieldSerializer(NestedSerializer, serializers.ModelSerializer):
-    image = Base64ImageField(use_url=True, allow_null=True, allow_empty_file=True)
 
     class Meta:
         model = Field

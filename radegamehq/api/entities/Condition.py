@@ -1,10 +1,9 @@
 from django.db import models
 
-from api.mixins.EntityBase import EntityBase, WithPermissions, WithBoard, WithStakes, WithReveal, WithCost
+from ..mixins.EntityBase import EntityBase, WithPermissions, WithBoard, WithStakes, WithReveal, WithCost
 
 
 class Condition(EntityBase, WithPermissions, WithBoard, WithStakes, WithReveal, WithCost):
-    image = models.ImageField(upload_to='condition_images', blank=True, null=True, max_length=255)
 
     mode = models.CharField(max_length=255)
 

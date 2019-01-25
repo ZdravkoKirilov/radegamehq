@@ -5,13 +5,11 @@ from ..entities.Source import Source
 from ..entities.Condition import Condition
 
 from ..helpers.image_sanitize import sanitize_image
-from .custom_serializers import Base64ImageField
 from ..mixins.NestedSerializing import NestedSerializer
 
 
 class ChoiceOptionSerializer(NestedSerializer, serializers.ModelSerializer):
     id = serializers.IntegerField(allow_null=True)
-    image = Base64ImageField(max_length=None, use_url=True, required=False, validators=[])
 
     def nested_entities(self):
         return [
@@ -31,7 +29,6 @@ class ChoiceOptionSerializer(NestedSerializer, serializers.ModelSerializer):
 
 class ChoiceSerializer(NestedSerializer, serializers.ModelSerializer):
     options = ChoiceOptionSerializer(many=True)
-    image = Base64ImageField(max_length=None, use_url=True, required=False, validators=[])
 
     def nested_entities(self):
         return [
