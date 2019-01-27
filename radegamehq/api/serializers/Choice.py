@@ -17,10 +17,6 @@ class ChoiceOptionSerializer(NestedSerializer, serializers.ModelSerializer):
             {'name': 'settings', 'model': Condition, 'm2m': True},
         ]
 
-    def to_internal_value(self, data):
-        data = sanitize_image(data)
-        value = super(ChoiceOptionSerializer, self).to_internal_value(data)
-        return value
 
     class Meta:
         model = ChoiceOption
@@ -46,7 +42,4 @@ class ChoiceSerializer(NestedSerializer, serializers.ModelSerializer):
         model = Choice
         fields = '__all__'
 
-    def to_internal_value(self, data):
-        data = sanitize_image(data)
-        value = super(ChoiceSerializer, self).to_internal_value(data)
-        return value
+

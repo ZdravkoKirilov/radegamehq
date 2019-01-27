@@ -24,7 +24,9 @@ class NestedSerializer:
         if instance is None:
             instance = owner(**data)
         else:
-            instance.__dict__.update(**data)
+            # instance.__dict__.update(**data)
+            for attr, value in data.items():
+                setattr(instance, attr, value)
 
         instance.save()
 

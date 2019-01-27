@@ -22,7 +22,4 @@ class RoundSerializer(NestedSerializer, serializers.ModelSerializer):
             {'name': 'phases', 'model': Phase, 'm2m': True}
         ]
 
-    def to_internal_value(self, data):
-        data = sanitize_image(data)
-        value = super(RoundSerializer, self).to_internal_value(data)
-        return value
+

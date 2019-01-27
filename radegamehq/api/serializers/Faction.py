@@ -19,7 +19,4 @@ class FactionSerializer(NestedSerializer, serializers.ModelSerializer):
             {'name': 'setups', 'model': Setup, 'm2m': True},
         ]
 
-    def to_internal_value(self, data):
-        data = sanitize_image(data)
-        value = super(FactionSerializer, self).to_internal_value(data)
-        return value
+

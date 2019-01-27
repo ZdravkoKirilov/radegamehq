@@ -24,6 +24,4 @@ class MapPathSerializer(NestedSerializer, serializers.ModelSerializer):
             {'name': 'disable', 'model': Condition, 'm2m': True},
         ]
 
-    def to_internal_value(self, data):
-        data = sanitize_image(data)
-        return super(MapPathSerializer, self).to_internal_value(data)
+

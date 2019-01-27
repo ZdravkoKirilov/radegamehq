@@ -32,7 +32,4 @@ class ConditionSerializer(NestedSerializer, serializers.ModelSerializer):
             {'name': 'cost', 'model': Source, 'm2m': True},
         ]
 
-    def to_internal_value(self, data):
-        data = sanitize_image(data)
-        value = super(ConditionSerializer, self).to_internal_value(data)
-        return value
+

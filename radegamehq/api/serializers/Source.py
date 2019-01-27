@@ -28,11 +28,6 @@ class SourceSerializer(NestedSerializer, serializers.ModelSerializer):
         model = Source
         fields = '__all__'
 
-    def to_internal_value(self, data):
-        data = sanitize_image(data)
-        value = super(SourceSerializer, self).to_internal_value(data)
-        return value
-
     def nested_entities(self):
         return [
             {'name': 'items', 'model': Source, 'm2m': False, 'serializer': SourceItemSerializer},

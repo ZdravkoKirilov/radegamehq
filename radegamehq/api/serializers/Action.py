@@ -32,8 +32,3 @@ class ActionSerializer(NestedSerializer, serializers.ModelSerializer):
             {'name': 'disable', 'model': Condition, 'm2m': True},
             {'name': 'reveal_cost', 'model': Source, 'm2m': True},
         ]
-
-    def to_internal_value(self, data):
-        data = sanitize_image(data)
-        value = super(ActionSerializer, self).to_internal_value(data)
-        return value

@@ -24,6 +24,7 @@ class ChoiceOption(WithSettings):
 
     effect = models.ManyToManyField('Source', blank=True)
     value = models.CharField(null=True, blank=True, max_length=255)
+    secret = models.BooleanField(null=True, blank=True)
 
     def __str__(self):
         return "Option_{}_{}".format(self.id, self.owner.name)
