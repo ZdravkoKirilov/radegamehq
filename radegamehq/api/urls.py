@@ -1,16 +1,17 @@
 from django.conf.urls import url
+from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
-from api.views.Choice import ChoiceView, ChoiceDetailsView
-from api.views.Stage import StageView, StageDetailsView
-from api.views.Round import RoundView, RoundDetailsView
-from api.views.Condition import ConditionView, ConditionDetailsView
-from api.views.Path import MapPathView, MapPathDetailsView
-from api.views.Slot import SlotView, SlotDetailsView
-from api.views.Game import GameView, GameDetailsView
-from api.views.Field import BoardFieldView, BoardFieldDetailsView
-from api.views.Faction import FactionView, FactionDetailsView
-from api.views.Action import ActionView, ActionDetailsView
-from api.views.Source import SourceView, SourceDetailsView
+from .views.Choice import ChoiceView, ChoiceDetailsView
+from .views.Stage import StageView, StageDetailsView
+from .views.Round import RoundView, RoundDetailsView
+from .views.Condition import ConditionView, ConditionDetailsView
+from .views.Path import MapPathView, MapPathDetailsView
+from .views.Slot import SlotView, SlotDetailsView
+from .views.Game import GameView, GameDetailsView, GameDataView
+from .views.Field import BoardFieldView, BoardFieldDetailsView
+from .views.Faction import FactionView, FactionDetailsView
+from .views.Action import ActionView, ActionDetailsView
+from .views.Source import SourceView, SourceDetailsView
 from .views.Token import TokenView, TokenDetailsView
 from .views.Phase import PhaseView, PhaseDetailsView
 from .views.Team import TeamView, TeamDetailsView
@@ -69,12 +70,15 @@ urlpatterns = {
         name="team.details"),
     url(r'games/(?P<pk>[0-9]+)/teams/$', TeamView.as_view(), name="team.list"),
 
+    # path('games/<int:pk>/data/', GameDataView.as_view(), name="game.data"),
+    url(r'games/(?P<pk>[0-9]+)/data/$', GameDataView.as_view(), name="game.data"),
     url(r'games/(?P<pk>[0-9]+)/$', GameDetailsView.as_view(), name="game.details"),
     url(r'^games/$', GameView.as_view(), name="game.list"),
 
     url(r'games/(?P<gameid>[0-9]+)/imageassets/(?P<pk>[0-9]+)/$', ImageAssetDetailsView.as_view(),
         name="imageasset.details"),
     url(r'games/(?P<pk>[0-9]+)/imageassets/$', ImageAssetView.as_view(), name="imageasset.list"),
+
 }
 
 urlpatterns = format_suffix_patterns(urlpatterns)
