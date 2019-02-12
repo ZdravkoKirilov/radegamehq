@@ -1,7 +1,7 @@
 from rest_framework import generics
 
-from api.entities.Action import Action
-from api.serializers.Action import ActionSerializer
+from ..entities.Action import Action
+from ..serializers.Action import ActionSerializer
 
 
 class ActionView(generics.ListCreateAPIView):
