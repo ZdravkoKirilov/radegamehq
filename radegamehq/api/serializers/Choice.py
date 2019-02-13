@@ -17,7 +17,6 @@ class ChoiceOptionSerializer(NestedSerializer, serializers.ModelSerializer):
             {'name': 'settings', 'model': Condition, 'm2m': True},
         ]
 
-
     class Meta:
         model = ChoiceOption
         fields = '__all__'
@@ -41,5 +40,3 @@ class ChoiceSerializer(NestedSerializer, serializers.ModelSerializer):
     class Meta:
         model = Choice
         fields = '__all__'
-
-

@@ -1,7 +1,6 @@
 from django.db.models import Model, base, Manager, QuerySet
 from django.db import transaction
 from typing import DefaultDict, List, Union
-from rest_framework.serializers import ModelSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import ModelSerializer
 

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from api.entities.Game import Game
+from ..entities.Game import Game
 
 
 class GameSerializer(serializers.ModelSerializer):
