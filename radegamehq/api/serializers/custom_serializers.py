@@ -12,6 +12,10 @@ class Base64ImageField(serializers.ImageField):
     Updated for Django REST framework 3.
     """
 
+    @classmethod
+    def is_url(cls, data: str) -> bool:
+        return 'http' in data
+
     def to_internal_value(self, data):
         from django.core.files.base import ContentFile
         import base64
@@ -19,11 +23,13 @@ class Base64ImageField(serializers.ImageField):
         import uuid
 
         # Check if this is a base64 string
-        if isinstance(data, six.string_types):
+        if isinstance(data, six.string_types) and not self.is_url(data):
             # Check if the base64 string is in the "data:" format
             if 'data:' in data and ';base64,' in data:
                 # Break out the header from the base64 content
                 header, data = data.split(';base64,')
+            # elif self.is_url(data):
+            #     return None
 
             # Try to decode the file. Return validation error if it fails.
             try:

@@ -12,8 +12,7 @@ from api.entities.Phase import Phase
 from api.entities.Faction import Faction
 from api.entities.Source import Source, SourceItem
 from api.entities.Token import Token
-from .entities.Game import Game
-from .entities.Setup import Setup
+from .entities.Game import Game, Setup
 from .entities.ImageAsset import ImageAsset
 
 admin.site.register(Game)

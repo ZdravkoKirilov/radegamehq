@@ -8,3 +8,4 @@ radegamehq/media/
 radegamehq/radegamehq/__pycache__/
 *.pyc
 *.pyo
+/migrations
