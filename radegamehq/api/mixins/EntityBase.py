@@ -1,15 +1,12 @@
 from django.db import models
 
-from ..entities.Game import Game
-from ..entities.ImageAsset import ImageAsset
-
 
 class EntityBase(models.Model):
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    game = models.ForeignKey('Game', on_delete=models.CASCADE)
 
     name = models.CharField(max_length=255, blank=False)
     description = models.TextField(blank=True, null=True)
-    image = models.ForeignKey(ImageAsset, blank=True, null=True, on_delete=models.SET_NULL)
+    image = models.ForeignKey('ImageAsset', blank=True, null=True, on_delete=models.SET_NULL)
     keywords = models.CharField(null=True, blank=True, max_length=255)
 
     def __str__(self):
@@ -81,3 +78,6 @@ class WithReveal(models.Model):
 
 class WithSetups(models.Model):
     setups = models.ManyToManyField('Setup', blank=True, related_name='setups_%(class)ss')
+
+    class Meta:
+        abstract = True

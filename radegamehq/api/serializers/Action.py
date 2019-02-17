@@ -4,7 +4,7 @@ from ..entities.Action import ActionConfig, Action
 from ..entities.Source import Source
 from ..entities.Condition import Condition
 
-from ..mixins.NestedSerializing import NestedSerializer, with_nesting
+from ..mixins.NestedSerializing import with_nesting
 
 
 class ActionConfigSerializer(serializers.ModelSerializer):
@@ -31,13 +31,3 @@ class ActionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Action
         fields = '__all__'
-
-    # def nested_entities(self):
-    #     return [
-    #         {'name': 'configs', 'model': ActionConfig, 'm2m': False, 'serializer': ActionConfigSerializer},
-    #         {'name': 'cost', 'model': Source, 'm2m': True},
-    #         {'name': 'condition', 'model': Condition, 'm2m': True},
-    #         {'name': 'enable', 'model': Condition, 'm2m': True},
-    #         {'name': 'disable', 'model': Condition, 'm2m': True},
-    #         {'name': 'reveal_cost', 'model': Source, 'm2m': True},
-    #     ]
