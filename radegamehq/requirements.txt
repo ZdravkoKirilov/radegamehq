@@ -14,10 +14,12 @@ itypes==1.1.0
 Jinja2==2.9.6
 MarkupSafe==1.0
 olefile==0.44
+Pillow==5.4.1
 pycparser==2.18
 PyJWT==1.6.1
 python-memcached==1.59
 pytz==2017.3
+redis==3.2.0
 requests==2.18.4
 six==1.11.0
 sorl-thumbnail==12.5.0
@@ -25,4 +27,4 @@ sorl-thumbnail-serializer-field==0.2.1
 sqlparse==0.2.4
 uritemplate==3.0.0
 urllib3==1.22
-Pillow==5.4.1
+walrus==0.7.1

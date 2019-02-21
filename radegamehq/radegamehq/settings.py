@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'api_auth',
     'api',
+    'lobby',
     'corsheaders',
     'django_cleanup',
     'debug_toolbar',
