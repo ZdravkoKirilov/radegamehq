@@ -25,5 +25,6 @@ urlpatterns = [
                   url(r'^admin/', admin.site.urls),
                   url(r'^docs/', include_docs_urls(title='Radegast API', description='Radegast RESTful API explorer')),
                   url(r'^api/v1/', include('api.urls')),
+                  url(r'^api/v1/', include('lobby.urls')),
                   url(r'^auth', include('api_auth.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
