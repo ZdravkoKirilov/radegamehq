@@ -4,6 +4,7 @@ from .views import LobbyListView, LobbyDetailsView, PlayerListView, PlayerDetail
 urlpatterns = [
     path('lobbies/<str:pk>/players/<str:player>', PlayerDetailsView.as_view(), name='players_details'),
     path('lobbies/<str:pk>/players', PlayerListView.as_view(), name='players_list'),
+    path('all_players', PlayerListView.as_view(), name='all_players_list'),
     path('lobbies/', LobbyListView.as_view(), name='lobby_list'),
     path('lobbies/<str:pk>', LobbyDetailsView.as_view(), name='lobby_details'),
 ]

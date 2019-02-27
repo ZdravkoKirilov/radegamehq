@@ -8,8 +8,11 @@ class PlayerListView(generics.ListCreateAPIView):
     serializer_class = PlayerSerializer
 
     def get_queryset(self):
-        lobby = self.kwargs['pk']
-        players = Player.query(Player.lobby == lobby)
+        try:
+            lobby = self.kwargs['pk']
+            players = Player.query(Player.lobby == lobby)
+        except KeyError:
+            players = Player.all()
         items = [player for player in players]
         return items
 
