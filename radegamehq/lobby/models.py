@@ -23,6 +23,9 @@ class Player(Model):
     __database__ = db
     name = TextField(primary_key=True)  ## combination of game, lobbyname and playername
     lobby = TextField(index=True)
+    user = IntegerField()
+    game = IntegerField()
+
     team = IntegerField()
     faction = IntegerField()
     color = IntegerField()

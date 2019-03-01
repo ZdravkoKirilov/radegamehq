@@ -1,6 +1,7 @@
 from .models import Lobby, Player
 from .serializers import LobbySerializer, PlayerSerializer
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.response import Response
 from django.http import Http404
 
 
@@ -47,15 +48,32 @@ class LobbyListView(generics.ListCreateAPIView):
         items = [item for item in lobbies]
         return items
 
+    def create(self, request, *args, **kwargs):
+        lobby = LobbySerializer(request.data['lobby'])
+        player = PlayerSerializer(request.data['owner'])
+
+        lobby_entity = lobby.create(lobby.data)
+        player_entity = player.create(player.data)
+
+        response = {
+            'lobby': LobbySerializer(lobby_entity).data,
+            'owner': PlayerSerializer(player_entity).data
+        }
+
+        return Response(response, status=status.HTTP_201_CREATED)
+
 
 class LobbyDetailsView(generics.RetrieveDestroyAPIView):
     serializer_class = LobbySerializer
 
     def get_object(self):
-        name = self.kwargs['pk']
-        lobby = Lobby.load(name)
-        serializer = LobbySerializer(lobby)
-        return serializer.data
+        try:
+            name = self.kwargs['pk']
+            lobby = Lobby.load(name)
+            serializer = LobbySerializer(lobby)
+            return serializer.data
+        except KeyError:
+            raise Http404()
 
     def delete(self, request, *args, **kwargs):
         name = self.kwargs['pk']

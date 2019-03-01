@@ -12,6 +12,8 @@ class AppUser(models.Model):
 
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
 
+    alias = models.CharField(max_length=255)
+
     class Meta:
         pass
 

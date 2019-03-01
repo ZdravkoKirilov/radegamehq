@@ -6,8 +6,10 @@ from .models import Lobby, MODES, Player
 class PlayerSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=None, required=True)
     lobby = serializers.CharField(required=True)
-    color = serializers.IntegerField(required=True)
+    user = serializers.IntegerField(required=True)
+    game = serializers.IntegerField(required=True)
 
+    color = serializers.IntegerField(required=False)
     team = serializers.IntegerField(required=False, allow_null=True)
     faction = serializers.IntegerField(required=False, allow_null=True)
 
