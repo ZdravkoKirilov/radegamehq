@@ -4,6 +4,8 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from django.http import Http404
 
+from .signals import lobby_created
+
 
 class PlayerListView(generics.ListCreateAPIView):
     serializer_class = PlayerSerializer
@@ -60,7 +62,16 @@ class LobbyListView(generics.ListCreateAPIView):
             'owner': PlayerSerializer(player_entity).data
         }
 
+        lobby_created.send(LobbyListView, data=response)
+
         return Response(response, status=status.HTTP_201_CREATED)
+
+    # def on_lobby_created(self):
+    #     lobby_created.connect(LobbyListView.pesho)
+    #
+    # @staticmethod
+    # def pesho(sender=Lobby, **kwargs):
+    #     pass
 
 
 class LobbyDetailsView(generics.RetrieveDestroyAPIView):

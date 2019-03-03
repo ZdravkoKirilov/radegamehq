@@ -54,6 +54,15 @@ REST_FRAMEWORK = {
     )
 }
 
+CHANNEL_LAYERS = {
+    "lobbies": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": ['redis://localhost:6379/1'],
+        },
+    },
+}
+
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
