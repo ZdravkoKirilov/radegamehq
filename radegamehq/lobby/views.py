@@ -3,8 +3,9 @@ from .serializers import LobbySerializer, PlayerSerializer
 from rest_framework import generics, status
 from rest_framework.response import Response
 from django.http import Http404
+from django.dispatch import receiver
 
-from .signals import lobby_created
+from .signals import lobby_created, lobby_deleted, player_deleted, player_saved, handle_action
 
 
 class PlayerListView(generics.ListCreateAPIView):
@@ -18,6 +19,15 @@ class PlayerListView(generics.ListCreateAPIView):
             players = Player.all()
         items = [player for player in players]
         return items
+
+    def create(self, request, *args, **kwargs):
+        player = PlayerSerializer(request.data)
+        player_entity = player.create(player.data)
+        response = PlayerSerializer(player_entity).data
+
+        player_saved.send(PlayerListView, data=response)
+
+        return Response(response, status=status.HTTP_201_CREATED)
 
 
 class PlayerDetailsView(generics.RetrieveUpdateDestroyAPIView):
@@ -39,7 +49,14 @@ class PlayerDetailsView(generics.RetrieveUpdateDestroyAPIView):
     def delete(self, request, *args, **kwargs):
         name = self.kwargs['player']
         player = Player.load(name)
+        serialized_player = PlayerSerializer(player).data
         player.delete()
+        player_deleted.send(PlayerDetailsView, data=serialized_player)
+
+    def patch(self, request, *args, **kwargs):
+        response = self.partial_update(request, *args, **kwargs)
+        player_saved.send(PlayerDetailsView, data=response.data)
+        return response
 
 
 class LobbyListView(generics.ListCreateAPIView):
@@ -66,13 +83,6 @@ class LobbyListView(generics.ListCreateAPIView):
 
         return Response(response, status=status.HTTP_201_CREATED)
 
-    # def on_lobby_created(self):
-    #     lobby_created.connect(LobbyListView.pesho)
-    #
-    # @staticmethod
-    # def pesho(sender=Lobby, **kwargs):
-    #     pass
-
 
 class LobbyDetailsView(generics.RetrieveDestroyAPIView):
     serializer_class = LobbySerializer
@@ -90,3 +100,35 @@ class LobbyDetailsView(generics.RetrieveDestroyAPIView):
         name = self.kwargs['pk']
         lobby = Lobby.load(name)
         lobby.delete()
+        players = Player.query(Player.lobby == name)
+        for player in players:
+            player.delete()
+
+        lobby_deleted.send(LobbyDetailsView, data=name)
+
+
+@receiver(handle_action)
+def handle_generic_action(sender, **kwargs):
+    action = kwargs['data']
+
+    if action['type'] == '[Lobby] DELETE_PLAYER':
+        payload = action['payload']
+
+        try:
+            player = Player.load(payload)
+            player.delete()
+            player_deleted.send('action_handler', data=payload)
+        except KeyError:
+            pass
+
+    if action['type'] == '[Lobby] UPDATE_PLAYER':
+        payload = action['payload']
+        try:
+            player = Player.load(payload['name'])
+            validated_data = PlayerSerializer(payload).data
+            for key, value in validated_data.items():
+                setattr(player, key, value)
+            player.save()
+            player_saved.send(PlayerDetailsView, data=PlayerSerializer(player).data)
+        except KeyError:
+            pass

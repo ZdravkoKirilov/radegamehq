@@ -77,6 +77,7 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_WHITELIST = (
     'localhost:4201',
+    'localhost:4202',
 )
 
 ROOT_URLCONF = 'radegamehq.urls'
