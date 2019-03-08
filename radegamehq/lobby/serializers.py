@@ -4,7 +4,7 @@ from .models import Lobby, MODES, Player
 
 
 class PlayerSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=None, required=True)
+    name = serializers.CharField(required=True)
     lobby = serializers.CharField(required=True)
     user = serializers.IntegerField(required=True)
     game = serializers.IntegerField(required=True)
