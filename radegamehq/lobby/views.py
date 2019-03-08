@@ -98,13 +98,17 @@ class LobbyDetailsView(generics.RetrieveDestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
         name = self.kwargs['pk']
-        lobby = Lobby.load(name)
-        lobby.delete()
-        players = Player.query(Player.lobby == name)
-        for player in players:
-            player.delete()
+        try:
+            lobby = Lobby.load(name)
+            lobby.delete()
+            players = Player.query(Player.lobby == name)
+            for player in players:
+                player.delete()
 
-        lobby_deleted.send(LobbyDetailsView, data=name)
+            lobby_deleted.send(LobbyDetailsView, data=name)
+            return Response(name, status=status.HTTP_204_NO_CONTENT)
+        except KeyError:
+            raise Http404()
 
 
 @receiver(handle_action)
