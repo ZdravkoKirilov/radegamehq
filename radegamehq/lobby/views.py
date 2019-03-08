@@ -132,3 +132,10 @@ def handle_generic_action(sender, **kwargs):
             player_saved.send(PlayerDetailsView, data=PlayerSerializer(player).data)
         except KeyError:
             pass
+
+    if action['type'] == '[Lobby] CREATE_PLAYER':
+        payload = action['payload']
+        player = PlayerSerializer(payload)
+
+        player.create(player.data)
+        player_saved.send(PlayerListView, data=player.data)

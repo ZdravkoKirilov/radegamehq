@@ -9,6 +9,7 @@ from .token import create_token
 
 class GetCurrentUserView(RetrieveAPIView):
     serializer_class = AppUserSerializer
+
     # permission_classes = [permissions.IsAuthenticated]
 
     def retrieve(self, request, *args, **kwargs):
@@ -30,7 +31,8 @@ class CreateLocalUserView(CreateAPIView):
         except AppUser.DoesNotExist:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
-            AppUser.objects.create(email=serializer.data['email'], password=serializer.initial_data['password'])
+            AppUser.objects.create(email=serializer.data['email'], password=serializer.initial_data['password'],
+                                   alias=serializer.initial_data['alias'])
             # self.perform_create(serializer)
             headers = self.get_success_headers(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

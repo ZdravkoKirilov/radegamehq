@@ -9,7 +9,7 @@ class PlayerSerializer(serializers.Serializer):
     user = serializers.IntegerField(required=True)
     game = serializers.IntegerField(required=True)
 
-    color = serializers.IntegerField(required=False)
+    color = serializers.IntegerField(required=False, allow_null=True)
     team = serializers.IntegerField(required=False, allow_null=True)
     faction = serializers.IntegerField(required=False, allow_null=True)
 
