@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from django.http import Http404
 from django.dispatch import receiver
 
-from .signals import lobby_created, lobby_deleted, player_deleted, player_saved, handle_action
+from .signals import lobby_created, lobby_deleted, player_deleted, player_saved, handle_action, send_message
 
 
 class PlayerListView(generics.ListCreateAPIView):
@@ -143,3 +143,8 @@ def handle_generic_action(sender, **kwargs):
 
         player.create(player.data)
         player_saved.send(PlayerListView, data=player.data)
+
+    if action['type'] == '[Lobby] SEND_MESSAGE':
+        payload = action['payload']
+
+        send_message.send(LobbyDetailsView, data=payload)
