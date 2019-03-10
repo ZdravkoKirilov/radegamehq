@@ -1,5 +1,6 @@
 from channels.generic.websocket import JsonWebsocketConsumer
-from .signals import lobby_created, lobby_deleted, player_deleted, player_saved, handle_action, send_message
+from .signals import lobby_created, lobby_deleted, player_deleted, player_saved, handle_action, send_message, \
+    player_updated
 from django.dispatch import receiver
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
@@ -30,7 +31,6 @@ class LobbyConsumer(JsonWebsocketConsumer):
         )
 
     def receive_json(self, action, **kwargs):
-
         if action['type'] == '[Lobby] SEND_MESSAGE':
             payload = action['payload']
 
@@ -45,6 +45,12 @@ class LobbyConsumer(JsonWebsocketConsumer):
     def send_message(self, event):
         self.send_json({
             'type': '[Lobby] SAVE_MESSAGE',
+            'payload': event['data']
+        })
+
+    def player_update(self, event):
+        self.send_json({
+            'type': '[Lobby] SAVE_PLAYER',
             'payload': event['data']
         })
 
@@ -139,6 +145,19 @@ def handle_player_saved(sender, **kwargs):
         "lobbies_list",
         {
             "type": "player.save",
+            "data": kwargs['data'],
+        },
+    )
+
+
+@receiver(player_updated)
+def handle_player_updated(sender, **kwargs):
+    layer = get_channel_layer(alias='lobbies')
+    lobby = 'lobby_%s' % kwargs['data']['lobby']
+    async_to_sync(layer.group_send)(
+        lobby,
+        {
+            "type": "player.update",
             "data": kwargs['data'],
         },
     )

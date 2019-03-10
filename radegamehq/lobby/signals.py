@@ -8,9 +8,7 @@ player_saved = django.dispatch.Signal(providing_args=['data'])
 
 player_deleted = django.dispatch.Signal(providing_args=['data'])
 
-player_delete_request = django.dispatch.Signal(providing_args=['data'])
-
-player_update_request = django.dispatch.Signal(providing_args=['data'])
+player_updated = django.dispatch.Signal(providing_args=['data'])
 
 send_message = django.dispatch.Signal(providing_args=['data'])
 

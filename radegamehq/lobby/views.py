@@ -5,7 +5,8 @@ from rest_framework.response import Response
 from django.http import Http404
 from django.dispatch import receiver
 
-from .signals import lobby_created, lobby_deleted, player_deleted, player_saved, handle_action, send_message
+from .signals import lobby_created, lobby_deleted, player_deleted, player_saved, handle_action, send_message, \
+    player_updated
 
 
 class PlayerListView(generics.ListCreateAPIView):
@@ -55,7 +56,7 @@ class PlayerDetailsView(generics.RetrieveUpdateDestroyAPIView):
 
     def patch(self, request, *args, **kwargs):
         response = self.partial_update(request, *args, **kwargs)
-        player_saved.send(PlayerDetailsView, data=response.data)
+        player_updated.send(PlayerDetailsView, data=response.data)
         return response
 
 
@@ -133,7 +134,7 @@ def handle_generic_action(sender, **kwargs):
             for key, value in validated_data.items():
                 setattr(player, key, value)
             player.save()
-            player_saved.send(PlayerDetailsView, data=PlayerSerializer(player).data)
+            player_updated.send(PlayerDetailsView, data=PlayerSerializer(player).data)
         except KeyError:
             pass
 
