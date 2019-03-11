@@ -12,6 +12,7 @@ class PlayerSerializer(serializers.Serializer):
     color = serializers.IntegerField(required=False, allow_null=True)
     team = serializers.IntegerField(required=False, allow_null=True)
     faction = serializers.IntegerField(required=False, allow_null=True)
+    ready = serializers.NullBooleanField(required=False)
 
     def create(self, validated_data):
         player = Player.create(**validated_data)

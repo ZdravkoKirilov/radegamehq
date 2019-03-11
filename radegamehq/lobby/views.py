@@ -3,10 +3,8 @@ from .serializers import LobbySerializer, PlayerSerializer
 from rest_framework import generics, status
 from rest_framework.response import Response
 from django.http import Http404
-from django.dispatch import receiver
 
-from .signals import lobby_created, lobby_deleted, player_deleted, player_saved, handle_action, send_message, \
-    player_updated
+from .signals import lobby_created, lobby_deleted, player_deleted, player_saved, player_updated
 
 
 class PlayerListView(generics.ListCreateAPIView):
@@ -112,40 +110,3 @@ class LobbyDetailsView(generics.RetrieveDestroyAPIView):
             raise Http404()
 
 
-@receiver(handle_action)
-def handle_generic_action(sender, **kwargs):
-    action = kwargs['data']
-
-    if action['type'] == '[Lobby] DELETE_PLAYER':
-        payload = action['payload']
-
-        try:
-            player = Player.load(payload)
-            player.delete()
-            player_deleted.send('action_handler', data=payload)
-        except KeyError:
-            pass
-
-    if action['type'] == '[Lobby] UPDATE_PLAYER':
-        payload = action['payload']
-        try:
-            player = Player.load(payload['name'])
-            validated_data = PlayerSerializer(payload).data
-            for key, value in validated_data.items():
-                setattr(player, key, value)
-            player.save()
-            player_updated.send(PlayerDetailsView, data=PlayerSerializer(player).data)
-        except KeyError:
-            pass
-
-    if action['type'] == '[Lobby] CREATE_PLAYER':
-        payload = action['payload']
-        player = PlayerSerializer(payload)
-
-        player.create(player.data)
-        player_saved.send(PlayerListView, data=player.data)
-
-    if action['type'] == '[Lobby] SEND_MESSAGE':
-        payload = action['payload']
-
-        send_message.send(LobbyDetailsView, data=payload)

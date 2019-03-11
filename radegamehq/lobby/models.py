@@ -1,4 +1,4 @@
-from walrus import Database, Model, TextField, IntegerField
+from walrus import Database, Model, TextField, IntegerField, BooleanField
 
 db = Database(host="localhost", port=6379, charset="utf-8", decode_responses=True)
 
@@ -29,3 +29,4 @@ class Player(Model):
     team = IntegerField()
     faction = IntegerField()
     color = IntegerField()
+    ready = BooleanField()
