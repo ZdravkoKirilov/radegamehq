@@ -19,6 +19,9 @@ from ..serializers.Phase import PhaseSerializer
 from ..serializers.Token import TokenSerializer
 from ..serializers.Source import SourceSerializer
 from ..serializers.ImageAsset import ImageAssetSerializer
+from ..serializers.Group import GroupSerializer
+from ..serializers.Style import StyleSerializer
+from ..serializers.Keyword import KeywordSerializer
 
 from ..entities.Action import Action
 from ..entities.Condition import Condition
@@ -34,6 +37,9 @@ from ..entities.Phase import Phase
 from ..entities.Token import Token
 from ..entities.Source import Source
 from ..entities.ImageAsset import ImageAsset
+from ..entities.Group import Group
+from ..entities.Style import Style
+from ..entities.Keyword import Keyword
 
 
 class GameView(generics.ListCreateAPIView):
@@ -72,6 +78,9 @@ class GameDataView(APIView):
         tokens = Token.objects.filter(game=kwargs['pk'])
         images = ImageAsset.objects.filter(game=kwargs['pk'])
         sources = Source.objects.filter(game=kwargs['pk'])
+        groups = Group.objects.filter(game=kwargs['pk'])
+        styles = Style.objects.filter(game=kwargs['pk'])
+        keywords = Keyword.objects.filter(game=kwargs['pk'])
 
         return Response({
             'actions': ActionSerializer(actions, many=True).data,
@@ -91,4 +100,7 @@ class GameDataView(APIView):
             'tokens': TokenSerializer(tokens, many=True).data,
             'images': ImageAssetSerializer(images, many=True).data,
             'sources': SourceSerializer(sources, many=True).data,
+            'groups': GroupSerializer(groups, many=True).data,
+            'styles': StyleSerializer(styles, many=True).data,
+            'keywords': KeywordSerializer(keywords, many=True).data,
         })

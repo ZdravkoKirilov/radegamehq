@@ -1,7 +1,7 @@
 from rest_framework import generics
 
-from api.entities.Team import Team
-from api.serializers.Team import TeamSerializer
+from ..entities.Team import Team
+from ..serializers.Team import TeamSerializer
 
 
 class TeamView(generics.ListCreateAPIView):

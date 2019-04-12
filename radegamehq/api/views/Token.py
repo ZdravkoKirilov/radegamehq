@@ -1,7 +1,7 @@
 from rest_framework import generics
 
-from api.entities.Token import Token
-from api.serializers.Token import TokenSerializer
+from ..entities.Token import Token
+from ..serializers.Token import TokenSerializer
 
 
 class TokenView(generics.ListCreateAPIView):

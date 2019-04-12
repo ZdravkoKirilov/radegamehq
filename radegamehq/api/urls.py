@@ -15,6 +15,9 @@ from .views.Token import TokenView, TokenDetailsView
 from .views.Phase import PhaseView, PhaseDetailsView
 from .views.Team import TeamView, TeamDetailsView
 from .views.ImageAsset import ImageAssetView, ImageAssetDetailsView
+from .views.Keyword import KeywordView, KeywordDetailsView
+from .views.Style import StyleView, StyleDetailsView
+from .views.Group import GroupView, GroupDetailsView
 
 urlpatterns = {
 
@@ -68,6 +71,18 @@ urlpatterns = {
     url(r'games/(?P<gameid>[0-9]+)/teams/(?P<pk>[0-9]+)/$', TeamDetailsView.as_view(),
         name="team.details"),
     url(r'games/(?P<pk>[0-9]+)/teams/$', TeamView.as_view(), name="team.list"),
+
+    url(r'games/(?P<gameid>[0-9]+)/groups/(?P<pk>[0-9]+)/$', GroupDetailsView.as_view(),
+        name="group.details"),
+    url(r'games/(?P<pk>[0-9]+)/groups/$', GroupView.as_view(), name="group.list"),
+
+    url(r'games/(?P<gameid>[0-9]+)/keywords/(?P<pk>[0-9]+)/$', KeywordDetailsView.as_view(),
+        name="keywords.details"),
+    url(r'games/(?P<pk>[0-9]+)/keywords/$', KeywordView.as_view(), name="keywords.list"),
+
+    url(r'games/(?P<gameid>[0-9]+)/styles/(?P<pk>[0-9]+)/$', StyleDetailsView.as_view(),
+        name="style.details"),
+    url(r'games/(?P<pk>[0-9]+)/styles/$', StyleView.as_view(), name="style.list"),
 
     # path('games/<int:pk>/data/', GameDataView.as_view(), name="game.data"),
     url(r'games/(?P<pk>[0-9]+)/data/$', GameDataView.as_view(), name="game.data"),

@@ -1,19 +1,22 @@
 from django.contrib import admin
 
-from api.entities.Path import Path
-from api.entities.Stage import Stage
-from api.entities.Choice import Choice, ChoiceOption
-from api.entities.Condition import Condition, ConditionClause
-from api.entities.Field import Field
+from .entities.Path import Path
+from .entities.Stage import Stage
+from .entities.Choice import Choice, ChoiceOption
+from .entities.Condition import Condition, ConditionClause
+from .entities.Field import Field
 from .entities.Slot import Slot
-from api.entities.Action import Action, ActionConfig
-from api.entities.Round import Round
-from api.entities.Phase import Phase
-from api.entities.Faction import Faction
-from api.entities.Source import Source, SourceItem
-from api.entities.Token import Token
+from .entities.Action import Action, ActionConfig
+from .entities.Round import Round
+from .entities.Phase import Phase
+from .entities.Faction import Faction
+from .entities.Source import Source
+from .entities.Token import Token
 from .entities.Game import Game, Setup
 from .entities.ImageAsset import ImageAsset
+from .entities.Keyword import Keyword
+from .entities.Style import Style
+from .entities.Group import Group, GroupItem
 
 admin.site.register(Game)
 admin.site.register(Field)
@@ -31,6 +34,9 @@ admin.site.register(Choice)
 admin.site.register(ChoiceOption)
 admin.site.register(Stage)
 admin.site.register(Source)
-admin.site.register(SourceItem)
 admin.site.register(Setup)
 admin.site.register(ImageAsset)
+admin.site.register(Style)
+admin.site.register(Keyword)
+admin.site.register(Group)
+admin.site.register(GroupItem)

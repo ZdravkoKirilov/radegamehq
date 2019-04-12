@@ -1,7 +1,7 @@
 from rest_framework import generics
 
-from api.entities.Source import Source
-from api.serializers.Source import SourceSerializer
+from ..entities.Source import Source
+from ..serializers.Source import SourceSerializer
 
 
 class SourceView(generics.ListCreateAPIView):
