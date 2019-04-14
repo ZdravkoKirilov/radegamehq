@@ -14,7 +14,7 @@ class Group(EntityBase, models.Model):
         return "{}".format(self.name)
 
 
-class GroupItem(EntityBase, WithPermissions, WithCost, WithSetups):
+class GroupItem(WithPermissions, WithCost, WithSetups):
     owner = models.ForeignKey(Group, blank=True, null=True, on_delete=models.CASCADE, related_name='items')
 
     action = models.ForeignKey('Action', on_delete=models.CASCADE, null=True, blank=True)

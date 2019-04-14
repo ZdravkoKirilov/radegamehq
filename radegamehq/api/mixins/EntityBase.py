@@ -7,7 +7,7 @@ class EntityBase(models.Model):
     name = models.CharField(max_length=255, blank=False)
     description = models.TextField(blank=True, null=True)
     image = models.ForeignKey('ImageAsset', blank=True, null=True, on_delete=models.SET_NULL)
-    keywords = models.CharField(null=True, blank=True, max_length=255)
+    keywords = models.ManyToManyField('Keyword', blank=True, related_name='keywords_%(class)ss')
 
     def __str__(self):
         return "{}".format(self.name)
