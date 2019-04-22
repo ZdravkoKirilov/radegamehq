@@ -1,24 +1,18 @@
 from rest_framework import serializers
 
 from ..entities.Field import Field
-from ..entities.Source import Source
+from ..entities.Group import Group
 
-from ..mixins.NestedSerializing import NestedSerializer
-from ..helpers.image_sanitize import sanitize_image
+from ..mixins.NestedSerializing import with_nesting
 
 
-class FieldSerializer(NestedSerializer, serializers.ModelSerializer):
-
+@with_nesting([
+    {'name': 'cost', 'model': Group, 'm2m': True},
+    {'name': 'risk', 'model': Group, 'm2m': True},
+    {'name': 'done', 'model': Group, 'm2m': True},
+    {'name': 'undone', 'model': Group, 'm2m': True},
+])
+class FieldSerializer(serializers.ModelSerializer):
     class Meta:
         model = Field
         fields = '__all__'
-
-    def nested_entities(self):
-        return [
-            {'name': 'cost', 'model': Source, 'm2m': True},
-            {'name': 'risk', 'model': Source, 'm2m': True},
-            {'name': 'done', 'model': Source, 'm2m': True},
-            {'name': 'undone', 'model': Source, 'm2m': True},
-        ]
-
-

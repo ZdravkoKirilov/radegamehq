@@ -18,6 +18,8 @@ from .views.ImageAsset import ImageAssetView, ImageAssetDetailsView
 from .views.Keyword import KeywordView, KeywordDetailsView
 from .views.Style import StyleView, StyleDetailsView
 from .views.Group import GroupView, GroupDetailsView
+from .views.Sound import SoundDetailsView, SoundView
+from .views.State import StateDetailsView, StateView
 
 urlpatterns = {
 
@@ -83,6 +85,14 @@ urlpatterns = {
     url(r'games/(?P<gameid>[0-9]+)/styles/(?P<pk>[0-9]+)/$', StyleDetailsView.as_view(),
         name="style.details"),
     url(r'games/(?P<pk>[0-9]+)/styles/$', StyleView.as_view(), name="style.list"),
+
+    url(r'games/(?P<gameid>[0-9]+)/sounds/(?P<pk>[0-9]+)/$', SoundDetailsView.as_view(),
+        name="sound.details"),
+    url(r'games/(?P<pk>[0-9]+)/sounds/$', SoundView.as_view(), name="sound.list"),
+
+    url(r'games/(?P<gameid>[0-9]+)/states/(?P<pk>[0-9]+)/$', StateDetailsView.as_view(),
+        name="state.details"),
+    url(r'games/(?P<pk>[0-9]+)/states/$', StateView.as_view(), name="state.list"),
 
     # path('games/<int:pk>/data/', GameDataView.as_view(), name="game.data"),
     url(r'games/(?P<pk>[0-9]+)/data/$', GameDataView.as_view(), name="game.data"),
