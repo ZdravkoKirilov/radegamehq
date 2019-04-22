@@ -12,7 +12,7 @@ class AppUser(models.Model):
 
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
 
-    alias = models.CharField(max_length=255)
+    alias = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         pass

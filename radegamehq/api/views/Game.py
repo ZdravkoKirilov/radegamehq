@@ -22,6 +22,8 @@ from ..serializers.ImageAsset import ImageAssetSerializer
 from ..serializers.Group import GroupSerializer
 from ..serializers.Style import StyleSerializer
 from ..serializers.Keyword import KeywordSerializer
+from ..serializers.Sound import SoundSerializer
+from ..serializers.State import StateSerializer
 
 from ..entities.Action import Action
 from ..entities.Condition import Condition
@@ -40,6 +42,8 @@ from ..entities.ImageAsset import ImageAsset
 from ..entities.Group import Group
 from ..entities.Style import Style
 from ..entities.Keyword import Keyword
+from ..entities.Sound import Sound
+from ..entities.State import State
 
 
 class GameView(generics.ListCreateAPIView):
@@ -81,6 +85,8 @@ class GameDataView(APIView):
         groups = Group.objects.filter(game=kwargs['pk'])
         styles = Style.objects.filter(game=kwargs['pk'])
         keywords = Keyword.objects.filter(game=kwargs['pk'])
+        sounds = Sound.objects.filter(game=kwargs['pk'])
+        states = State.objects.filter(game=kwargs['pk'])
 
         return Response({
             'actions': ActionSerializer(actions, many=True).data,
@@ -103,4 +109,6 @@ class GameDataView(APIView):
             'groups': GroupSerializer(groups, many=True).data,
             'styles': StyleSerializer(styles, many=True).data,
             'keywords': KeywordSerializer(keywords, many=True).data,
+            'sounds': SoundSerializer(sounds, many=True).data,
+            'states': StateSerializer(states, many=True).data,
         })
