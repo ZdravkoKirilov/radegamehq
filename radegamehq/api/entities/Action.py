@@ -1,9 +1,10 @@
 from django.db import models
 
-from ..mixins.EntityBase import EntityBase, WithPermissions, WithCost, WithCondition, WithReveal, WithStakes
+from ..mixins.EntityBase import EntityBase, WithPermissions, WithCost, WithCondition, WithReveal, WithStakes, \
+    WithKeywords
 
 
-class Action(EntityBase, WithPermissions, WithCost, WithCondition, WithReveal, WithStakes):
+class Action(EntityBase, WithPermissions, WithCost, WithCondition, WithReveal, WithStakes, WithKeywords):
     mode = models.CharField(max_length=255)
 
     def __str__(self):

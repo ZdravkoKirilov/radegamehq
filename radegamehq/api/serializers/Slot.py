@@ -3,7 +3,7 @@ from rest_framework import serializers
 from ..entities.Slot import Slot
 from ..entities.Condition import Condition
 from ..mixins.NestedSerializing import NestedSerializer
-from ..entities.Source import Source
+from ..entities.Keyword import Keyword
 
 
 class SlotSerializer(NestedSerializer, serializers.ModelSerializer):
@@ -15,6 +15,5 @@ class SlotSerializer(NestedSerializer, serializers.ModelSerializer):
         return [
             {'name': 'enable', 'model': Condition, 'm2m': True},
             {'name': 'disable', 'model': Condition, 'm2m': True},
-            {'name': 'settings', 'model': Source, 'm2m': True},
-            {'name': 'risk', 'model': Source, 'm2m': True},
+            {'name': 'keywords', 'model': Keyword, 'm2m': True},
         ]

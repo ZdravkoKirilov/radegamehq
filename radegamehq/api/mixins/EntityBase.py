@@ -7,10 +7,24 @@ class EntityBase(models.Model):
     name = models.CharField(max_length=255, blank=False)
     description = models.TextField(blank=True, null=True)
     image = models.ForeignKey('ImageAsset', blank=True, null=True, on_delete=models.SET_NULL)
-    keywords = models.ManyToManyField('Keyword', blank=True, related_name='keywords_%(class)ss')
 
     def __str__(self):
         return "{}".format(self.name)
+
+    class Meta:
+        abstract = True
+
+
+class WithStyle(models.Model):
+    style = models.ForeignKey('Style', blank=True, null=True, on_delete=models.SET_NULL,
+                              related_name='style_%(class)ss')
+
+    class Meta:
+        abstract = True
+
+
+class WithKeywords(models.Model):
+    keywords = models.ManyToManyField('Keyword', blank=True, related_name='keywords_%(class)ss')
 
     class Meta:
         abstract = True

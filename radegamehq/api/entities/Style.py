@@ -4,9 +4,16 @@ from ..mixins.EntityBase import EntityBase
 
 
 class Style(EntityBase, models.Model):
-
     frame = models.IntegerField(null=True, blank=True)
     rotation = models.IntegerField(null=True, blank=True)
+
+    width = models.TextField(null=True, blank=True)
+    height = models.TextField(null=True, blank=True)
+    fill = models.TextField(null=True, blank=True)
+    strokeColor = models.TextField(null=True, blank=True)
+    strokeThickness = models.TextField(null=True, blank=True)
+    points = models.TextField(null=True, blank=True)
+    shape = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return "{}".format(self.name)
