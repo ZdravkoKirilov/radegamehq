@@ -1,12 +1,9 @@
 from django.db import models
-
 from .Slot import Slot
+from ..mixins.EntityBase import EntityBase, WithPermissions, WithSetups, WithStyle
 
-from ..mixins.EntityBase import EntityBase, WithPermissions, WithRisk, WithStakes, WithBoard, WithCost
 
-
-class Path(EntityBase, WithPermissions, WithRisk, WithStakes, WithBoard, WithCost):
-
+class Path(EntityBase, WithPermissions, WithSetups, WithStyle):
     owner = models.ForeignKey('Stage', on_delete=models.CASCADE, related_name='path_owner')
 
     from_slot = models.ForeignKey(
@@ -18,6 +15,8 @@ class Path(EntityBase, WithPermissions, WithRisk, WithStakes, WithBoard, WithCos
         Slot,
         on_delete=models.CASCADE,
     )
+
+    field = models.ForeignKey('Field', null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return "{}".format('From: ' + self.from_slot.name + ' To: ' + self.to_slot.name)

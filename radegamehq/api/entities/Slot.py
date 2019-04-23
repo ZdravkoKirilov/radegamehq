@@ -1,6 +1,6 @@
 from django.db import models
 
-from api.mixins.EntityBase import EntityBase, WithPermissions, WithBoard, WithKeywords, \
+from ..mixins.EntityBase import EntityBase, WithPermissions, WithBoard, WithKeywords, \
     WithStyle
 
 
