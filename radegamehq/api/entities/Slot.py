@@ -1,10 +1,9 @@
 from django.db import models
 
-from ..mixins.EntityBase import EntityBase, WithPermissions, WithBoard, WithKeywords, \
-    WithStyle
+from ..mixins.EntityBase import EntityBase, WithBoard, WithStyle
 
 
-class Slot(EntityBase, WithPermissions, WithBoard, WithKeywords, WithStyle):
+class Slot(EntityBase, WithBoard, WithStyle):
     owner = models.ForeignKey('Stage', on_delete=models.CASCADE)
 
     field = models.ForeignKey('Field', null=True, blank=True, on_delete=models.SET_NULL)
@@ -15,3 +14,7 @@ class Slot(EntityBase, WithPermissions, WithBoard, WithKeywords, WithStyle):
 
     def __str__(self):
         return "{}".format(self.name)
+
+
+# class SlotFrame(ImageFrame):
+#     owner = models.ForeignKey(Slot, blank=True, null=True, on_delete=models.CASCADE, related_name='frames')

@@ -15,6 +15,14 @@ class EntityBase(models.Model):
         abstract = True
 
 
+class ImageFrame(models.Model):
+    image = models.ForeignKey('ImageAsset', blank=True, null=True, on_delete=models.CASCADE)
+    order = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        abstract = True
+
+
 class WithStyle(models.Model):
     style = models.ForeignKey('Style', blank=True, null=True, on_delete=models.SET_NULL,
                               related_name='style_%(class)ss')
