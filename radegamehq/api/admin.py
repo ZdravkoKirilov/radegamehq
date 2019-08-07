@@ -17,6 +17,9 @@ from .entities.ImageAsset import ImageAsset
 from .entities.Keyword import Keyword
 from .entities.Style import Style
 from .entities.Group import Group, GroupItem
+from .entities.State import State
+from .entities.Expression import Expression
+from .entities.Sound import Sound
 
 admin.site.register(Game)
 admin.site.register(Field)
@@ -40,3 +43,6 @@ admin.site.register(Style)
 admin.site.register(Keyword)
 admin.site.register(Group)
 admin.site.register(GroupItem)
+admin.site.register(State)
+admin.site.register(Expression)
+admin.site.register(Sound)
