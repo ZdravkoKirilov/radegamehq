@@ -12,7 +12,7 @@ from .entities.Phase import Phase
 from .entities.Faction import Faction
 from .entities.Source import Source
 from .entities.Token import Token
-from .entities.Game import Game, Setup
+from .entities.Game import Game
 from .entities.ImageAsset import ImageAsset
 from .entities.Keyword import Keyword
 from .entities.Style import Style
@@ -20,6 +20,9 @@ from .entities.Group import Group, GroupItem
 from .entities.State import State
 from .entities.Expression import Expression
 from .entities.Sound import Sound
+from .entities.Setup import Setup
+from .entities.Animation import Animation
+from .entities.Handler import Handler
 
 admin.site.register(Game)
 admin.site.register(Field)
@@ -46,3 +49,5 @@ admin.site.register(GroupItem)
 admin.site.register(State)
 admin.site.register(Expression)
 admin.site.register(Sound)
+admin.site.register(Animation)
+admin.site.register(Handler)

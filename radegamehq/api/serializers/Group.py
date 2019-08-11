@@ -1,9 +1,8 @@
 from rest_framework import serializers
 
 from ..entities.Group import GroupItem, Group
-from ..entities.Keyword import Keyword
 from ..entities.Condition import Condition
-from ..entities.Game import Setup
+from ..entities.Setup import Setup
 
 from ..mixins.NestedSerializing import with_nesting
 

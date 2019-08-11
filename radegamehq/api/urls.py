@@ -23,6 +23,7 @@ from .views.State import StateDetailsView, StateView
 from .views.Expression import ExpressionView, ExpressionDetailsView
 from .views.Animation import AnimationView, AnimationDetailsView
 from .views.Handler import HandlerView, HandlerDetailsView
+from .views.Setup import SetupDetailsView, SetupView
 
 urlpatterns = {
 
@@ -108,6 +109,10 @@ urlpatterns = {
     url(r'games/(?P<gameid>[0-9]+)/handlers/(?P<pk>[0-9]+)/$', HandlerDetailsView.as_view(),
         name="handler.details"),
     url(r'games/(?P<pk>[0-9]+)/handlers/$', HandlerView.as_view(), name="handler.list"),
+
+    url(r'games/(?P<gameid>[0-9]+)/setups/(?P<pk>[0-9]+)/$', SetupDetailsView.as_view(),
+        name="setup.details"),
+    url(r'games/(?P<pk>[0-9]+)/setups/$', SetupView.as_view(), name="setup.list"),
 
     # path('games/<int:pk>/data/', GameDataView.as_view(), name="game.data"),
     url(r'games/(?P<pk>[0-9]+)/data/$', GameDataView.as_view(), name="game.data"),

@@ -27,6 +27,7 @@ from ..serializers.State import StateSerializer
 from ..serializers.Expression import ExpressionSerializer
 from ..serializers.Animation import AnimationSerializer
 from ..serializers.Handler import HandlerSerializer
+from ..serializers.Setup import SetupSerializer
 
 from ..entities.Action import Action
 from ..entities.Condition import Condition
@@ -50,7 +51,7 @@ from ..entities.State import State
 from ..entities.Expression import Expression
 from ..entities.Animation import Animation
 from ..entities.Handler import Handler
-
+from ..entities.Setup import Setup
 
 class GameView(generics.ListCreateAPIView):
     serializer_class = GameSerializer
@@ -96,6 +97,7 @@ class GameDataView(APIView):
         expressions = Expression.objects.filter(game=kwargs['pk'])
         animations = Animation.objects.filter(game=kwargs['pk'])
         handlers = Handler.objects.filter(game=kwargs['pk'])
+        setups = Setup.objects.filter(game=kwargs['pk'])
 
         return Response({
             'actions': ActionSerializer(actions, many=True).data,
@@ -123,4 +125,5 @@ class GameDataView(APIView):
             'expressions': ExpressionSerializer(expressions, many=True).data,
             'animations': AnimationSerializer(animations, many=True).data,
             'handlers': HandlerSerializer(handlers, many=True).data,
+            'setups': SetupSerializer(setups, many=True).data
         })
