@@ -25,6 +25,8 @@ from ..serializers.Keyword import KeywordSerializer
 from ..serializers.Sound import SoundSerializer
 from ..serializers.State import StateSerializer
 from ..serializers.Expression import ExpressionSerializer
+from ..serializers.Animation import AnimationSerializer
+from ..serializers.Handler import HandlerSerializer
 
 from ..entities.Action import Action
 from ..entities.Condition import Condition
@@ -46,6 +48,8 @@ from ..entities.Keyword import Keyword
 from ..entities.Sound import Sound
 from ..entities.State import State
 from ..entities.Expression import Expression
+from ..entities.Animation import Animation
+from ..entities.Handler import Handler
 
 
 class GameView(generics.ListCreateAPIView):
@@ -90,6 +94,8 @@ class GameDataView(APIView):
         sounds = Sound.objects.filter(game=kwargs['pk'])
         states = State.objects.filter(game=kwargs['pk'])
         expressions = Expression.objects.filter(game=kwargs['pk'])
+        animations = Animation.objects.filter(game=kwargs['pk'])
+        handlers = Handler.objects.filter(game=kwargs['pk'])
 
         return Response({
             'actions': ActionSerializer(actions, many=True).data,
@@ -114,5 +120,7 @@ class GameDataView(APIView):
             'keywords': KeywordSerializer(keywords, many=True).data,
             'sounds': SoundSerializer(sounds, many=True).data,
             'states': StateSerializer(states, many=True).data,
-            'expressions': ExpressionSerializer(expressions, many=True).data
+            'expressions': ExpressionSerializer(expressions, many=True).data,
+            'animations': AnimationSerializer(animations, many=True).data,
+            'handlers': HandlerSerializer(handlers, many=True).data,
         })

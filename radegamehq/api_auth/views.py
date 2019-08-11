@@ -14,8 +14,10 @@ class GetCurrentUserView(RetrieveAPIView):
 
     def retrieve(self, request, *args, **kwargs):
         instance = request.user
-        serializer = self.get_serializer(instance)
-        return Response(serializer.data)
+        if instance:
+            serializer = self.get_serializer(instance)
+            return Response(serializer.data)
+        return Response(None)
 
 
 class CreateLocalUserView(CreateAPIView):
