@@ -62,15 +62,15 @@ class WithBoard(models.Model):
 
 
 class WithStakes(models.Model):
-    done = models.ManyToManyField('Source', blank=True, related_name='done_%(class)ss')
-    undone = models.ManyToManyField('Source', blank=True, related_name='undone_%(class)ss')
+    done = models.ManyToManyField('Expression', blank=True, related_name='done_%(class)ss')
+    undone = models.ManyToManyField('Expression', blank=True, related_name='undone_%(class)ss')
 
     class Meta:
         abstract = True
 
 
 class WithRisk(models.Model):
-    risk = models.ManyToManyField('Source', blank=True, related_name='risk_%(class)ss')
+    risk = models.ManyToManyField('Expression', blank=True, related_name='risk_%(class)ss')
 
     class Meta:
         abstract = True
@@ -84,14 +84,14 @@ class WithCondition(models.Model):
 
 
 class WithCost(models.Model):
-    cost = models.ManyToManyField('Source', blank=True, related_name='cost_%(class)ss')
+    cost = models.ManyToManyField('Expression', blank=True, related_name='cost_%(class)ss')
 
     class Meta:
         abstract = True
 
 
 class WithReveal(models.Model):
-    reveal_cost = models.ManyToManyField('Source', blank=True, related_name='reveal_cost_%(class)ss')
+    reveal_cost = models.ManyToManyField('Expression', blank=True, related_name='reveal_cost_%(class)ss')
     reveal_slots = models.IntegerField(null=True, blank=True)
 
     class Meta:

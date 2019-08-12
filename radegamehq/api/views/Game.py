@@ -17,9 +17,7 @@ from ..serializers.Team import TeamSerializer
 from ..serializers.Round import RoundSerializer
 from ..serializers.Phase import PhaseSerializer
 from ..serializers.Token import TokenSerializer
-from ..serializers.Source import SourceSerializer
 from ..serializers.ImageAsset import ImageAssetSerializer
-from ..serializers.Group import GroupSerializer
 from ..serializers.Style import StyleSerializer
 from ..serializers.Keyword import KeywordSerializer
 from ..serializers.Sound import SoundSerializer
@@ -41,9 +39,7 @@ from ..entities.Team import Team
 from ..entities.Round import Round
 from ..entities.Phase import Phase
 from ..entities.Token import Token
-from ..entities.Source import Source
 from ..entities.ImageAsset import ImageAsset
-from ..entities.Group import Group
 from ..entities.Style import Style
 from ..entities.Keyword import Keyword
 from ..entities.Sound import Sound
@@ -52,6 +48,7 @@ from ..entities.Expression import Expression
 from ..entities.Animation import Animation
 from ..entities.Handler import Handler
 from ..entities.Setup import Setup
+
 
 class GameView(generics.ListCreateAPIView):
     serializer_class = GameSerializer
@@ -88,8 +85,6 @@ class GameDataView(APIView):
 
         tokens = Token.objects.filter(game=kwargs['pk'])
         images = ImageAsset.objects.filter(game=kwargs['pk'])
-        sources = Source.objects.filter(game=kwargs['pk'])
-        groups = Group.objects.filter(game=kwargs['pk'])
         styles = Style.objects.filter(game=kwargs['pk'])
         keywords = Keyword.objects.filter(game=kwargs['pk'])
         sounds = Sound.objects.filter(game=kwargs['pk'])
@@ -116,8 +111,6 @@ class GameDataView(APIView):
 
             'tokens': TokenSerializer(tokens, many=True).data,
             'images': ImageAssetSerializer(images, many=True).data,
-            'sources': SourceSerializer(sources, many=True).data,
-            'groups': GroupSerializer(groups, many=True).data,
             'styles': StyleSerializer(styles, many=True).data,
             'keywords': KeywordSerializer(keywords, many=True).data,
             'sounds': SoundSerializer(sounds, many=True).data,

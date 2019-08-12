@@ -22,7 +22,7 @@ class ChoiceOption(WithSettings):
 
     image = models.ForeignKey(ImageAsset, blank=True, null=True, on_delete=models.SET_NULL)
 
-    effect = models.ManyToManyField('Source', blank=True)
+    effect = models.ManyToManyField('Expression', blank=True)
     value = models.CharField(null=True, blank=True, max_length=255)
     secret = models.BooleanField(null=True, blank=True)
 

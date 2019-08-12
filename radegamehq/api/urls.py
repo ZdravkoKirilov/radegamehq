@@ -10,14 +10,12 @@ from .views.Game import GameView, GameDetailsView, GameDataView
 from .views.Field import BoardFieldView, BoardFieldDetailsView
 from .views.Faction import FactionView, FactionDetailsView
 from .views.Action import ActionView, ActionDetailsView
-from .views.Source import SourceView, SourceDetailsView
 from .views.Token import TokenView, TokenDetailsView
 from .views.Phase import PhaseView, PhaseDetailsView
 from .views.Team import TeamView, TeamDetailsView
 from .views.ImageAsset import ImageAssetView, ImageAssetDetailsView
 from .views.Keyword import KeywordView, KeywordDetailsView
 from .views.Style import StyleView, StyleDetailsView
-from .views.Group import GroupView, GroupDetailsView
 from .views.Sound import SoundDetailsView, SoundView
 from .views.State import StateDetailsView, StateView
 from .views.Expression import ExpressionView, ExpressionDetailsView
@@ -62,10 +60,6 @@ urlpatterns = {
     url(r'games/(?P<gameid>[0-9]+)/fields/(?P<pk>[0-9]+)/$', BoardFieldDetailsView.as_view(), name="field.details"),
     url(r'games/(?P<pk>[0-9]+)/fields/$', BoardFieldView.as_view(), name="field.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/sources/(?P<pk>[0-9]+)/$', SourceDetailsView.as_view(),
-        name="pool.details"),
-    url(r'games/(?P<pk>[0-9]+)/sources/$', SourceView.as_view(), name="pool.list"),
-
     url(r'games/(?P<gameid>[0-9]+)/tokens/(?P<pk>[0-9]+)/$', TokenDetailsView.as_view(),
         name="token.details"),
     url(r'games/(?P<pk>[0-9]+)/tokens/$', TokenView.as_view(), name="token.list"),
@@ -77,10 +71,6 @@ urlpatterns = {
     url(r'games/(?P<gameid>[0-9]+)/teams/(?P<pk>[0-9]+)/$', TeamDetailsView.as_view(),
         name="team.details"),
     url(r'games/(?P<pk>[0-9]+)/teams/$', TeamView.as_view(), name="team.list"),
-
-    url(r'games/(?P<gameid>[0-9]+)/groups/(?P<pk>[0-9]+)/$', GroupDetailsView.as_view(),
-        name="group.details"),
-    url(r'games/(?P<pk>[0-9]+)/groups/$', GroupView.as_view(), name="group.list"),
 
     url(r'games/(?P<gameid>[0-9]+)/keywords/(?P<pk>[0-9]+)/$', KeywordDetailsView.as_view(),
         name="keywords.details"),

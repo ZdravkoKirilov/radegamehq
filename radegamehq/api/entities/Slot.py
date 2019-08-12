@@ -7,7 +7,6 @@ class Slot(EntityBase, WithBoard, WithStyle):
     owner = models.ForeignKey('Stage', on_delete=models.CASCADE)
 
     field = models.ForeignKey('Field', null=True, blank=True, on_delete=models.SET_NULL)
-    draw = models.ForeignKey('Source', null=True, blank=True, on_delete=models.SET_NULL, related_name='draw')
 
     x = models.IntegerField()
     y = models.IntegerField()
