@@ -1,15 +1,15 @@
 from django.db import models
 
-from api.mixins.EntityBase import EntityBase, WithBoard, WithCondition, WithStakes
+from ..mixins.EntityBase import EntityBase, WithBoard
 
 
-class Round(EntityBase, WithBoard, WithCondition, WithStakes):
-
-    replay_count = models.IntegerField(null=True, blank=True)  # how many tries to pass the condition
-    repeat = models.IntegerField(null=True, blank=True)  # repeat X times before going to the next round
-
-    phases = models.ManyToManyField('Phase', related_name='round_phases')
-    phase_order = models.TextField(null=True, blank=True)
+class Round(EntityBase, WithBoard):
 
     def __str__(self):
         return "{}".format(self.name)
+
+
+class PhaseSlot(models.Model):
+    owner = models.ForeignKey(Round, on_delete=models.CASCADE, related_name='phases', blank=True, null=True)
+    phase = models.ForeignKey('Phase', on_delete=models.CASCADE)
+    done = models.ForeignKey('Expression', on_delete=models.SET_NULL, null=True, blank=True)

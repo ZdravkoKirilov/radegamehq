@@ -1,18 +1,21 @@
 from rest_framework import serializers
 
-from ..entities.Round import Round
-from ..entities.Phase import Phase
-from ..entities.Condition import Condition
-from ..mixins.NestedSerializing import NestedSerializer
+from ..entities.Round import Round, PhaseSlot
+from ..mixins.NestedSerializing import with_nesting
 
 
-class RoundSerializer(NestedSerializer, serializers.ModelSerializer):
+class PhaseSlotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PhaseSlot
+        fields = '__all__'
+
+
+@with_nesting([
+    {'name': 'phases', 'model': PhaseSlot, 'm2m': False, 'serializer': PhaseSlotSerializer},
+])
+class RoundSerializer(serializers.ModelSerializer):
+    phases = PhaseSlotSerializer(many=True)
+
     class Meta:
         model = Round
         fields = '__all__'
-
-    def nested_entities(self):
-        return [
-            {'name': 'condition', 'model': Condition, 'm2m': True},
-            {'name': 'phases', 'model': Phase, 'm2m': True}
-        ]
