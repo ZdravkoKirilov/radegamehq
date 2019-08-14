@@ -1,10 +1,7 @@
-from django.db import models
-from ..mixins.EntityBase import EntityBase, WithSettings
+from ..mixins.EntityBase import EntityBase, WithDone, WithDisplayName
 
 
-class Phase(EntityBase, WithSettings):
-
-    turn_cycles = models.IntegerField(blank=True, null=True, default=1)
+class Phase(EntityBase, WithDone, WithDisplayName):
 
     def __str__(self):
         return 'Phase_{}'.format(self.name)

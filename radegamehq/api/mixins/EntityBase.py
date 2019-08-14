@@ -15,6 +15,27 @@ class EntityBase(models.Model):
         abstract = True
 
 
+class WithDone(models.Model):
+    done = models.ForeignKey('Expression', on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+
+class WithDisplayName(models.Model):
+    display_name = models.TextField(blank=True, null=True)
+
+    class Meta:
+        abstract = True
+
+
+class WithType(models.Model):
+    entity_type = models.CharField(max_length=255)
+
+    class Meta:
+        abstract = True
+
+
 class ImageFrame(models.Model):
     image = models.ForeignKey('ImageAsset', blank=True, null=True, on_delete=models.CASCADE)
     order = models.IntegerField(blank=True, null=True)
