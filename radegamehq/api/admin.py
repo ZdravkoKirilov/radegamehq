@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from .entities.Path import Path
 from .entities.Stage import Stage
-from .entities.Choice import Choice, ChoiceOption
+from .entities.Choice import Choice, ChoiceOption, ChoiceTip
 from .entities.Condition import Condition
 from .entities.Field import Field
 from .entities.Slot import Slot, SlotHandler, SlotItem
@@ -38,6 +38,7 @@ admin.site.register(PhaseSlot)
 admin.site.register(Phase)
 admin.site.register(Choice)
 admin.site.register(ChoiceOption)
+admin.site.register(ChoiceTip)
 admin.site.register(Stage)
 admin.site.register(Setup)
 admin.site.register(RoundSlot)
