@@ -3,7 +3,7 @@ from django.contrib import admin
 from .entities.Path import Path
 from .entities.Stage import Stage
 from .entities.Choice import Choice, ChoiceOption
-from .entities.Condition import Condition, ConditionClause
+from .entities.Condition import Condition
 from .entities.Field import Field
 from .entities.Slot import Slot, SlotHandler, SlotItem
 from .entities.Action import Action, ActionConfig
@@ -33,7 +33,6 @@ admin.site.register(Token)
 admin.site.register(Action)
 admin.site.register(ActionConfig)
 admin.site.register(Condition)
-admin.site.register(ConditionClause)
 admin.site.register(Round)
 admin.site.register(PhaseSlot)
 admin.site.register(Phase)

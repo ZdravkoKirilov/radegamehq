@@ -12,5 +12,7 @@ class Style(EntityBase, models.Model):
     strokeColor = models.TextField(null=True, blank=True)
     strokeThickness = models.IntegerField(null=True, blank=True)
 
+    hidden = models.NullBooleanField(blank=True, default=False)
+
     def __str__(self):
         return "{}".format(self.name)

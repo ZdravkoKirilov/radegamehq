@@ -91,8 +91,10 @@ class WithBoard(models.Model):
 
 
 class WithStakes(models.Model):
-    done = models.ManyToManyField('Expression', blank=True, related_name='done_%(class)ss')
-    undone = models.ManyToManyField('Expression', blank=True, related_name='undone_%(class)ss')
+    passes = models.ForeignKey('Expression', blank=True, null=True, related_name='passes_%(class)ss',
+                               on_delete=models.SET_NULL)
+    fails = models.ForeignKey('Expression', blank=True, null=True, related_name='fails_%(class)ss',
+                              on_delete=models.SET_NULL)
 
     class Meta:
         abstract = True
