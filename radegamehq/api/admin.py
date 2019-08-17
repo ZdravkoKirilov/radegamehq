@@ -5,7 +5,7 @@ from .entities.Stage import Stage
 from .entities.Choice import Choice, ChoiceOption
 from .entities.Condition import Condition, ConditionClause
 from .entities.Field import Field
-from .entities.Slot import Slot
+from .entities.Slot import Slot, SlotHandler, SlotItem
 from .entities.Action import Action, ActionConfig
 from .entities.Round import Round, PhaseSlot
 from .entities.Phase import Phase
@@ -25,6 +25,8 @@ from .entities.Handler import Handler
 admin.site.register(Game)
 admin.site.register(Field)
 admin.site.register(Slot)
+admin.site.register(SlotHandler)
+admin.site.register(SlotItem)
 admin.site.register(Path)
 admin.site.register(Faction)
 admin.site.register(Token)
