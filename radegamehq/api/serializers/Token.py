@@ -1,18 +1,14 @@
 from rest_framework import serializers
+
 from ..entities.Token import Token
-
-from ..entities.Condition import Condition
-
-from ..mixins.NestedSerializing import NestedSerializer
+from ..entities.Keyword import Keyword
+from ..mixins.NestedSerializing import with_nesting
 
 
-class TokenSerializer(NestedSerializer, serializers.ModelSerializer):
+@with_nesting([
+    {'name': 'keywords', 'model': Keyword, 'm2m': True},
+])
+class TokenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Token
         fields = '__all__'
-
-    def nested_entities(self):
-        return [
-            {'name': 'restricted', 'model': Condition, 'm2m': True},
-            {'name': 'allowed', 'model': Condition, 'm2m': True},
-        ]

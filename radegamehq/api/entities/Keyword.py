@@ -1,9 +1,7 @@
-from django.db import models
-
-from ..mixins.EntityBase import EntityBase
+from ..mixins.EntityBase import EntityBase, WithDisplayName
 
 
-class Keyword(EntityBase, models.Model):
+class Keyword(EntityBase, WithDisplayName):
 
     def __str__(self):
         return "{}".format(self.name)

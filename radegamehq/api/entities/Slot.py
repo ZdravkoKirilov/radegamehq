@@ -1,15 +1,16 @@
 from django.db import models
 
-from ..mixins.EntityBase import EntityBase, WithBoard, WithStyle
+from ..mixins.EntityBase import EntityBase, WithBoard, WithStyle, WithState
 
 
-class Slot(EntityBase, WithBoard, WithStyle):
+class Slot(EntityBase, WithBoard, WithStyle, WithState):
     owner = models.ForeignKey('Stage', on_delete=models.CASCADE)
-
-    field = models.ForeignKey('Field', null=True, blank=True, on_delete=models.SET_NULL)
 
     x = models.IntegerField()
     y = models.IntegerField()
+
+    display_text = models.ForeignKey('Expression', on_delete=models.SET_NULL, null=True, blank=True,
+                                     related_name='slot_display_text')
 
     def __str__(self):
         return "{}".format(self.name)

@@ -9,12 +9,8 @@ class Style(EntityBase, models.Model):
 
     width = models.IntegerField(null=True, blank=True)
     height = models.IntegerField(null=True, blank=True)
-    radius = models.IntegerField(null=True, blank=True)
-    fill = models.TextField(null=True, blank=True)
     strokeColor = models.TextField(null=True, blank=True)
     strokeThickness = models.IntegerField(null=True, blank=True)
-    points = models.TextField(null=True, blank=True)
-    shape = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return "{}".format(self.name)

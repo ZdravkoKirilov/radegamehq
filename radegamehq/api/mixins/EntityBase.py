@@ -36,6 +36,14 @@ class WithType(models.Model):
         abstract = True
 
 
+class WithState(models.Model):
+    state = models.ForeignKey('Expression', on_delete=models.SET_NULL, null=True, blank=True,
+                              related_name='state_%(class)ss')
+
+    class Meta:
+        abstract = True
+
+
 class ImageFrame(models.Model):
     image = models.ForeignKey('ImageAsset', blank=True, null=True, on_delete=models.CASCADE)
     order = models.IntegerField(blank=True, null=True)
