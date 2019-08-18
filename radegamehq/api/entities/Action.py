@@ -1,9 +1,9 @@
 from django.db import models
 
-from ..mixins.EntityBase import EntityBase, WithFrame
+from ..mixins.EntityBase import EntityBase, WithFrame, WithDisplayName
 
 
-class Action(EntityBase):
+class Action(EntityBase, WithDisplayName):
 
     def __str__(self):
         return "{}".format(self.name)

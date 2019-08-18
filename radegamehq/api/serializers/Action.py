@@ -22,6 +22,7 @@ class ActionConfigSerializer(serializers.ModelSerializer):
 ])
 class ActionSerializer(serializers.ModelSerializer):
     configs = ActionConfigSerializer(many=True)
+    frames = ActionFrameSerializer(many=True)
 
     class Meta:
         model = Action

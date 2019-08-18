@@ -84,4 +84,7 @@ class WithStakes(models.Model):
 
 
 class WithFrame(models.Model):
-    frame = models.ForeignKey('ImageAsset', on_delete=models.CASCADE, related_name='frame_%(class)ss')
+    image = models.ForeignKey('ImageAsset', on_delete=models.CASCADE, related_name='frame_%(class)ss')
+
+    class Meta:
+        abstract = True
