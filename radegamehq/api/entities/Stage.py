@@ -1,9 +1,9 @@
 from django.db import models
 
-from ..mixins.EntityBase import EntityBase
+from ..mixins.EntityBase import EntityBase, WithImage
 
 
-class Stage(EntityBase, models.Model):
+class Stage(EntityBase, WithImage):
 
     width = models.IntegerField()
     height = models.IntegerField()

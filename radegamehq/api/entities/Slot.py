@@ -1,9 +1,9 @@
 from django.db import models
 
-from ..mixins.EntityBase import EntityBase, WithBoard, WithStyle, WithState
+from ..mixins.EntityBase import EntityBase, WithBoard, WithStyle, WithState, WithImage
 
 
-class Slot(EntityBase, WithBoard, WithStyle, WithState):
+class Slot(EntityBase, WithBoard, WithStyle, WithState, WithImage):
     owner = models.ForeignKey('Stage', on_delete=models.CASCADE)
 
     x = models.IntegerField()

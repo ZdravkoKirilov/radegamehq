@@ -1,12 +1,16 @@
 from django.db import models
 
-from ..mixins.EntityBase import EntityBase
+from ..mixins.EntityBase import EntityBase, WithFrame
 
 
 class Action(EntityBase):
 
     def __str__(self):
         return "{}".format(self.name)
+
+
+class ActionFrame(WithFrame):
+    owner = models.ForeignKey(Action, blank=True, null=True, on_delete=models.CASCADE, related_name='frames')
 
 
 class ActionConfig(models.Model):

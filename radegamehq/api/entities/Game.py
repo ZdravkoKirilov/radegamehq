@@ -1,7 +1,6 @@
 from django.db import models
 
 from api_auth.models import AppUser
-from ..mixins.EntityBase import WithSettings
 
 
 class Game(models.Model):
@@ -17,6 +16,3 @@ class Game(models.Model):
 
     def __str__(self):
         return "{}".format(self.title)
-
-
-

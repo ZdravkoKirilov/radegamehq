@@ -1,7 +1,7 @@
-from ..mixins.EntityBase import EntityBase, WithCost, WithRisk, WithBoard, WithStakes
+from ..mixins.EntityBase import EntityBase, WithBoard, WithStakes
 
 
-class Field(EntityBase, WithCost, WithRisk, WithBoard, WithStakes):
+class Field(EntityBase, WithBoard, WithStakes):
 
     def __str__(self):
         return "{}".format(self.name)

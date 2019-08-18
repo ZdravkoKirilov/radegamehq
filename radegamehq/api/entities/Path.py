@@ -1,9 +1,9 @@
 from django.db import models
 from .Slot import Slot
-from ..mixins.EntityBase import EntityBase, WithPermissions, WithSetups, WithStyle
+from ..mixins.EntityBase import EntityBase, WithStyle
 
 
-class Path(EntityBase, WithPermissions, WithSetups, WithStyle):
+class Path(EntityBase, WithStyle):
     owner = models.ForeignKey('Stage', on_delete=models.CASCADE, related_name='path_owner')
 
     from_slot = models.ForeignKey(
