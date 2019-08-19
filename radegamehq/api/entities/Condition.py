@@ -1,6 +1,6 @@
 from django.db import models
 
-from ..mixins.EntityBase import EntityBase, WithStakes
+from ..mixins.EntityBase import EntityBase, WithStakes, WithFrame
 
 
 class Condition(EntityBase, WithStakes):
@@ -8,3 +8,7 @@ class Condition(EntityBase, WithStakes):
 
     def __str__(self) -> str:
         return "{}".format(self.name)
+
+
+class ConditionFrame(WithFrame):
+    owner = models.ForeignKey(Condition, blank=True, null=True, on_delete=models.CASCADE, related_name='frames')
