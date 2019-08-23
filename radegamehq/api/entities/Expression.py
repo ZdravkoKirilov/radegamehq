@@ -7,6 +7,7 @@ class Expression(models.Model):
     name = models.CharField(max_length=255, blank=False)
     description = models.TextField(blank=True, null=True)
 
+    preload_as = models.CharField(max_length=255, blank=True, null=True)
     code = models.TextField(max_length=None)
 
     def __str__(self):

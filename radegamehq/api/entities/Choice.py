@@ -10,6 +10,8 @@ class Choice(EntityBase, WithKeywords, WithImage):
                              related_name='choice_time')
     options_filter = models.ForeignKey('Expression', on_delete=models.SET_NULL, null=True, blank=True,
                                        related_name='choice_options_filter')
+    scope = models.ForeignKey('Expression', on_delete=models.SET_NULL, null=True, blank=True,
+                              related_name='choice_scope')
 
     def __str__(self):
         return "{}".format(self.name)
