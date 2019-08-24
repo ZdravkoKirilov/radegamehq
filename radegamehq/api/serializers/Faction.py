@@ -1,14 +1,12 @@
 from rest_framework import serializers
 
 from ..entities.Faction import Faction
-from ..entities.Condition import Condition
-from ..entities.Setup import Setup
+from ..entities.Stage import Stage
 from ..mixins.NestedSerializing import with_nesting
 
 
 @with_nesting([
-    {'name': 'settings', 'model': Condition, 'm2m': True},
-    {'name': 'setups', 'model': Setup, 'm2m': True},
+    {'name': 'stages', 'model': Stage, 'm2m': True},
 ])
 class FactionSerializer(serializers.ModelSerializer):
     class Meta:
