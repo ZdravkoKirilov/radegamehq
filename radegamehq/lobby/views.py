@@ -1,10 +1,12 @@
 from .models import Lobby, Player
 from .serializers import LobbySerializer, PlayerSerializer
+from arena.serializers import GameInstanceSerializer
 from rest_framework import generics, status
 from rest_framework.response import Response
 from django.http import Http404
+import uuid
 
-from .signals import lobby_created, lobby_deleted, player_deleted, player_saved, player_updated
+from .signals import lobby_created, lobby_deleted, player_deleted, player_saved, player_updated, game_created
 
 
 class PlayerListView(generics.ListCreateAPIView):
@@ -110,3 +112,22 @@ class LobbyDetailsView(generics.RetrieveDestroyAPIView):
             raise Http404()
 
 
+class NewGameView(generics.CreateAPIView):
+
+    def create(self, request, *args, **kwargs):
+        payload = {
+            'game_id': request.data['game_id'],
+            'players': request.data['players'],
+        }
+        serialized = GameInstanceSerializer(data=payload)
+        serialized.is_valid()
+        instance = serialized.save()
+        game_instance_id = instance.public_id
+        response = {
+            'lobby': self.kwargs['pk'],
+            'game_instance_id': str(game_instance_id)
+        }
+
+        game_created.send(NewGameView, data=response)
+
+        return Response(game_instance_id, status=status.HTTP_201_CREATED)

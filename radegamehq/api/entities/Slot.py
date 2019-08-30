@@ -12,6 +12,8 @@ class Slot(EntityBase, WithBoard, WithStyle, WithState, WithImage):
     display_text = models.ForeignKey('Expression', on_delete=models.SET_NULL, null=True, blank=True,
                                      related_name='slot_display_text')
 
+    populate_by = models.ForeignKey('Expression', on_delete=models.SET_NULL, null=True, blank=True)
+
     def __str__(self):
         return "{}".format(self.name)
 

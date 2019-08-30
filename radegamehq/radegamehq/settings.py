@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'api_auth',
     'api',
     'lobby',
+    'arena',
     'corsheaders',
     'django_cleanup',
     'debug_toolbar',

@@ -20,6 +20,21 @@ send_message = django.dispatch.Signal(providing_args=['data'])
 
 handle_action = django.dispatch.Signal(providing_args=['data'])
 
+game_created = django.dispatch.Signal(providing_args=['data'])
+
+
+@receiver(game_created)
+def handle_game_created(sender, **kwargs):
+    layer = get_channel_layer(alias='lobbies')
+    lobby = 'lobby_%s' % kwargs['data']['lobby']
+    async_to_sync(layer.group_send)(
+        lobby,
+        {
+            "type": "game.starting",
+            "data": kwargs['data'],
+        },
+    )
+
 
 @receiver(lobby_created)
 def handle_lobby_created(sender, **kwargs):
