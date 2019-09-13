@@ -24,7 +24,7 @@ class GameInstance(models.Model):
 
 
 class GamePlayer(models.Model):
-    owner = models.ForeignKey(GameInstance, on_delete=models.CASCADE, null=True, blank=True)
+    owner = models.ForeignKey(GameInstance, on_delete=models.CASCADE, null=True, blank=True, related_name='players')
 
     name = models.CharField(max_length=255)
     user = models.ForeignKey(AppUser, on_delete=models.SET_NULL, blank=True, null=True)

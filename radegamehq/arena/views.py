@@ -11,8 +11,9 @@ class GameInstanceView(generics.RetrieveUpdateDestroyAPIView):
         return GameInstance.objects.all().filter(public_id=self.kwargs['public_id'])
 
 
-class ActiveGamesView(generics.RetrieveAPIView):
+class ActiveGamesView(generics.ListAPIView):
     serializer_class = GameInstanceSerializer
 
     def get_queryset(self):
-        return GameInstance.objects.all().filter(public_id=self.kwargs['public_id'])
+        result = GameInstance.objects.filter(players__user_id=self.kwargs['user_id'])
+        return result
