@@ -1,17 +1,15 @@
-from rest_framework import generics, status
-from rest_framework.response import Response
+from django.db.models import QuerySet
+from rest_framework import generics
 from .models import GameInstance
 from .serializers import GameInstanceSerializer
 
 
 class GameInstanceView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = GameInstanceSerializer
+    lookup_field = 'public_id'
 
-    def get_queryset(self):
-        try:
-            return GameInstance.objects.get(public_id=self.kwargs['public_id'])
-        except GameInstance.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+    def get_queryset(self) -> QuerySet:
+        return GameInstance.objects.all()
 
 
 class ActiveGamesView(generics.ListAPIView):
