@@ -4,6 +4,7 @@ import uuid
 from api.entities.Game import Game
 from api.entities.Team import Team
 from api.entities.Faction import Faction
+from api.entities.Setup import Setup
 from api_auth.models import AppUser
 
 
@@ -12,9 +13,8 @@ class GameInstance(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
 
     public_id = models.CharField(max_length=255, null=True, blank=True)
-
     game_id = models.ForeignKey(Game, on_delete=models.CASCADE)
-
+    setup = models.ForeignKey(Setup, on_delete=models.CASCADE)
     state = models.TextField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
