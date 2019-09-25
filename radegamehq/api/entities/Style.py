@@ -9,8 +9,9 @@ class Style(EntityBase, models.Model):
 
     width = models.IntegerField(null=True, blank=True)
     height = models.IntegerField(null=True, blank=True)
-    strokeColor = models.TextField(null=True, blank=True)
-    strokeThickness = models.IntegerField(null=True, blank=True)
+    stroke_color = models.TextField(null=True, blank=True)
+    stroke_thickness = models.IntegerField(null=True, blank=True)
+    opacity = models.FloatField(null=True, blank=True)
 
     hidden = models.NullBooleanField(blank=True, default=False)
 

@@ -14,5 +14,8 @@ class Handler(WithState, models.Model):
     effect = models.ForeignKey('Expression', on_delete=models.SET_NULL, null=True, blank=True,
                                related_name='handler_effect')
 
+    enabled = models.ForeignKey('Expression', on_delete=models.SET_NULL, null=True, blank=True,
+                                related_name='handler_enabled')
+
     def __str__(self):
         return "{}".format(self.name)

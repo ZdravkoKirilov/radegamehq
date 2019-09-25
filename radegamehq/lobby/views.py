@@ -118,6 +118,7 @@ class NewGameView(generics.CreateAPIView):
         payload = {
             'game_id': request.data['game_id'],
             'players': request.data['players'],
+            'setup': request.data['setup']
         }
         serialized = GameInstanceSerializer(data=payload)
         serialized.is_valid()
