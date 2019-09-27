@@ -19,10 +19,12 @@ from .entities.State import State
 from .entities.Expression import Expression
 from .entities.Sound import Sound
 from .entities.Setup import Setup, RoundSlot
-from .entities.Animation import Animation
+from .entities.Animation import Animation, AnimationStep
 from .entities.Handler import Handler
+from .entities.Transition import Transition
 
 admin.site.register(Game)
+admin.site.register(Transition)
 admin.site.register(Field)
 admin.site.register(Slot)
 admin.site.register(SlotHandler)
@@ -49,4 +51,5 @@ admin.site.register(State)
 admin.site.register(Expression)
 admin.site.register(Sound)
 admin.site.register(Animation)
+admin.site.register(AnimationStep)
 admin.site.register(Handler)

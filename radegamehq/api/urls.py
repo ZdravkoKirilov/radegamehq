@@ -22,6 +22,7 @@ from .views.Expression import ExpressionView, ExpressionDetailsView
 from .views.Animation import AnimationView, AnimationDetailsView
 from .views.Handler import HandlerView, HandlerDetailsView
 from .views.Setup import SetupDetailsView, SetupView
+from .views.Transition import TransitionDetailsView, TransitionView
 
 urlpatterns = {
 
@@ -54,8 +55,12 @@ urlpatterns = {
     url(r'games/(?P<pk>[0-9]+)/paths/$', MapPathView.as_view(), name="mappath.list"),
 
     url(r'games/(?P<gameid>[0-9]+)/slots/(?P<pk>[0-9]+)/$', SlotDetailsView.as_view(),
+        name="slot.details"),
+    url(r'games/(?P<pk>[0-9]+)/slots/$', SlotView.as_view(), name="slots.list"),
+
+    url(r'games/(?P<gameid>[0-9]+)/transitions/(?P<pk>[0-9]+)/$', TransitionDetailsView.as_view(),
         name="location.details"),
-    url(r'games/(?P<pk>[0-9]+)/slots/$', SlotView.as_view(), name="location.list"),
+    url(r'games/(?P<pk>[0-9]+)/transitions/$', TransitionView.as_view(), name="location.list"),
 
     url(r'games/(?P<gameid>[0-9]+)/fields/(?P<pk>[0-9]+)/$', BoardFieldDetailsView.as_view(), name="field.details"),
     url(r'games/(?P<pk>[0-9]+)/fields/$', BoardFieldView.as_view(), name="field.list"),
