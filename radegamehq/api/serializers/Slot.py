@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from ..entities.Slot import Slot, SlotItem, SlotHandler
+from ..entities.Transition import Transition
 from ..mixins.NestedSerializing import with_nesting
 
 
@@ -19,6 +20,7 @@ class SlotHandlerSerializer(serializers.ModelSerializer):
 @with_nesting([
     {'name': 'items', 'model': SlotItem, 'm2m': False, 'serializer': SlotItemSerializer},
     {'name': 'handlers', 'model': SlotHandler, 'm2m': False, 'serializer': SlotHandlerSerializer},
+    {'name': 'transitions', 'model': Transition, 'm2m': True},
 ])
 class SlotSerializer(serializers.ModelSerializer):
     items = SlotItemSerializer(many=True)

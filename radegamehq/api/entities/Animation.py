@@ -18,6 +18,9 @@ class AnimationStep(models.Model):
 
     delay = models.IntegerField(null=True, blank=True)
     easing = models.CharField(max_length=255)
+    duration = models.IntegerField(null=True, blank=True)
+    repeat = models.IntegerField(null=True, blank=True)
+    bidirectional = models.BooleanField(null=True, blank=True)
 
     from_style = models.ForeignKey('Style', on_delete=models.CASCADE, related_name='from_style')
     to_style = models.ForeignKey('Style', on_delete=models.CASCADE, related_name='to_style')
