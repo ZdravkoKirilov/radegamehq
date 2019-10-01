@@ -10,8 +10,11 @@ class Transition(models.Model):
     trigger = models.TextField()
     prop = models.CharField(max_length=255)
 
-    animation = models.ForeignKey('Animation', on_delete=models.CASCADE, related_name='animation', blank=True, null=True)
-    sound = models.ForeignKey('Sound', on_delete=models.CASCADE, related_name='sound', blank=True, null=True)
+    animation = models.ForeignKey('Animation', on_delete=models.SET_NULL, related_name='animation', blank=True,
+                                  null=True)
+    sound = models.ForeignKey('Sound', on_delete=models.SET_NULL, related_name='sound', blank=True, null=True)
+
+    enabled = models.ForeignKey('Expression', on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
         return "{}".format(self.name)
