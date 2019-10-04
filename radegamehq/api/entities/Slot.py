@@ -14,6 +14,9 @@ class Slot(EntityBase, WithBoard, WithStyle, WithState, WithImage):
 
     populate_by = models.ForeignKey('Expression', on_delete=models.SET_NULL, null=True, blank=True)
 
+    enabled = models.ForeignKey('Expression', on_delete=models.SET_NULL, null=True, blank=True,
+                                related_name='slot_enabled')
+
     transitions = models.ManyToManyField('Transition', blank=True, related_name='transitionss_%(class)ss')
 
     def __str__(self):
