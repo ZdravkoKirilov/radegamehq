@@ -1,6 +1,7 @@
 from django.db import models
 
 from api_auth.models import AppUser
+from ..mixins.EntityBase import WithImage
 
 
 class Game(models.Model):
@@ -16,3 +17,12 @@ class Game(models.Model):
 
     def __str__(self):
         return "{}".format(self.title)
+
+
+class GameLanguage(WithImage):
+    owner = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='languages', blank=True, null=True)
+    name = models.CharField(max_length=255)
+    display_name = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return "{}".format(self.name)

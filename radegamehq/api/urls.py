@@ -23,6 +23,7 @@ from .views.Animation import AnimationView, AnimationDetailsView
 from .views.Handler import HandlerView, HandlerDetailsView
 from .views.Setup import SetupDetailsView, SetupView
 from .views.Transition import TransitionDetailsView, TransitionView
+from .views.Text import TextView, TextDetailsView
 
 urlpatterns = {
 
@@ -117,6 +118,10 @@ urlpatterns = {
     url(r'games/(?P<gameid>[0-9]+)/imageassets/(?P<pk>[0-9]+)/$', ImageAssetDetailsView.as_view(),
         name="imageasset.details"),
     url(r'games/(?P<pk>[0-9]+)/imageassets/$', ImageAssetView.as_view(), name="imageasset.list"),
+
+    url(r'games/(?P<gameid>[0-9]+)/texts/(?P<pk>[0-9]+)/$', TextDetailsView.as_view(),
+        name="text.details"),
+    url(r'games/(?P<pk>[0-9]+)/texts/$', TextView.as_view(), name="text.list"),
 
 }
 

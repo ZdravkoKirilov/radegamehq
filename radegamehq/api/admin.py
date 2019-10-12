@@ -11,7 +11,7 @@ from .entities.Round import Round, PhaseSlot
 from .entities.Phase import Phase
 from .entities.Faction import Faction
 from .entities.Token import Token
-from .entities.Game import Game
+from .entities.Game import Game, GameLanguage
 from .entities.ImageAsset import ImageAsset
 from .entities.Keyword import Keyword
 from .entities.Style import Style
@@ -22,8 +22,12 @@ from .entities.Setup import Setup, RoundSlot
 from .entities.Animation import Animation, AnimationStep
 from .entities.Handler import Handler
 from .entities.Transition import Transition
+from .entities.Text import Text, Translation
 
 admin.site.register(Game)
+admin.site.register(GameLanguage)
+admin.site.register(Text)
+admin.site.register(Translation)
 admin.site.register(Transition)
 admin.site.register(Field)
 admin.site.register(Slot)

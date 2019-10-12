@@ -27,6 +27,7 @@ from ..serializers.Animation import AnimationSerializer
 from ..serializers.Handler import HandlerSerializer
 from ..serializers.Setup import SetupSerializer
 from ..serializers.Transition import TransitionSerializer
+from ..serializers.Text import TextSerializer
 
 from ..entities.Action import Action
 from ..entities.Condition import Condition
@@ -50,6 +51,7 @@ from ..entities.Animation import Animation
 from ..entities.Handler import Handler
 from ..entities.Setup import Setup
 from ..entities.Transition import Transition
+from ..entities.Text import Text
 
 
 class GameView(generics.ListCreateAPIView):
@@ -96,6 +98,7 @@ class GameDataView(APIView):
         handlers = Handler.objects.filter(game=kwargs['pk'])
         setups = Setup.objects.filter(game=kwargs['pk'])
         transitions = Transition.objects.filter(game=kwargs['pk'])
+        texts = Text.objects.filter(game=kwargs['pk'])
 
         return Response({
             'actions': ActionSerializer(actions, many=True).data,
@@ -122,5 +125,6 @@ class GameDataView(APIView):
             'animations': AnimationSerializer(animations, many=True).data,
             'handlers': HandlerSerializer(handlers, many=True).data,
             'setups': SetupSerializer(setups, many=True).data,
-            'transitions': TransitionSerializer(transitions, many=True).data
+            'transitions': TransitionSerializer(transitions, many=True).data,
+            'texts': TextSerializer(texts, many=True).data,
         })
