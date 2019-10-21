@@ -7,7 +7,6 @@ from .views.Condition import ConditionView, ConditionDetailsView
 from .views.Path import MapPathView, MapPathDetailsView
 from .views.Slot import SlotView, SlotDetailsView
 from .views.Game import GameView, GameDetailsView, GameDataView
-from .views.Field import BoardFieldView, BoardFieldDetailsView
 from .views.Faction import FactionView, FactionDetailsView
 from .views.Action import ActionView, ActionDetailsView
 from .views.Token import TokenView, TokenDetailsView
@@ -24,6 +23,7 @@ from .views.Handler import HandlerView, HandlerDetailsView
 from .views.Setup import SetupDetailsView, SetupView
 from .views.Transition import TransitionDetailsView, TransitionView
 from .views.Text import TextView, TextDetailsView
+from .views.Sonata import SonataView, SonataDetailsView
 
 urlpatterns = {
 
@@ -63,8 +63,8 @@ urlpatterns = {
         name="location.details"),
     url(r'games/(?P<pk>[0-9]+)/transitions/$', TransitionView.as_view(), name="location.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/fields/(?P<pk>[0-9]+)/$', BoardFieldDetailsView.as_view(), name="field.details"),
-    url(r'games/(?P<pk>[0-9]+)/fields/$', BoardFieldView.as_view(), name="field.list"),
+    url(r'games/(?P<gameid>[0-9]+)/sonatas/(?P<pk>[0-9]+)/$', SonataDetailsView.as_view(), name="sonata.details"),
+    url(r'games/(?P<pk>[0-9]+)/sonatas/$', SonataView.as_view(), name="sonata.list"),
 
     url(r'games/(?P<gameid>[0-9]+)/tokens/(?P<pk>[0-9]+)/$', TokenDetailsView.as_view(),
         name="token.details"),

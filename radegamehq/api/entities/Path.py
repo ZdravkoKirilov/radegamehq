@@ -16,7 +16,5 @@ class Path(EntityBase, WithStyle):
         on_delete=models.CASCADE,
     )
 
-    field = models.ForeignKey('Field', null=True, blank=True, on_delete=models.SET_NULL)
-
     def __str__(self):
         return "{}".format('From: ' + self.from_slot.name + ' To: ' + self.to_slot.name)

@@ -36,4 +36,3 @@ class SlotItem(models.Model):
     condition = models.ForeignKey('Condition', null=True, blank=True, on_delete=models.CASCADE)
     choice = models.ForeignKey('Choice', null=True, blank=True, on_delete=models.CASCADE)
     token = models.ForeignKey('Token', null=True, blank=True, on_delete=models.CASCADE)
-    field = models.ForeignKey('Field', null=True, blank=True, on_delete=models.CASCADE)

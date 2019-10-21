@@ -12,7 +12,6 @@ from ..serializers.Faction import FactionSerializer
 from ..serializers.Stage import StageSerializer
 from ..serializers.Slot import SlotSerializer
 from ..serializers.Path import MapPathSerializer
-from ..serializers.Field import FieldSerializer
 from ..serializers.Team import TeamSerializer
 from ..serializers.Round import RoundSerializer
 from ..serializers.Phase import PhaseSerializer
@@ -28,6 +27,7 @@ from ..serializers.Handler import HandlerSerializer
 from ..serializers.Setup import SetupSerializer
 from ..serializers.Transition import TransitionSerializer
 from ..serializers.Text import TextSerializer
+from ..serializers.Sonata import SonataSerializer
 
 from ..entities.Action import Action
 from ..entities.Condition import Condition
@@ -36,7 +36,6 @@ from ..entities.Faction import Faction
 from ..entities.Stage import Stage
 from ..entities.Slot import Slot
 from ..entities.Path import Path
-from ..entities.Field import Field
 from ..entities.Team import Team
 from ..entities.Round import Round
 from ..entities.Phase import Phase
@@ -52,7 +51,7 @@ from ..entities.Handler import Handler
 from ..entities.Setup import Setup
 from ..entities.Transition import Transition
 from ..entities.Text import Text
-
+from ..entities.Sonata import Sonata
 
 class GameView(generics.ListCreateAPIView):
     serializer_class = GameSerializer
@@ -81,7 +80,7 @@ class GameDataView(APIView):
         stages = Stage.objects.filter(game=kwargs['pk'])
         slots = Slot.objects.filter(game=kwargs['pk'])
         paths = Path.objects.filter(game=kwargs['pk'])
-        fields = Field.objects.filter(game=kwargs['pk'])
+        sonatas = Sonata.objects.filter(game=kwargs['pk'])
 
         teams = Team.objects.filter(game=kwargs['pk'])
         rounds = Round.objects.filter(game=kwargs['pk'])
@@ -109,7 +108,7 @@ class GameDataView(APIView):
             'stages': StageSerializer(stages, many=True).data,
             'slots': SlotSerializer(slots, many=True).data,
             'paths': MapPathSerializer(paths, many=True).data,
-            'fields': FieldSerializer(fields, many=True).data,
+            'sonatas': SonataSerializer(sonatas, many=True).data,
 
             'teams': TeamSerializer(teams, many=True).data,
             'rounds': RoundSerializer(rounds, many=True).data,

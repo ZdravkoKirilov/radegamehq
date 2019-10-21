@@ -4,7 +4,6 @@ from .entities.Path import Path
 from .entities.Stage import Stage
 from .entities.Choice import Choice, ChoiceOption, ChoiceTip
 from .entities.Condition import Condition
-from .entities.Field import Field
 from .entities.Slot import Slot, SlotHandler, SlotItem
 from .entities.Action import Action, ActionConfig
 from .entities.Round import Round, PhaseSlot
@@ -23,13 +22,15 @@ from .entities.Animation import Animation, AnimationStep
 from .entities.Handler import Handler
 from .entities.Transition import Transition
 from .entities.Text import Text, Translation
+from .entities.Sonata import Sonata, SonataStep
 
 admin.site.register(Game)
 admin.site.register(GameLanguage)
 admin.site.register(Text)
 admin.site.register(Translation)
 admin.site.register(Transition)
-admin.site.register(Field)
+admin.site.register(Sonata)
+admin.site.register(SonataStep)
 admin.site.register(Slot)
 admin.site.register(SlotHandler)
 admin.site.register(SlotItem)

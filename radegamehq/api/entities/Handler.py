@@ -16,6 +16,8 @@ class Handler(WithState, models.Model):
 
     enabled = models.ForeignKey('Expression', on_delete=models.SET_NULL, null=True, blank=True,
                                 related_name='handler_enabled')
+    sound = models.ForeignKey('Expression', on_delete=models.SET_NULL, null=True, blank=True,
+                              related_name='handler_sound')
 
     def __str__(self):
         return "{}".format(self.name)
