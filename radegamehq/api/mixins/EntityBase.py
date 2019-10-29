@@ -53,6 +53,7 @@ class WithState(models.Model):
 class WithStyle(models.Model):
     style = models.ForeignKey('Style', blank=True, null=True, on_delete=models.SET_NULL,
                               related_name='style_%(class)ss')
+    style_inline = models.TextField(blank=True, null=True)
 
     class Meta:
         abstract = True

@@ -24,6 +24,7 @@ from .views.Setup import SetupDetailsView, SetupView
 from .views.Transition import TransitionDetailsView, TransitionView
 from .views.Text import TextView, TextDetailsView
 from .views.Sonata import SonataView, SonataDetailsView
+from .views.Shape import ShapeView, ShapeDetailsView
 
 urlpatterns = {
 
@@ -50,6 +51,10 @@ urlpatterns = {
     url(r'games/(?P<gameid>[0-9]+)/factions/(?P<pk>[0-9]+)/$', FactionDetailsView.as_view(),
         name="faction.details"),
     url(r'games/(?P<pk>[0-9]+)/factions/$', FactionView.as_view(), name="faction.list"),
+
+    url(r'games/(?P<gameid>[0-9]+)/shapes/(?P<pk>[0-9]+)/$', ShapeDetailsView.as_view(),
+        name="shape.details"),
+    url(r'games/(?P<pk>[0-9]+)/shapes/$', ShapeView.as_view(), name="shape.list"),
 
     url(r'games/(?P<gameid>[0-9]+)/paths/(?P<pk>[0-9]+)/$', MapPathDetailsView.as_view(),
         name="mappath.details"),

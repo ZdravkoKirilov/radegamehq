@@ -23,10 +23,13 @@ from .entities.Handler import Handler
 from .entities.Transition import Transition
 from .entities.Text import Text, Translation
 from .entities.Sonata import Sonata, SonataStep
+from .entities.Shape import Shape, ShapePoint
 
 admin.site.register(Game)
 admin.site.register(GameLanguage)
 admin.site.register(Text)
+admin.site.register(Shape)
+admin.site.register(ShapePoint)
 admin.site.register(Translation)
 admin.site.register(Transition)
 admin.site.register(Sonata)

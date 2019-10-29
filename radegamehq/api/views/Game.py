@@ -28,6 +28,7 @@ from ..serializers.Setup import SetupSerializer
 from ..serializers.Transition import TransitionSerializer
 from ..serializers.Text import TextSerializer
 from ..serializers.Sonata import SonataSerializer
+from ..serializers.Shape import ShapeSerializer
 
 from ..entities.Action import Action
 from ..entities.Condition import Condition
@@ -52,6 +53,8 @@ from ..entities.Setup import Setup
 from ..entities.Transition import Transition
 from ..entities.Text import Text
 from ..entities.Sonata import Sonata
+from ..entities.Shape import Shape
+
 
 class GameView(generics.ListCreateAPIView):
     serializer_class = GameSerializer
@@ -98,6 +101,7 @@ class GameDataView(APIView):
         setups = Setup.objects.filter(game=kwargs['pk'])
         transitions = Transition.objects.filter(game=kwargs['pk'])
         texts = Text.objects.filter(game=kwargs['pk'])
+        shapes = Shape.objects.filter(game=kwargs['pk'])
 
         return Response({
             'actions': ActionSerializer(actions, many=True).data,
@@ -126,4 +130,5 @@ class GameDataView(APIView):
             'setups': SetupSerializer(setups, many=True).data,
             'transitions': TransitionSerializer(transitions, many=True).data,
             'texts': TextSerializer(texts, many=True).data,
+            'shapes': ShapeSerializer(shapes, many=True).data
         })
