@@ -1,9 +1,9 @@
 from django.db import models
 
-from ..mixins.EntityBase import EntityBase, WithBoard, WithStyle, WithState, WithImage
+from ..mixins.EntityBase import EntityBase, WithBoard, WithStyle, WithState, WithFrame
 
 
-class Slot(EntityBase, WithBoard, WithStyle, WithState, WithImage):
+class Slot(EntityBase, WithBoard, WithStyle, WithState):
     owner = models.ForeignKey('Stage', on_delete=models.CASCADE)
 
     x = models.IntegerField()
@@ -36,3 +36,7 @@ class SlotItem(models.Model):
     condition = models.ForeignKey('Condition', null=True, blank=True, on_delete=models.CASCADE)
     choice = models.ForeignKey('Choice', null=True, blank=True, on_delete=models.CASCADE)
     token = models.ForeignKey('Token', null=True, blank=True, on_delete=models.CASCADE)
+
+
+class SlotFrame(WithFrame):
+    owner = models.ForeignKey(Slot, blank=True, null=True, on_delete=models.CASCADE, related_name='frames')

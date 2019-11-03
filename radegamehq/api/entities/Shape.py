@@ -1,7 +1,9 @@
 from django.db import models
 
+from ..mixins.EntityBase import WithStyle
 
-class Shape(models.Model):
+
+class Shape(WithStyle):
     game = models.ForeignKey('Game', on_delete=models.CASCADE)
 
     name = models.CharField(max_length=255, blank=False)
