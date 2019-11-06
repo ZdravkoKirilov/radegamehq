@@ -19,6 +19,8 @@ class Slot(EntityBase, WithBoard, WithStyle, WithState):
 
     transitions = models.ManyToManyField('Transition', blank=True, related_name='transitionss_%(class)ss')
 
+    shape = models.ForeignKey('Shape', blank=True, null=True, on_delete=models.SET_NULL)
+
     def __str__(self):
         return "{}".format(self.name)
 

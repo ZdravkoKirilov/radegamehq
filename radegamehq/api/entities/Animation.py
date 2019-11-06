@@ -28,3 +28,6 @@ class AnimationStep(models.Model):
 
     from_style = models.ForeignKey('Style', on_delete=models.CASCADE, related_name='from_style')
     to_style = models.ForeignKey('Style', on_delete=models.CASCADE, related_name='to_style')
+
+    from_style_inline = models.TextField(null=True, blank=True)
+    to_style_inline = models.TextField(null=True, blank=True)
