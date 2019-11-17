@@ -84,8 +84,10 @@ class WithStakes(models.Model):
         abstract = True
 
 
-class WithFrame(models.Model):
-    image = models.ForeignKey('ImageAsset', on_delete=models.CASCADE, related_name='frame_%(class)ss')
+class WithFrame(WithStyle):
+    image = models.ForeignKey('ImageAsset', on_delete=models.CASCADE, blank=True, null=True,
+                              related_name='image_%(class)ss')
+    stage = models.ForeignKey('Stage', on_delete=models.CASCADE, blank=True, null=True, related_name='stage_%(class)ss')
 
     class Meta:
         abstract = True
