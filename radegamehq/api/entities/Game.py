@@ -15,6 +15,8 @@ class Game(models.Model):
 
     description = models.TextField(blank=True, null=True)
 
+    menu = models.ForeignKey('Stage', blank=True, null=True, on_delete=models.SET_NULL, related_name='menu')
+
     def __str__(self):
         return "{}".format(self.title)
 
