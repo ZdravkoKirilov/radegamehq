@@ -9,6 +9,8 @@ class Slot(EntityBase, WithBoard, WithStyle, WithState):
     x = models.IntegerField()
     y = models.IntegerField()
 
+    shape = models.ForeignKey('Shape', null=True, blank=True, on_delete=models.SET_NULL)
+
     display_text = models.ForeignKey('Expression', on_delete=models.SET_NULL, null=True, blank=True,
                                      related_name='slot_display_text')
 
