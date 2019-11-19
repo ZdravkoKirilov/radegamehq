@@ -21,7 +21,7 @@ class Slot(EntityBase, WithBoard, WithStyle, WithState):
 
     transitions = models.ManyToManyField('Transition', blank=True, related_name='transitionss_%(class)ss')
 
-    shape = models.ForeignKey('Shape', blank=True, null=True, on_delete=models.SET_NULL)
+    item = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return "{}".format(self.name)
@@ -31,15 +31,6 @@ class SlotHandler(models.Model):
     owner = models.ForeignKey(Slot, on_delete=models.CASCADE, related_name='handlers', blank=True, null=True)
     handler = models.ForeignKey('Handler', on_delete=models.CASCADE)
 
-
-class SlotItem(models.Model):
-    owner = models.ForeignKey(Slot, on_delete=models.CASCADE, related_name='items', blank=True, null=True)
-    entity_type = models.CharField(max_length=255)
-
-    action = models.ForeignKey('Action', null=True, blank=True, on_delete=models.CASCADE)
-    condition = models.ForeignKey('Condition', null=True, blank=True, on_delete=models.CASCADE)
-    choice = models.ForeignKey('Choice', null=True, blank=True, on_delete=models.CASCADE)
-    token = models.ForeignKey('Token', null=True, blank=True, on_delete=models.CASCADE)
 
 
 class SlotFrame(WithFrame):

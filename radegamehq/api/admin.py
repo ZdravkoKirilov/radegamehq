@@ -4,7 +4,7 @@ from .entities.Path import Path
 from .entities.Stage import Stage
 from .entities.Choice import Choice, ChoiceOption, ChoiceTip
 from .entities.Condition import Condition
-from .entities.Slot import Slot, SlotHandler, SlotItem
+from .entities.Slot import Slot, SlotHandler
 from .entities.Action import Action, ActionConfig
 from .entities.Round import Round, PhaseSlot
 from .entities.Phase import Phase
@@ -36,7 +36,6 @@ admin.site.register(Sonata)
 admin.site.register(SonataStep)
 admin.site.register(Slot)
 admin.site.register(SlotHandler)
-admin.site.register(SlotItem)
 admin.site.register(Path)
 admin.site.register(Faction)
 admin.site.register(Token)
