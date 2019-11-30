@@ -11,15 +11,12 @@ from .views.Faction import FactionView, FactionDetailsView
 from .views.Action import ActionView, ActionDetailsView
 from .views.Token import TokenView, TokenDetailsView
 from .views.Phase import PhaseView, PhaseDetailsView
-from .views.Team import TeamView, TeamDetailsView
 from .views.ImageAsset import ImageAssetView, ImageAssetDetailsView
 from .views.Keyword import KeywordView, KeywordDetailsView
 from .views.Style import StyleView, StyleDetailsView
 from .views.Sound import SoundDetailsView, SoundView
-from .views.State import StateDetailsView, StateView
 from .views.Expression import ExpressionView, ExpressionDetailsView
 from .views.Animation import AnimationView, AnimationDetailsView
-from .views.Handler import HandlerView, HandlerDetailsView
 from .views.Setup import SetupDetailsView, SetupView
 from .views.Transition import TransitionDetailsView, TransitionView
 from .views.Text import TextView, TextDetailsView
@@ -79,10 +76,6 @@ urlpatterns = {
         name="phase.details"),
     url(r'games/(?P<pk>[0-9]+)/phases/$', PhaseView.as_view(), name="phase.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/teams/(?P<pk>[0-9]+)/$', TeamDetailsView.as_view(),
-        name="team.details"),
-    url(r'games/(?P<pk>[0-9]+)/teams/$', TeamView.as_view(), name="team.list"),
-
     url(r'games/(?P<gameid>[0-9]+)/keywords/(?P<pk>[0-9]+)/$', KeywordDetailsView.as_view(),
         name="keywords.details"),
     url(r'games/(?P<pk>[0-9]+)/keywords/$', KeywordView.as_view(), name="keywords.list"),
@@ -95,10 +88,6 @@ urlpatterns = {
         name="sound.details"),
     url(r'games/(?P<pk>[0-9]+)/sounds/$', SoundView.as_view(), name="sound.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/states/(?P<pk>[0-9]+)/$', StateDetailsView.as_view(),
-        name="state.details"),
-    url(r'games/(?P<pk>[0-9]+)/states/$', StateView.as_view(), name="state.list"),
-
     url(r'games/(?P<gameid>[0-9]+)/expressions/(?P<pk>[0-9]+)/$', ExpressionDetailsView.as_view(),
         name="expression.details"),
     url(r'games/(?P<pk>[0-9]+)/expressions/$', ExpressionView.as_view(), name="expression.list"),
@@ -106,10 +95,6 @@ urlpatterns = {
     url(r'games/(?P<gameid>[0-9]+)/animations/(?P<pk>[0-9]+)/$', AnimationDetailsView.as_view(),
         name="animation.details"),
     url(r'games/(?P<pk>[0-9]+)/animations/$', AnimationView.as_view(), name="animation.list"),
-
-    url(r'games/(?P<gameid>[0-9]+)/handlers/(?P<pk>[0-9]+)/$', HandlerDetailsView.as_view(),
-        name="handler.details"),
-    url(r'games/(?P<pk>[0-9]+)/handlers/$', HandlerView.as_view(), name="handler.list"),
 
     url(r'games/(?P<gameid>[0-9]+)/setups/(?P<pk>[0-9]+)/$', SetupDetailsView.as_view(),
         name="setup.details"),
