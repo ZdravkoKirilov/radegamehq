@@ -26,8 +26,8 @@ class AnimationStep(models.Model):
     repeat = models.IntegerField(null=True, blank=True, default=0)
     bidirectional = models.BooleanField(null=True, blank=True)
 
-    from_style = models.ForeignKey('Style', on_delete=models.CASCADE, related_name='from_style')
-    to_style = models.ForeignKey('Style', on_delete=models.CASCADE, related_name='to_style')
+    from_style = models.ForeignKey('Style', on_delete=models.CASCADE, related_name='from_style', null=True, blank=True)
+    to_style = models.ForeignKey('Style', on_delete=models.CASCADE, related_name='to_style', null=True, blank=True)
 
     from_style_inline = models.TextField(null=True, blank=True)
     to_style_inline = models.TextField(null=True, blank=True)
