@@ -1,19 +1,20 @@
 from django.db import models
 
-from ..mixins.EntityBase import EntityBase, WithBoard, WithStyle, WithFrame
+from ..mixins.EntityBase import EntityBase, WithBoard, WithFrame
 
 
-class Slot(EntityBase, WithBoard, WithStyle):
+class Slot(EntityBase, WithBoard):
     owner = models.ForeignKey('Stage', on_delete=models.CASCADE)
 
     x = models.IntegerField()
     y = models.IntegerField()
 
+    style = models.TextField(blank=True, null=True)
+    style_inline = models.TextField(blank=True, null=True)
+
     shape = models.ForeignKey('Shape', null=True, blank=True, on_delete=models.SET_NULL)
 
-    display_text = models.ForeignKey('Expression', on_delete=models.SET_NULL, null=True, blank=True,
-                                     related_name='slot_display_text')
-    display_text_inline = models.TextField(null=True, blank=True)
+    display_text = models.TextField(null=True, blank=True)
 
     populate_by = models.ForeignKey('Expression', on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -30,12 +31,9 @@ class SlotHandler(models.Model):
 
     type = models.CharField(max_length=255)
 
-    effect = models.ForeignKey('Expression', on_delete=models.SET_NULL, null=True, blank=True)
-    effect_inline = models.TextField(null=True, blank=True)
+    effect = models.TextField(null=True, blank=True)
 
-    sound = models.ForeignKey('Expression', on_delete=models.SET_NULL, null=True, blank=True,
-                              related_name='handler_sound')
-    sound_inline = models.TextField(null=True, blank=True)
+    sound = models.TextField(null=True, blank=True)
 
 
 class SlotFrame(WithFrame):
