@@ -12,7 +12,6 @@ from .views.Action import ActionView, ActionDetailsView
 from .views.Token import TokenView, TokenDetailsView
 from .views.Phase import PhaseView, PhaseDetailsView
 from .views.ImageAsset import ImageAssetView, ImageAssetDetailsView
-from .views.Keyword import KeywordView, KeywordDetailsView
 from .views.Style import StyleView, StyleDetailsView
 from .views.Sound import SoundDetailsView, SoundView
 from .views.Expression import ExpressionView, ExpressionDetailsView
@@ -75,10 +74,6 @@ urlpatterns = {
     url(r'games/(?P<gameid>[0-9]+)/phases/(?P<pk>[0-9]+)/$', PhaseDetailsView.as_view(),
         name="phase.details"),
     url(r'games/(?P<pk>[0-9]+)/phases/$', PhaseView.as_view(), name="phase.list"),
-
-    url(r'games/(?P<gameid>[0-9]+)/keywords/(?P<pk>[0-9]+)/$', KeywordDetailsView.as_view(),
-        name="keywords.details"),
-    url(r'games/(?P<pk>[0-9]+)/keywords/$', KeywordView.as_view(), name="keywords.list"),
 
     url(r'games/(?P<gameid>[0-9]+)/styles/(?P<pk>[0-9]+)/$', StyleDetailsView.as_view(),
         name="style.details"),

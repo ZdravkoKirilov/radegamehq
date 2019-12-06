@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from ..entities.Token import Token, TokenFrame
-from ..entities.Keyword import Keyword
 from ..mixins.NestedSerializing import with_nesting
 
 
@@ -12,7 +11,6 @@ class TokenFrameSerializer(serializers.ModelSerializer):
 
 
 @with_nesting([
-    {'name': 'keywords', 'model': Keyword, 'm2m': True},
     {'name': 'frames', 'model': TokenFrame, 'm2m': False, 'serializer': TokenFrameSerializer}
 ])
 class TokenSerializer(serializers.ModelSerializer):

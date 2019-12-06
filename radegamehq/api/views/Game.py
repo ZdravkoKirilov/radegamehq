@@ -17,7 +17,6 @@ from ..serializers.Phase import PhaseSerializer
 from ..serializers.Token import TokenSerializer
 from ..serializers.ImageAsset import ImageAssetSerializer
 from ..serializers.Style import StyleSerializer
-from ..serializers.Keyword import KeywordSerializer
 from ..serializers.Sound import SoundSerializer
 from ..serializers.Expression import ExpressionSerializer
 from ..serializers.Animation import AnimationSerializer
@@ -39,7 +38,6 @@ from ..entities.Phase import Phase
 from ..entities.Token import Token
 from ..entities.ImageAsset import ImageAsset
 from ..entities.Style import Style
-from ..entities.Keyword import Keyword
 from ..entities.Sound import Sound
 from ..entities.Expression import Expression
 from ..entities.Animation import Animation
@@ -85,7 +83,6 @@ class GameDataView(APIView):
         tokens = Token.objects.filter(game=kwargs['pk'])
         images = ImageAsset.objects.filter(game=kwargs['pk'])
         styles = Style.objects.filter(game=kwargs['pk'])
-        keywords = Keyword.objects.filter(game=kwargs['pk'])
         sounds = Sound.objects.filter(game=kwargs['pk'])
         expressions = Expression.objects.filter(game=kwargs['pk'])
         animations = Animation.objects.filter(game=kwargs['pk'])
@@ -111,7 +108,6 @@ class GameDataView(APIView):
             'tokens': TokenSerializer(tokens, many=True).data,
             'images': ImageAssetSerializer(images, many=True).data,
             'styles': StyleSerializer(styles, many=True).data,
-            'keywords': KeywordSerializer(keywords, many=True).data,
             'sounds': SoundSerializer(sounds, many=True).data,
             'expressions': ExpressionSerializer(expressions, many=True).data,
             'animations': AnimationSerializer(animations, many=True).data,

@@ -12,7 +12,6 @@ from .entities.Faction import Faction
 from .entities.Token import Token
 from .entities.Game import Game, GameLanguage
 from .entities.ImageAsset import ImageAsset
-from .entities.Keyword import Keyword
 from .entities.Style import Style
 from .entities.Expression import Expression
 from .entities.Sound import Sound
@@ -51,7 +50,6 @@ admin.site.register(Setup)
 admin.site.register(RoundSlot)
 admin.site.register(ImageAsset)
 admin.site.register(Style)
-admin.site.register(Keyword)
 admin.site.register(Expression)
 admin.site.register(Sound)
 admin.site.register(Animation)

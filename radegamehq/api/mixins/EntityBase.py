@@ -51,8 +51,7 @@ class WithState(models.Model):
 
 
 class WithStyle(models.Model):
-    style = models.ForeignKey('Style', blank=True, null=True, on_delete=models.SET_NULL,
-                              related_name='style_%(class)ss')
+    style = models.TextField(blank=True, null=True)
     style_inline = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -60,7 +59,7 @@ class WithStyle(models.Model):
 
 
 class WithKeywords(models.Model):
-    keywords = models.ManyToManyField('Keyword', blank=True, related_name='keywords_%(class)ss')
+    keywords = models.TextField(null=True, blank=True)
 
     class Meta:
         abstract = True
