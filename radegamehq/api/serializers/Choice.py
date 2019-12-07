@@ -9,6 +9,7 @@ class ChoiceTipSerializer(serializers.ModelSerializer):
         model = ChoiceTip
         fields = '__all__'
 
+
 class ChoiceOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChoiceOption
