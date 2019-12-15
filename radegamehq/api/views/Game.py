@@ -11,7 +11,6 @@ from ..serializers.Choice import ChoiceSerializer
 from ..serializers.Faction import FactionSerializer
 from ..serializers.Stage import StageSerializer
 from ..serializers.Slot import SlotSerializer
-from ..serializers.Path import MapPathSerializer
 from ..serializers.Round import RoundSerializer
 from ..serializers.Phase import PhaseSerializer
 from ..serializers.Token import TokenSerializer
@@ -32,7 +31,6 @@ from ..entities.Choice import Choice
 from ..entities.Faction import Faction
 from ..entities.Stage import Stage
 from ..entities.Slot import Slot
-from ..entities.Path import Path
 from ..entities.Round import Round
 from ..entities.Phase import Phase
 from ..entities.Token import Token
@@ -74,7 +72,6 @@ class GameDataView(APIView):
 
         stages = Stage.objects.filter(game=kwargs['pk'])
         slots = Slot.objects.filter(game=kwargs['pk'])
-        paths = Path.objects.filter(game=kwargs['pk'])
         sonatas = Sonata.objects.filter(game=kwargs['pk'])
 
         rounds = Round.objects.filter(game=kwargs['pk'])
@@ -99,7 +96,6 @@ class GameDataView(APIView):
 
             'stages': StageSerializer(stages, many=True).data,
             'slots': SlotSerializer(slots, many=True).data,
-            'paths': MapPathSerializer(paths, many=True).data,
             'sonatas': SonataSerializer(sonatas, many=True).data,
 
             'rounds': RoundSerializer(rounds, many=True).data,

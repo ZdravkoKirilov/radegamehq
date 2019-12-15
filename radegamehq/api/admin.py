@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from .entities.Path import Path
 from .entities.Stage import Stage
 from .entities.Choice import Choice, ChoiceOption, ChoiceTip
 from .entities.Condition import Condition
@@ -33,7 +32,6 @@ admin.site.register(Sonata)
 admin.site.register(SonataStep)
 admin.site.register(Slot)
 admin.site.register(SlotHandler)
-admin.site.register(Path)
 admin.site.register(Faction)
 admin.site.register(Token)
 admin.site.register(Action)

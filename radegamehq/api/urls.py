@@ -4,7 +4,6 @@ from .views.Choice import ChoiceView, ChoiceDetailsView
 from .views.Stage import StageView, StageDetailsView
 from .views.Round import RoundView, RoundDetailsView
 from .views.Condition import ConditionView, ConditionDetailsView
-from .views.Path import MapPathView, MapPathDetailsView
 from .views.Slot import SlotView, SlotDetailsView
 from .views.Game import GameView, GameDetailsView, GameDataView
 from .views.Faction import FactionView, FactionDetailsView
@@ -51,10 +50,6 @@ urlpatterns = {
     url(r'games/(?P<gameid>[0-9]+)/shapes/(?P<pk>[0-9]+)/$', ShapeDetailsView.as_view(),
         name="shape.details"),
     url(r'games/(?P<pk>[0-9]+)/shapes/$', ShapeView.as_view(), name="shape.list"),
-
-    url(r'games/(?P<gameid>[0-9]+)/paths/(?P<pk>[0-9]+)/$', MapPathDetailsView.as_view(),
-        name="mappath.details"),
-    url(r'games/(?P<pk>[0-9]+)/paths/$', MapPathView.as_view(), name="mappath.list"),
 
     url(r'games/(?P<gameid>[0-9]+)/slots/(?P<pk>[0-9]+)/$', SlotDetailsView.as_view(),
         name="slot.details"),
