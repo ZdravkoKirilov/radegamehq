@@ -73,6 +73,14 @@ class WithBoard(models.Model):
         abstract = True
 
 
+class WithTemplate(models.Model):
+    template = models.ForeignKey('Stage', blank=True, null=True, on_delete=models.SET_NULL,
+                                 related_name='template_%(class)ss')
+
+    class Meta:
+        abstract = True
+
+
 class WithStakes(models.Model):
     passes = models.ForeignKey('Expression', blank=True, null=True, related_name='passes_%(class)ss',
                                on_delete=models.SET_NULL)
