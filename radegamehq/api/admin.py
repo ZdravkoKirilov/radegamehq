@@ -1,12 +1,10 @@
 from django.contrib import admin
 
-from .entities.Stage import Stage
+from .entities.Stage import Stage, Slot, SlotHandler
 from .entities.Choice import Choice, ChoiceOption, ChoiceTip
 from .entities.Condition import Condition
-from .entities.Slot import Slot, SlotHandler
 from .entities.Action import Action, ActionConfig
-from .entities.Round import Round, PhaseSlot
-from .entities.Phase import Phase
+from .entities.Round import Round, Phase
 from .entities.Faction import Faction
 from .entities.Token import Token
 from .entities.Game import Game, GameLanguage
@@ -38,7 +36,6 @@ admin.site.register(Action)
 admin.site.register(ActionConfig)
 admin.site.register(Condition)
 admin.site.register(Round)
-admin.site.register(PhaseSlot)
 admin.site.register(Phase)
 admin.site.register(Choice)
 admin.site.register(ChoiceOption)

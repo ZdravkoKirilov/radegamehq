@@ -4,12 +4,10 @@ from .views.Choice import ChoiceView, ChoiceDetailsView
 from .views.Stage import StageView, StageDetailsView
 from .views.Round import RoundView, RoundDetailsView
 from .views.Condition import ConditionView, ConditionDetailsView
-from .views.Slot import SlotView, SlotDetailsView
 from .views.Game import GameView, GameDetailsView, GameDataView
 from .views.Faction import FactionView, FactionDetailsView
 from .views.Action import ActionView, ActionDetailsView
 from .views.Token import TokenView, TokenDetailsView
-from .views.Phase import PhaseView, PhaseDetailsView
 from .views.ImageAsset import ImageAssetView, ImageAssetDetailsView
 from .views.Style import StyleView, StyleDetailsView
 from .views.Sound import SoundDetailsView, SoundView
@@ -51,10 +49,6 @@ urlpatterns = {
         name="shape.details"),
     url(r'games/(?P<pk>[0-9]+)/shapes/$', ShapeView.as_view(), name="shape.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/slots/(?P<pk>[0-9]+)/$', SlotDetailsView.as_view(),
-        name="slot.details"),
-    url(r'games/(?P<pk>[0-9]+)/slots/$', SlotView.as_view(), name="slots.list"),
-
     url(r'games/(?P<gameid>[0-9]+)/transitions/(?P<pk>[0-9]+)/$', TransitionDetailsView.as_view(),
         name="location.details"),
     url(r'games/(?P<pk>[0-9]+)/transitions/$', TransitionView.as_view(), name="location.list"),
@@ -65,10 +59,6 @@ urlpatterns = {
     url(r'games/(?P<gameid>[0-9]+)/tokens/(?P<pk>[0-9]+)/$', TokenDetailsView.as_view(),
         name="token.details"),
     url(r'games/(?P<pk>[0-9]+)/tokens/$', TokenView.as_view(), name="token.list"),
-
-    url(r'games/(?P<gameid>[0-9]+)/phases/(?P<pk>[0-9]+)/$', PhaseDetailsView.as_view(),
-        name="phase.details"),
-    url(r'games/(?P<pk>[0-9]+)/phases/$', PhaseView.as_view(), name="phase.list"),
 
     url(r'games/(?P<gameid>[0-9]+)/styles/(?P<pk>[0-9]+)/$', StyleDetailsView.as_view(),
         name="style.details"),
