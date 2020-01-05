@@ -61,7 +61,14 @@ class GameDetailsView(generics.RetrieveUpdateDestroyAPIView):
 
 class GameDataView(APIView):
     def get(self, request, *args, **kwargs):
-        actions = Action.objects.filter(game=kwargs['pk'])
+        keywords = request.query_params.get('keywords', None)
+        query = {
+            'game': kwargs['pk']
+        }
+        if keywords is not None:
+            query['keywords__contains'] = keywords
+
+        actions = Action.objects.filter(**query)
         conditions = Condition.objects.filter(game=kwargs['pk'])
         choices = Choice.objects.filter(game=kwargs['pk'])
         factions = Faction.objects.filter(game=kwargs['pk'])

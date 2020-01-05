@@ -1,11 +1,8 @@
 from django.db import models
-from ..mixins.EntityBase import EntityBase, WithKeywords
+from ..mixins.EntityBase import EntityBase
 
 
-class Text(WithKeywords):
-    game = models.ForeignKey('Game', on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
-
+class Text(EntityBase):
     default_value = models.TextField()
 
     def __str__(self):

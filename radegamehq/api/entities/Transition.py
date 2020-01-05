@@ -1,12 +1,8 @@
 from django.db import models
+from ..mixins.EntityBase import EntityBase
 
 
-class Transition(models.Model):
-    game = models.ForeignKey('Game', on_delete=models.CASCADE)
-
-    name = models.CharField(max_length=255, blank=False)
-    description = models.TextField(blank=True, null=True)
-
+class Transition(EntityBase):
     trigger = models.TextField()
 
     animation = models.ForeignKey('Animation', on_delete=models.SET_NULL, related_name='animation', blank=True,

@@ -3,7 +3,7 @@ from django.db import models
 from ..mixins.EntityBase import EntityBase, WithKeywords, WithFrame, WithImage
 
 
-class Choice(EntityBase, WithKeywords, WithImage):
+class Choice(EntityBase, WithImage):
     chances = models.ForeignKey('Expression', on_delete=models.SET_NULL, null=True, blank=True,
                                 related_name='choice_chances')
     time = models.ForeignKey('Expression', on_delete=models.SET_NULL, null=True, blank=True,

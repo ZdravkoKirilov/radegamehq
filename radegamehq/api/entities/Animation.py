@@ -1,12 +1,8 @@
 from django.db import models
+from ..mixins.EntityBase import EntityBase
 
 
-class Animation(models.Model):
-    game = models.ForeignKey('Game', on_delete=models.CASCADE)
-
-    name = models.CharField(max_length=255, blank=False)
-    description = models.TextField(blank=True, null=True)
-
+class Animation(EntityBase):
     delay = models.IntegerField(null=True, blank=True)
     repeat = models.IntegerField(null=True, blank=True, default=0)
     bidirectional = models.BooleanField(null=True, blank=True)

@@ -1,12 +1,9 @@
 from django.db import models
 
-from ..mixins.EntityBase import WithStyle
+from ..mixins.EntityBase import WithStyle, EntityBase
 
 
-class Shape(WithStyle):
-    game = models.ForeignKey('Game', on_delete=models.CASCADE)
-
-    name = models.CharField(max_length=255, blank=False)
+class Shape(WithStyle, EntityBase):
     type = models.TextField()
 
     construct_by = models.ForeignKey('Expression', on_delete=models.SET_NULL, blank=True, null=True)
