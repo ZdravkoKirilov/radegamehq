@@ -65,7 +65,7 @@ class GameDataView(APIView):
         query = {
             'game': kwargs['pk']
         }
-        if keywords is not None:
+        if keywords is not None and keywords is not []:
             query['keywords__contains'] = keywords
 
         actions = Action.objects.filter(**query)
