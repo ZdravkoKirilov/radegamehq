@@ -10,9 +10,7 @@ from ..serializers.Action import ActionSerializer
 from ..serializers.Choice import ChoiceSerializer
 from ..serializers.Faction import FactionSerializer
 from ..serializers.Stage import StageSerializer
-from ..serializers.Slot import SlotSerializer
 from ..serializers.Round import RoundSerializer
-from ..serializers.Phase import PhaseSerializer
 from ..serializers.Token import TokenSerializer
 from ..serializers.ImageAsset import ImageAssetSerializer
 from ..serializers.Style import StyleSerializer
@@ -30,9 +28,7 @@ from ..entities.Condition import Condition
 from ..entities.Choice import Choice
 from ..entities.Faction import Faction
 from ..entities.Stage import Stage
-from ..entities.Slot import Slot
 from ..entities.Round import Round
-from ..entities.Phase import Phase
 from ..entities.Token import Token
 from ..entities.ImageAsset import ImageAsset
 from ..entities.Style import Style
@@ -65,17 +61,22 @@ class GameDetailsView(generics.RetrieveUpdateDestroyAPIView):
 
 class GameDataView(APIView):
     def get(self, request, *args, **kwargs):
-        actions = Action.objects.filter(game=kwargs['pk'])
+        keywords = request.query_params.get('keywords', None)
+        query = {
+            'game': kwargs['pk']
+        }
+        if keywords is not None and keywords is not []:
+            query['keywords__contains'] = keywords
+
+        actions = Action.objects.filter(**query)
         conditions = Condition.objects.filter(game=kwargs['pk'])
         choices = Choice.objects.filter(game=kwargs['pk'])
         factions = Faction.objects.filter(game=kwargs['pk'])
 
         stages = Stage.objects.filter(game=kwargs['pk'])
-        slots = Slot.objects.filter(game=kwargs['pk'])
         sonatas = Sonata.objects.filter(game=kwargs['pk'])
 
         rounds = Round.objects.filter(game=kwargs['pk'])
-        phases = Phase.objects.filter(game=kwargs['pk'])
 
         tokens = Token.objects.filter(game=kwargs['pk'])
         images = ImageAsset.objects.filter(game=kwargs['pk'])
@@ -95,11 +96,9 @@ class GameDataView(APIView):
             'factions': FactionSerializer(factions, many=True).data,
 
             'stages': StageSerializer(stages, many=True).data,
-            'slots': SlotSerializer(slots, many=True).data,
             'sonatas': SonataSerializer(sonatas, many=True).data,
 
             'rounds': RoundSerializer(rounds, many=True).data,
-            'phases': PhaseSerializer(phases, many=True).data,
 
             'tokens': TokenSerializer(tokens, many=True).data,
             'images': ImageAssetSerializer(images, many=True).data,

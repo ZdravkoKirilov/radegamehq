@@ -1,8 +1,8 @@
 from django.db import models
-from ..mixins.EntityBase import EntityBase, WithKeywords, WithFrame
+from ..mixins.EntityBase import EntityBase, WithFrame
 
 
-class Token(EntityBase, WithKeywords):
+class Token(EntityBase):
 
     def __str__(self):
         return self.name
