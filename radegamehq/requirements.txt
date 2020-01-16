@@ -64,7 +64,7 @@ six==1.11.0
 sorl-thumbnail==12.5.0
 sorl-thumbnail-serializer-field==0.2.1
 sqlparse==0.2.4
-Twisted==18.9.0
+Twisted==19.7.0
 txaio==18.8.1
 typing-extensions==3.7.2
 uritemplate==3.0.0
