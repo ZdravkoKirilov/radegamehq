@@ -17,7 +17,7 @@ class Style(EntityBase, models.Model):
 
     stroke_color = models.TextField(null=True, blank=True)
     stroke_thickness = models.TextField(null=True, blank=True)
-    background_color = models.TextField(null=True, blank=True)
+    fill = models.TextField(null=True, blank=True)
 
     font_size = models.TextField(null=True, blank=True)
     font_family = models.TextField(null=True, blank=True)
