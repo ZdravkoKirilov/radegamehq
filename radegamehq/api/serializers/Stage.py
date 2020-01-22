@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from ..entities.Transition import Transition
 from ..mixins.NestedSerializing import with_nesting
-from ..entities.Stage import Stage, Slot, SlotHandler, SlotFrame
+from ..entities.Stage import Stage, Slot, SlotHandler, StageFrame
 
 
 class SlotHandlerSerializer(serializers.ModelSerializer):
@@ -11,20 +11,18 @@ class SlotHandlerSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class SlotFrameSerializer(serializers.ModelSerializer):
+class StageFrameSerializer(serializers.ModelSerializer):
     class Meta:
-        model = SlotFrame
+        model = StageFrame
         fields = '__all__'
 
 
 @with_nesting([
     {'name': 'handlers', 'model': SlotHandler, 'm2m': False, 'serializer': SlotHandlerSerializer},
     {'name': 'transitions', 'model': Transition, 'm2m': True},
-    {'name': 'frames', 'model': SlotFrame, 'm2m': False, 'serializer': SlotFrameSerializer},
 ])
 class SlotSerializer(serializers.ModelSerializer):
     handlers = SlotHandlerSerializer(many=True)
-    frames = SlotFrameSerializer(many=True)
 
     class Meta:
         model = Slot
@@ -33,9 +31,11 @@ class SlotSerializer(serializers.ModelSerializer):
 
 @with_nesting([
     {'name': 'slots', 'model': Slot, 'm2m': False, 'serializer': SlotSerializer},
+    {'name': 'frames', 'model': StageFrame, 'm2m': False, 'serializer': StageFrameSerializer},
 ])
 class StageSerializer(serializers.ModelSerializer):
     slots = SlotSerializer(many=True)
+    frames = StageFrameSerializer(many=True)
 
     class Meta:
         model = Stage

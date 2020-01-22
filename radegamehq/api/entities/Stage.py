@@ -41,5 +41,5 @@ class SlotHandler(models.Model):
     sound = models.TextField(null=True, blank=True)
 
 
-class SlotFrame(WithFrame):
-    owner = models.ForeignKey(Slot, blank=True, null=True, on_delete=models.CASCADE, related_name='frames')
+class StageFrame(WithFrame):
+    owner = models.ForeignKey(Stage, blank=True, null=True, on_delete=models.CASCADE, related_name='frames')
