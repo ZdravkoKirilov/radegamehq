@@ -7,7 +7,9 @@ class Stage(EntityBase, WithImage):
     width = models.IntegerField()
     height = models.IntegerField()
 
-    computed_slots = models.TextField(null=True, blank=True)
+    slot_getter = models.TextField(null=True, blank=True)
+
+    frame_getter = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return "{}".format(self.name)

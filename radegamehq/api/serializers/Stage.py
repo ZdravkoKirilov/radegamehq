@@ -22,7 +22,7 @@ class StageFrameSerializer(serializers.ModelSerializer):
     {'name': 'transitions', 'model': Transition, 'm2m': True},
 ])
 class SlotSerializer(serializers.ModelSerializer):
-    handlers = SlotHandlerSerializer(many=True)
+    handlers = SlotHandlerSerializer(many=True, allow_null=True)
 
     class Meta:
         model = Slot
