@@ -83,16 +83,6 @@ class WithTemplate(models.Model):
         abstract = True
 
 
-class WithStakes(models.Model):
-    passes = models.ForeignKey('Expression', blank=True, null=True, related_name='passes_%(class)ss',
-                               on_delete=models.SET_NULL)
-    fails = models.ForeignKey('Expression', blank=True, null=True, related_name='fails_%(class)ss',
-                              on_delete=models.SET_NULL)
-
-    class Meta:
-        abstract = True
-
-
 class WithFrame(WithStyle):
     image = models.ForeignKey('ImageAsset', on_delete=models.CASCADE, blank=True, null=True,
                               related_name='image_%(class)ss')

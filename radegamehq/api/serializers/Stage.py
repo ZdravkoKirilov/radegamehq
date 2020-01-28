@@ -23,6 +23,7 @@ class StageFrameSerializer(serializers.ModelSerializer):
 ])
 class SlotSerializer(serializers.ModelSerializer):
     handlers = SlotHandlerSerializer(many=True, allow_null=True)
+    id = serializers.IntegerField(allow_null=True)
 
     class Meta:
         model = Slot

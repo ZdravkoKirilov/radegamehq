@@ -23,5 +23,8 @@ class Style(EntityBase, models.Model):
     font_family = models.TextField(null=True, blank=True)
     font_style = models.TextField(null=True, blank=True)
 
+    interactive = models.NullBooleanField(blank=True)
+    z_order = models.IntegerField(null=True, blank=True)
+
     def __str__(self):
         return "{}".format(self.name)
