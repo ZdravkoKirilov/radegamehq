@@ -24,6 +24,7 @@ class Slot(EntityBase, WithBoard, WithStyle):
     shape = models.ForeignKey('Shape', null=True, blank=True, on_delete=models.SET_NULL)
 
     display_text = models.TextField(null=True, blank=True)
+    display_text_inline = models.ForeignKey('Text', null=True, blank=True, on_delete=models.SET_NULL)
 
     transitions = models.ManyToManyField('Transition', blank=True, related_name='transitionss_%(class)ss')
 
