@@ -6,9 +6,10 @@ from ..entities.Stage import Stage, Slot, SlotHandler, StageFrame
 
 
 class SlotHandlerSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = SlotHandler
-        fields = '__all__'
+        exclude = ('owner',)
 
 
 class StageFrameSerializer(serializers.ModelSerializer):
