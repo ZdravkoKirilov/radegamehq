@@ -8,6 +8,7 @@ class Style(EntityBase, models.Model):
     border_radius = models.TextField(null=True, blank=True)
     opacity = models.TextField(null=True, blank=True)
     skew = models.TextField(null=True, blank=True)
+    scale = models.TextField(null=True, blank=True)
 
     width = models.TextField(null=True, blank=True)
     height = models.TextField(null=True, blank=True)
