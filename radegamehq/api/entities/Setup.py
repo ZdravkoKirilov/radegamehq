@@ -1,9 +1,9 @@
 from django.db import models
 
-from ..mixins.EntityBase import EntityBase, WithDisplayName
+from ..mixins.EntityBase import EntityBase
 
 
-class Setup(EntityBase, WithDisplayName):
+class Setup(EntityBase):
     min_players = models.IntegerField(null=True, blank=True)
     max_players = models.IntegerField(null=True, blank=True)
     recommended_age = models.IntegerField(null=True, blank=True)

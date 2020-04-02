@@ -23,35 +23,6 @@ class WithImage(models.Model):
         abstract = True
 
 
-class WithDone(models.Model):
-    done = models.ForeignKey('Expression', on_delete=models.SET_NULL, null=True, blank=True)
-
-    class Meta:
-        abstract = True
-
-
-class WithDisplayName(models.Model):
-    display_name = models.TextField(blank=True, null=True)
-
-    class Meta:
-        abstract = True
-
-
-class WithType(models.Model):
-    entity_type = models.CharField(max_length=255)
-
-    class Meta:
-        abstract = True
-
-
-class WithState(models.Model):
-    state = models.ForeignKey('Expression', on_delete=models.SET_NULL, null=True, blank=True,
-                              related_name='state_%(class)ss')
-
-    class Meta:
-        abstract = True
-
-
 class WithStyle(models.Model):
     style = models.TextField(blank=True, null=True)
     style_inline = models.TextField(blank=True, null=True)
@@ -84,9 +55,19 @@ class WithTemplate(models.Model):
 
 
 class WithFrame(WithStyle):
+    name = models.TextField(blank=True, null=True)
+
     image = models.ForeignKey('ImageAsset', on_delete=models.CASCADE, blank=True, null=True,
                               related_name='image_%(class)ss')
     stage = models.ForeignKey('Stage', on_delete=models.CASCADE, blank=True, null=True, related_name='stage_%(class)ss')
+
+    class Meta:
+        abstract = True
+
+
+class WithText(WithStyle):
+    name = models.TextField(blank=True, null=True)
+    text = models.ForeignKey('Text', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         abstract = True
