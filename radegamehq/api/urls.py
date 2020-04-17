@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
 from .views.Choice import ChoiceView, ChoiceDetailsView
-from .views.Stage import StageView, StageDetailsView
+from .views.Stage import StageView, StageDetailsView, SlotView, SlotDetailsView
 from .views.Round import RoundView, RoundDetailsView
 from .views.Condition import ConditionView, ConditionDetailsView
 from .views.Game import GameView, GameDetailsView, GameDataView
@@ -20,6 +20,10 @@ from .views.Sonata import SonataView, SonataDetailsView
 from .views.Shape import ShapeView, ShapeDetailsView
 
 urlpatterns = {
+
+    url(r'games/(?P<gameid>[0-9]+)/stages/(?P<stageid>[0-9]+)/slots/(?P<pk>[0-9]+)/$', SlotDetailsView.as_view(),
+        name="slot.details"),
+    url(r'games/(?P<pk>[0-9]+)/stages/(?P<stageId>[0-9]+)/slots/$', SlotView.as_view(), name="slot.list"),
 
     url(r'games/(?P<gameid>[0-9]+)/stages/(?P<pk>[0-9]+)/$', StageDetailsView.as_view(),
         name="stage.details"),
