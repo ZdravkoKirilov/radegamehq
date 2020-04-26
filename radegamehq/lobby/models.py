@@ -1,4 +1,4 @@
-from walrus import Database, Model, TextField, IntegerField, BooleanField
+from walrus import Database, Model, TextField, IntegerField, JSONField
 
 db = Database(host="localhost", port=6379, charset="utf-8", decode_responses=True)
 
@@ -11,10 +11,11 @@ MODES = (
 class Lobby(Model):
     __database__ = db
     name = TextField(primary_key=True)
+    timestamp = IntegerField()
     mode = TextField()
     password = TextField()
 
-    game = IntegerField()
+    game = IntegerField(index=True)
     setup = IntegerField()
     owner = IntegerField()
 
@@ -26,7 +27,4 @@ class Player(Model):
     user = IntegerField()
     game = IntegerField()
 
-    team = IntegerField()
-    faction = IntegerField()
-    color = IntegerField()
-    ready = BooleanField()
+    data = JSONField()

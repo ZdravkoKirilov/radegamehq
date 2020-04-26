@@ -27,6 +27,3 @@ class GamePlayer(models.Model):
 
     name = models.CharField(max_length=255)
     user = models.ForeignKey(AppUser, on_delete=models.SET_NULL, blank=True, null=True)
-
-    faction = models.ForeignKey(Faction, on_delete=models.SET_NULL, blank=True, null=True)
-    color = models.IntegerField(null=True, blank=True)

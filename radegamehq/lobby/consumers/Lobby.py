@@ -44,12 +44,6 @@ class LobbyConsumer(JsonWebsocketConsumer):
             'payload': event['data']
         })
 
-    def player_update(self, event):
-        self.send_json({
-            'type': '[Lobby] SAVE_PLAYER',
-            'payload': event['data']
-        })
-
     def game_starting(self, event):
         self.send_json(({
             'type': '[Lobby] GAME_STARTING',

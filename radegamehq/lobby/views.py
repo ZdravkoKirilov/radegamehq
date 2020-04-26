@@ -4,9 +4,8 @@ from arena.serializers import GameInstanceSerializer
 from rest_framework import generics, status
 from rest_framework.response import Response
 from django.http import Http404
-import uuid
 
-from .signals import lobby_created, lobby_deleted, player_deleted, player_saved, player_updated, game_created
+from .signals import lobby_created, lobby_deleted, player_deleted, player_saved, game_created
 
 
 class PlayerListView(generics.ListCreateAPIView):
@@ -56,7 +55,7 @@ class PlayerDetailsView(generics.RetrieveUpdateDestroyAPIView):
 
     def patch(self, request, *args, **kwargs):
         response = self.partial_update(request, *args, **kwargs)
-        player_updated.send(PlayerDetailsView, data=response.data)
+        ## player_updated.send(PlayerDetailsView, data=response.data)
         return response
 
 

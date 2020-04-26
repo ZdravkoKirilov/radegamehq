@@ -1,7 +1,8 @@
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import JsonWebsocketConsumer
 
-from ..signals import handle_action
+from ..action_handler import handle_action
+from ..action_types import LobbyActionTypes
 
 
 class LobbiesConsumer(JsonWebsocketConsumer):
@@ -20,32 +21,41 @@ class LobbiesConsumer(JsonWebsocketConsumer):
         action = content
         handle_action.send(LobbiesConsumer, data=action)
 
-    def lobby_create(self, event):
+    def fetch_lobbies(self, event):
+        lobbies = event['data']
         self.send_json({
-            'type': '[Lobby] CREATE_LOBBY',
-            'payload': event['data']
+            'type': LobbyActionTypes.ADD_LOBBIES.value,
+            'payload': {'lobbies': lobbies}
         })
 
-    def lobby_delete(self, event):
+    def create_lobby(self, event):
+        lobby = event['data']
         self.send_json({
-            'type': '[Lobby] REMOVE_LOBBY',
+            'type': LobbyActionTypes.ADD_LOBBY.value,
+            'payload': {'lobby': lobby}
+        })
+
+    def delete_lobby(self, event):
+        self.send_json({
+            'type': LobbyActionTypes.REMOVE_LOBBY.value,
             'payload': event['data']
         })
 
     def player_delete(self, event):
         self.send_json({
-            'type': '[Lobby] REMOVE_PLAYER',
+            'type': LobbyActionTypes.REMOVE_PLAYER.value,
             'payload': event['data']
         })
 
     def player_save(self, event):
+        player = event['data']
         self.send_json({
-            'type': '[Lobby] SAVE_PLAYER',
-            'payload': event['data']
+            'type': LobbyActionTypes.ADD_PLAYER.value,
+            'payload': {'player': player}
         })
 
     def send_message(self, event):
         self.send_json({
-            'type': '[Lobby] SAVE_MESSAGE',
-            'payload': event['data']
+            'type': LobbyActionTypes.ADD_MESSAGE.value,
+            'payload': {'message': event['data']}
         })
