@@ -16,3 +16,6 @@ class LobbyActionTypes(Enum):
 
     SEND_MESSAGE = '[Lobby] SEND_MESSAGE'
     ADD_MESSAGE = '[Lobby] ADD_MESSAGE'
+
+    CREATE_GAME = '[Lobby] CREATE_GAME'
+    START_GAME = '[Lobby] START_GAME'

@@ -28,6 +28,7 @@ class Slot(EntityBase, WithBoard, WithStyle):
 
     provide_context = models.TextField(null=True, blank=True)
     consume_context = models.TextField(null=True, blank=True)
+    pass_to_children = models.TextField(null=True, blank=True)
 
     transitions = models.ManyToManyField('Transition', blank=True, related_name='transitionss_%(class)ss')
 

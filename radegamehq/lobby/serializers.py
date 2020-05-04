@@ -6,6 +6,7 @@ from walrus import Model
 import uuid
 
 from .models import Lobby, MODES, Player
+from .types import MessageType, PlayerType, LobbyType
 
 
 class ChatMessageSerializer(serializers.Serializer):
@@ -16,28 +17,29 @@ class ChatMessageSerializer(serializers.Serializer):
     timestamp = serializers.IntegerField(allow_null=True)
     message = serializers.CharField(required=True)
 
-    def to_internal_value(self, data: Dict) -> Dict:
-        if 'id' not in data or data['id'] is None:
-            data['id'] = str(uuid.uuid4())
-
-        if 'timestamp' not in data or data['timestamp'] is None:
-            data['timestamp'] = time.time()
+    def to_internal_value(self, data: MessageType) -> Dict:
+        data['id'] = str(uuid.uuid4())
+        data['timestamp'] = time.time()
 
         return data
 
 
 class PlayerSerializer(serializers.Serializer):
-    name = serializers.CharField(required=True)
+    name = serializers.CharField(allow_blank=True, allow_null=True)
     lobby = serializers.CharField(required=True)
     user = serializers.IntegerField(required=True)
-    game = serializers.IntegerField(required=True)
 
     data = serializers.DictField(allow_null=True, required=False)
+
+    def to_internal_value(self, data: PlayerType) -> Dict:
+        if 'name' not in data or not data['name']:
+            data['name'] = str(uuid.uuid4())
+        return data
 
     def create(self, _):
         try:
             self.is_valid()
-            validated_data = self.validated_data
+            validated_data: PlayerType | Dict = self.validated_data
             Player.create(**validated_data)
             return self.validated_data
         except Exception as e:
@@ -46,16 +48,17 @@ class PlayerSerializer(serializers.Serializer):
     def update(self, player: Model, _):
         try:
             self.is_valid()
-            player.data.update(self.validated_data['data'])
+            new_data: PlayerType = self.validated_data['data']
+            player.data.update(new_data)
             player.save()
             return self.validated_data
         except Exception as e:
             pass
 
-    def delete(self, player: Dict):
+    def delete(self, player: PlayerType):
         try:
             player_entity = Player.load(player['name'])
-            data = PlayerSerializer(player).data
+            data: PlayerType | Dict = PlayerSerializer(player).data
             player_entity.delete()
             return data
         except Exception as e:
@@ -72,7 +75,7 @@ class LobbySerializer(serializers.Serializer):
     setup = serializers.IntegerField(required=True)
     owner = serializers.IntegerField(required=True)
 
-    def to_internal_value(self, data: Dict) -> Dict:
+    def to_internal_value(self, data: LobbyType) -> LobbyType:
         data['name'] = str(uuid.uuid4())
         data['timestamp'] = time.time()
         if 'mode' not in data or not data['mode']:
@@ -80,14 +83,15 @@ class LobbySerializer(serializers.Serializer):
 
         return data
 
-    def create(self):
+    def create(self, _) -> LobbyType:
         self.is_valid()
-        Lobby.create(**self.validated_data)
-        return self.validated_data
+        data: LobbyType | Dict = self.validated_data
+        Lobby.create(**data)
+        return data
 
     def update(self, instance, validated_data):
         pass
 
-    def delete(self, lobby: Dict):
+    def delete(self, lobby: LobbyType):
         lobby_entity = Lobby.load(lobby['name'])
         lobby_entity.delete()

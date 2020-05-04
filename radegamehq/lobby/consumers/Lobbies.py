@@ -1,7 +1,7 @@
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import JsonWebsocketConsumer
 
-from ..action_handler import handle_action
+from shared.signals import handle_lobby_socket_action
 from ..action_types import LobbyActionTypes
 
 
@@ -11,6 +11,7 @@ class LobbiesConsumer(JsonWebsocketConsumer):
 
     def connect(self):
         self.accept()
+        ## TODO: Scope to one game only, now it should be for all
         async_to_sync(self.channel_layer.group_add)(self.group_name, self.channel_name)
         self.send_json({'message': 'Lobbies socket connected!'})
 
@@ -19,13 +20,12 @@ class LobbiesConsumer(JsonWebsocketConsumer):
 
     def receive_json(self, content, **kwargs):
         action = content
-        handle_action.send(LobbiesConsumer, data=action)
+        handle_lobby_socket_action.send(LobbiesConsumer, data=action)
 
     def fetch_lobbies(self, event):
-        lobbies = event['data']
         self.send_json({
             'type': LobbyActionTypes.ADD_LOBBIES.value,
-            'payload': {'lobbies': lobbies}
+            'payload': event['data']
         })
 
     def create_lobby(self, event):

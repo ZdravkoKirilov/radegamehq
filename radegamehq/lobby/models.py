@@ -25,6 +25,5 @@ class Player(Model):
     name = TextField(primary_key=True)  ## combination of game, lobbyname and playername
     lobby = TextField(index=True)
     user = IntegerField()
-    game = IntegerField()
 
     data = JSONField()

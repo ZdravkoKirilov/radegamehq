@@ -5,7 +5,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from django.http import Http404
 
-from .signals import lobby_created, lobby_deleted, player_deleted, player_saved, game_created
+from shared.signals import lobby_created, lobby_deleted, player_saved, player_deleted, game_created
 
 
 class PlayerListView(generics.ListCreateAPIView):

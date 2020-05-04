@@ -1,6 +1,11 @@
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import JsonWebsocketConsumer
 
+from arena.models import GameInstance
+from shared.signals import handle_lobby_socket_action
+from ..action_types import LobbyActionTypes
+from ..models import Player
+
 
 class LobbyConsumer(JsonWebsocketConsumer):
     channel_layer_alias = 'lobbies'
@@ -27,25 +32,24 @@ class LobbyConsumer(JsonWebsocketConsumer):
         )
 
     def receive_json(self, action, **kwargs):
-        if action['type'] == '[Lobby] SEND_MESSAGE':
-            payload = action['payload']
+        handle_lobby_socket_action.send(LobbyConsumer, data={"action": action, "lobby": self.lobby_name})
 
-            async_to_sync(self.channel_layer.group_send)(
-                self.lobby_group_name,
-                {
-                    "type": "send.message",
-                    "data": payload,
-                },
-            )
+    def player_save(self, event):
+        player: Player = event['data']
+        self.send_json({
+            'type': LobbyActionTypes.ADD_PLAYER.value,
+            'payload': {'player': player}
+        })
+
+    def start_game(self, event):
+        game_instance: GameInstance = event['data']['game']
+        self.send_json({
+            'type': LobbyActionTypes.START_GAME.value,
+            'payload': {'game': game_instance}
+        })
 
     def send_message(self, event):
         self.send_json({
-            'type': '[Lobby] SAVE_MESSAGE',
-            'payload': event['data']
+            'type': LobbyActionTypes.ADD_MESSAGE.value,
+            'payload': {'message': event['data']}
         })
-
-    def game_starting(self, event):
-        self.send_json(({
-            'type': '[Lobby] GAME_STARTING',
-            'payload': event['data']['game_instance_id']
-        }))
