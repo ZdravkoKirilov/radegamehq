@@ -1,18 +1,17 @@
 from django.contrib import admin
 
-from .entities.Stage import Stage, Slot, SlotHandler
+from .entities.Widget import Widget, WidgetNode, NodeHandler
 from .entities.Choice import Choice, ChoiceOption, ChoiceTip
 from .entities.Condition import Condition
 from .entities.Action import Action, ActionConfig
-from .entities.Round import Round, Phase
-from .entities.Faction import Faction
+from .entities.Module import Module
 from .entities.Token import Token
 from .entities.Game import Game, GameLanguage
 from .entities.ImageAsset import ImageAsset
 from .entities.Style import Style
 from .entities.Expression import Expression
 from .entities.Sound import Sound
-from .entities.Setup import Setup, RoundSlot
+from .entities.Setup import Setup
 from .entities.Animation import Animation, AnimationStep
 from .entities.Transition import Transition
 from .entities.Text import Text, Translation
@@ -28,21 +27,18 @@ admin.site.register(Translation)
 admin.site.register(Transition)
 admin.site.register(Sonata)
 admin.site.register(SonataStep)
-admin.site.register(Slot)
-admin.site.register(SlotHandler)
-admin.site.register(Faction)
+admin.site.register(WidgetNode)
+admin.site.register(NodeHandler)
 admin.site.register(Token)
 admin.site.register(Action)
 admin.site.register(ActionConfig)
 admin.site.register(Condition)
-admin.site.register(Round)
-admin.site.register(Phase)
+admin.site.register(Module)
 admin.site.register(Choice)
 admin.site.register(ChoiceOption)
 admin.site.register(ChoiceTip)
-admin.site.register(Stage)
+admin.site.register(Widget)
 admin.site.register(Setup)
-admin.site.register(RoundSlot)
 admin.site.register(ImageAsset)
 admin.site.register(Style)
 admin.site.register(Expression)

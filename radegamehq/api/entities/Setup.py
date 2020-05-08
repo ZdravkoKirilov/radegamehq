@@ -10,8 +10,3 @@ class Setup(EntityBase):
 
     def __str__(self):
         return '{}'.format(self.name)
-
-
-class RoundSlot(models.Model):
-    owner = models.ForeignKey(Setup, on_delete=models.CASCADE, related_name='rounds', blank=True, null=True)
-    round = models.ForeignKey('Round', on_delete=models.CASCADE)

@@ -17,7 +17,8 @@ class Game(models.Model):
 
     core_data = models.TextField(blank=True, null=True)
 
-    menu = models.ForeignKey('Stage', blank=True, null=True, on_delete=models.SET_NULL, related_name='menu')
+    menu = models.ForeignKey('Widget', blank=True, null=True, on_delete=models.SET_NULL, related_name='menu')
+    get_active_module = models.TextField()
 
     def __str__(self):
         return "{}".format(self.title)

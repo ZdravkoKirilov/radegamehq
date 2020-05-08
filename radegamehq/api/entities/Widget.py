@@ -3,11 +3,11 @@ from django.db import models
 from ..mixins.EntityBase import EntityBase, WithBoard, WithFrame, WithStyle
 
 
-class Stage(EntityBase):
+class Widget(EntityBase):
     width = models.IntegerField()
     height = models.IntegerField()
 
-    slot_getter = models.TextField(null=True, blank=True)
+    node_getter = models.TextField(null=True, blank=True)
 
     frame_getter = models.TextField(null=True, blank=True)
 
@@ -15,8 +15,8 @@ class Stage(EntityBase):
         return "{}".format(self.name)
 
 
-class Slot(EntityBase, WithBoard, WithStyle):
-    owner = models.ForeignKey('Stage', on_delete=models.CASCADE, related_name="slots")
+class WidgetNode(EntityBase, WithBoard, WithStyle):
+    owner = models.ForeignKey('Widget', on_delete=models.CASCADE, related_name="nodes")
 
     x = models.IntegerField()
     y = models.IntegerField()
@@ -38,8 +38,8 @@ class Slot(EntityBase, WithBoard, WithStyle):
         return "{}".format(self.name)
 
 
-class SlotHandler(models.Model):
-    owner = models.ForeignKey(Slot, on_delete=models.CASCADE, related_name='handlers', blank=True, null=True)
+class NodeHandler(models.Model):
+    owner = models.ForeignKey(WidgetNode, on_delete=models.CASCADE, related_name='handlers', blank=True, null=True)
 
     type = models.CharField(max_length=255)
 
@@ -49,8 +49,8 @@ class SlotHandler(models.Model):
     static_sound = models.ForeignKey('Sonata', null=True, blank=True, on_delete=models.SET_NULL)
 
 
-class SlotLifecycle(models.Model):
-    owner = models.ForeignKey(Slot, on_delete=models.CASCADE, related_name='lifecycles', blank=True, null=True)
+class NodeLifecycle(models.Model):
+    owner = models.ForeignKey(WidgetNode, on_delete=models.CASCADE, related_name='lifecycles', blank=True, null=True)
 
     type = models.CharField(max_length=255)
 
@@ -60,5 +60,5 @@ class SlotLifecycle(models.Model):
     static_sound = models.ForeignKey('Sonata', null=True, blank=True, on_delete=models.SET_NULL)
 
 
-class StageFrame(WithFrame):
-    owner = models.ForeignKey(Stage, blank=True, null=True, on_delete=models.CASCADE, related_name='frames')
+class WidgetFrame(WithFrame):
+    owner = models.ForeignKey(Widget, blank=True, null=True, on_delete=models.CASCADE, related_name='frames')

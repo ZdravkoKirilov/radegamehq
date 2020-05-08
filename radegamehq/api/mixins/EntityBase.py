@@ -39,7 +39,7 @@ class WithKeywords(models.Model):
 
 
 class WithBoard(models.Model):
-    board = models.ForeignKey('Stage', blank=True, null=True, on_delete=models.SET_NULL,
+    board = models.ForeignKey('Widget', blank=True, null=True, on_delete=models.SET_NULL,
                               related_name='board_%(class)ss')
 
     class Meta:
@@ -47,7 +47,7 @@ class WithBoard(models.Model):
 
 
 class WithTemplate(models.Model):
-    template = models.ForeignKey('Stage', blank=True, null=True, on_delete=models.SET_NULL,
+    template = models.ForeignKey('Widget', blank=True, null=True, on_delete=models.SET_NULL,
                                  related_name='template_%(class)ss')
 
     class Meta:
@@ -59,7 +59,7 @@ class WithFrame(WithStyle):
 
     image = models.ForeignKey('ImageAsset', on_delete=models.CASCADE, blank=True, null=True,
                               related_name='image_%(class)ss')
-    stage = models.ForeignKey('Stage', on_delete=models.CASCADE, blank=True, null=True, related_name='stage_%(class)ss')
+    widget = models.ForeignKey('Widget', on_delete=models.CASCADE, blank=True, null=True, related_name='widget_%(class)ss')
 
     class Meta:
         abstract = True

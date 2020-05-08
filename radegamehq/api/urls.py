@@ -1,11 +1,10 @@
 from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
 from .views.Choice import ChoiceView, ChoiceDetailsView
-from .views.Stage import StageView, StageDetailsView, SlotView, SlotDetailsView
-from .views.Round import RoundView, RoundDetailsView
+from .views.Widget import WidgetView, WidgetDetailsView, NodeView, NodeDetailsView
+from .views.Module import ModuleView, ModuleDetailsView
 from .views.Condition import ConditionView, ConditionDetailsView
 from .views.Game import GameView, GameDetailsView, GameDataView
-from .views.Faction import FactionView, FactionDetailsView
 from .views.Action import ActionView, ActionDetailsView
 from .views.Token import TokenView, TokenDetailsView
 from .views.ImageAsset import ImageAssetView, ImageAssetDetailsView
@@ -21,21 +20,21 @@ from .views.Shape import ShapeView, ShapeDetailsView
 
 urlpatterns = {
 
-    url(r'games/(?P<gameid>[0-9]+)/stages/(?P<stageid>[0-9]+)/slots/(?P<pk>[0-9]+)/$', SlotDetailsView.as_view(),
-        name="slot.details"),
-    url(r'games/(?P<pk>[0-9]+)/stages/(?P<stageId>[0-9]+)/slots/$', SlotView.as_view(), name="slot.list"),
+    url(r'games/(?P<gameid>[0-9]+)/widgets/(?P<widgetid>[0-9]+)/nodes/(?P<pk>[0-9]+)/$', NodeDetailsView.as_view(),
+        name="node.details"),
+    url(r'games/(?P<pk>[0-9]+)/widgets/(?P<widgetId>[0-9]+)/nodes/$', NodeView.as_view(), name="node.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/stages/(?P<pk>[0-9]+)/$', StageDetailsView.as_view(),
-        name="stage.details"),
-    url(r'games/(?P<pk>[0-9]+)/stages/$', StageView.as_view(), name="stage.list"),
+    url(r'games/(?P<gameid>[0-9]+)/widgets/(?P<pk>[0-9]+)/$', WidgetDetailsView.as_view(),
+        name="widget.details"),
+    url(r'games/(?P<pk>[0-9]+)/widgets/$', WidgetView.as_view(), name="widget.list"),
 
     url(r'games/(?P<gameid>[0-9]+)/choices/(?P<pk>[0-9]+)/$', ChoiceDetailsView.as_view(),
         name="choice.details"),
     url(r'games/(?P<pk>[0-9]+)/choices/$', ChoiceView.as_view(), name="choice.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/rounds/(?P<pk>[0-9]+)/$', RoundDetailsView.as_view(),
-        name="round.details"),
-    url(r'games/(?P<pk>[0-9]+)/rounds/$', RoundView.as_view(), name="round.list"),
+    url(r'games/(?P<gameid>[0-9]+)/moduls/(?P<pk>[0-9]+)/$', ModuleDetailsView.as_view(),
+        name="module.details"),
+    url(r'games/(?P<pk>[0-9]+)/modules/$', ModuleView.as_view(), name="module.list"),
 
     url(r'games/(?P<gameid>[0-9]+)/conditions/(?P<pk>[0-9]+)/$', ConditionDetailsView.as_view(),
         name="condition.details"),
@@ -44,10 +43,6 @@ urlpatterns = {
     url(r'games/(?P<gameid>[0-9]+)/actions/(?P<pk>[0-9]+)/$', ActionDetailsView.as_view(),
         name="action.details"),
     url(r'games/(?P<pk>[0-9]+)/actions/$', ActionView.as_view(), name="action.list"),
-
-    url(r'games/(?P<gameid>[0-9]+)/factions/(?P<pk>[0-9]+)/$', FactionDetailsView.as_view(),
-        name="faction.details"),
-    url(r'games/(?P<pk>[0-9]+)/factions/$', FactionView.as_view(), name="faction.list"),
 
     url(r'games/(?P<gameid>[0-9]+)/shapes/(?P<pk>[0-9]+)/$', ShapeDetailsView.as_view(),
         name="shape.details"),
