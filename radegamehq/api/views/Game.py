@@ -6,7 +6,6 @@ from ..entities.Game import Game
 from ..serializers.Game import GameSerializer
 
 from ..serializers.Condition import ConditionSerializer
-from ..serializers.Action import ActionSerializer
 from ..serializers.Choice import ChoiceSerializer
 from ..serializers.Widget import WidgetSerializer
 from ..serializers.Module import ModuleSerializer
@@ -22,7 +21,6 @@ from ..serializers.Text import TextSerializer
 from ..serializers.Sonata import SonataSerializer
 from ..serializers.Shape import ShapeSerializer
 
-from ..entities.Action import Action
 from ..entities.Condition import Condition
 from ..entities.Choice import Choice
 from ..entities.Widget import Widget
@@ -66,7 +64,7 @@ class GameDataView(APIView):
         if keywords is not None and keywords is not []:
             query['keywords__contains'] = keywords
 
-        actions = Action.objects.filter(**query)
+        # actions = Action.objects.filter(**query)
         conditions = Condition.objects.filter(game=kwargs['pk'])
         choices = Choice.objects.filter(game=kwargs['pk'])
 
@@ -87,7 +85,6 @@ class GameDataView(APIView):
         shapes = Shape.objects.filter(game=kwargs['pk'])
 
         return Response({
-            'actions': ActionSerializer(actions, many=True).data,
             'conditions': ConditionSerializer(conditions, many=True).data,
             'choices': ChoiceSerializer(choices, many=True).data,
 

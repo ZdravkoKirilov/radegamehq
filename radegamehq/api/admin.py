@@ -3,7 +3,6 @@ from django.contrib import admin
 from .entities.Widget import Widget, WidgetNode, NodeHandler
 from .entities.Choice import Choice, ChoiceOption, ChoiceTip
 from .entities.Condition import Condition
-from .entities.Action import Action, ActionConfig
 from .entities.Module import Module
 from .entities.Token import Token
 from .entities.Game import Game, GameLanguage
@@ -30,8 +29,6 @@ admin.site.register(SonataStep)
 admin.site.register(WidgetNode)
 admin.site.register(NodeHandler)
 admin.site.register(Token)
-admin.site.register(Action)
-admin.site.register(ActionConfig)
 admin.site.register(Condition)
 admin.site.register(Module)
 admin.site.register(Choice)

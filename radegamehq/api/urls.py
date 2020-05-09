@@ -5,7 +5,6 @@ from .views.Widget import WidgetView, WidgetDetailsView, NodeView, NodeDetailsVi
 from .views.Module import ModuleView, ModuleDetailsView
 from .views.Condition import ConditionView, ConditionDetailsView
 from .views.Game import GameView, GameDetailsView, GameDataView
-from .views.Action import ActionView, ActionDetailsView
 from .views.Token import TokenView, TokenDetailsView
 from .views.ImageAsset import ImageAssetView, ImageAssetDetailsView
 from .views.Style import StyleView, StyleDetailsView
@@ -39,10 +38,6 @@ urlpatterns = {
     url(r'games/(?P<gameid>[0-9]+)/conditions/(?P<pk>[0-9]+)/$', ConditionDetailsView.as_view(),
         name="condition.details"),
     url(r'games/(?P<pk>[0-9]+)/conditions/$', ConditionView.as_view(), name="condition.list"),
-
-    url(r'games/(?P<gameid>[0-9]+)/actions/(?P<pk>[0-9]+)/$', ActionDetailsView.as_view(),
-        name="action.details"),
-    url(r'games/(?P<pk>[0-9]+)/actions/$', ActionView.as_view(), name="action.list"),
 
     url(r'games/(?P<gameid>[0-9]+)/shapes/(?P<pk>[0-9]+)/$', ShapeDetailsView.as_view(),
         name="shape.details"),
