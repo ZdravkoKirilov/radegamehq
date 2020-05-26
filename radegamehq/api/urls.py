@@ -16,6 +16,7 @@ from .views.Transition import TransitionDetailsView, TransitionView
 from .views.Text import TextView, TextDetailsView
 from .views.Sonata import SonataView, SonataDetailsView
 from .views.Shape import ShapeView, ShapeDetailsView
+from .views.Sandbox import SandboxView, SandboxDetailsView
 
 urlpatterns = {
 
@@ -26,6 +27,10 @@ urlpatterns = {
     url(r'games/(?P<gameid>[0-9]+)/widgets/(?P<pk>[0-9]+)/$', WidgetDetailsView.as_view(),
         name="widget.details"),
     url(r'games/(?P<pk>[0-9]+)/widgets/$', WidgetView.as_view(), name="widget.list"),
+
+    url(r'games/(?P<gameid>[0-9]+)/sandboxes/(?P<pk>[0-9]+)/$', SandboxDetailsView.as_view(),
+        name="sandbox.details"),
+    url(r'games/(?P<pk>[0-9]+)/sandboxes/$', SandboxView.as_view(), name="sandbox.list"),
 
     url(r'games/(?P<gameid>[0-9]+)/choices/(?P<pk>[0-9]+)/$', ChoiceDetailsView.as_view(),
         name="choice.details"),
