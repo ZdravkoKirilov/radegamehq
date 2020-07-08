@@ -3,12 +3,12 @@ from django.db import models
 from ..mixins.EntityBase import EntityBase, WithBoard, WithFrame, WithStyle
 
 
-class Widget(EntityBase):
+class Widget(EntityBase, WithStyle):
     width = models.IntegerField()
     height = models.IntegerField()
 
     node_getter = models.TextField(null=True, blank=True)
-
+    render = models.TextField(null=True, blank=True)
     frame_getter = models.TextField(null=True, blank=True)
 
     def __str__(self):
@@ -18,10 +18,8 @@ class Widget(EntityBase):
 class WidgetNode(EntityBase, WithBoard, WithStyle):
     owner = models.ForeignKey('Widget', on_delete=models.CASCADE, related_name="nodes")
 
-    x = models.IntegerField()
-    y = models.IntegerField()
-
     shape = models.ForeignKey('Shape', null=True, blank=True, on_delete=models.SET_NULL)
+    module = models.ForeignKey('Module', null=True, blank=True, on_delete=models.SET_NULL)
 
     display_text = models.TextField(null=True, blank=True)
     display_text_inline = models.ForeignKey('Text', null=True, blank=True, on_delete=models.SET_NULL)

@@ -72,7 +72,6 @@ class GameDataView(APIView):
         sonatas = Sonata.objects.filter(game=kwargs['pk'])
 
         modules = Module.objects.filter(game=kwargs['pk'])
-
         tokens = Token.objects.filter(game=kwargs['pk'])
         images = ImageAsset.objects.filter(game=kwargs['pk'])
         styles = Style.objects.filter(game=kwargs['pk'])

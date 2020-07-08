@@ -9,8 +9,10 @@ class Token(EntityBase, WithTemplate):
 
 
 class TokenFrame(WithFrame):
-    owner = models.ForeignKey(Token, blank=True, null=True, on_delete=models.CASCADE, related_name='frames')
+    owner = models.ForeignKey(
+        Token, blank=True, null=True, on_delete=models.CASCADE, related_name='frames')
 
 
 class TokenText(WithText):
-    owner = models.ForeignKey(Token, blank=True, null=True, on_delete=models.CASCADE, related_name='texts')
+    owner = models.ForeignKey(
+        Token, blank=True, null=True, on_delete=models.CASCADE, related_name='texts')

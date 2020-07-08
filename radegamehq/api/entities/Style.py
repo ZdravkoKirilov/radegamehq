@@ -15,6 +15,7 @@ class Style(EntityBase, models.Model):
 
     y = models.TextField(null=True, blank=True)
     x = models.TextField(null=True, blank=True)
+    z = models.IntegerField(null=True, blank=True)
 
     stroke_color = models.TextField(null=True, blank=True)
     stroke_thickness = models.TextField(null=True, blank=True)
@@ -24,9 +25,6 @@ class Style(EntityBase, models.Model):
     font_size = models.TextField(null=True, blank=True)
     font_family = models.TextField(null=True, blank=True)
     font_style = models.TextField(null=True, blank=True)
-
-    interactive = models.NullBooleanField(blank=True)
-    z_order = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return "{}".format(self.name)

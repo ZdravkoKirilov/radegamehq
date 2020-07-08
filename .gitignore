@@ -8,3 +8,6 @@ radegamehq/media/
 *.pyc
 *.pyo
 /migrations/
+/.vscode
+/.launch.json
+/*.pyc
