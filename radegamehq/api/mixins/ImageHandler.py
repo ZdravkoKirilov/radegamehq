@@ -1,13 +1,13 @@
-from api.helpers.image_sanitize import sanitize_image
 from rest_framework.serializers import ModelSerializer
 
+from ..helpers.image_sanitize import sanitize_image
 
-class ImageHandler:
-    @property
-    def converter(self):
-        raise NotImplementedError
+class ImageHandler(ModelSerializer):
+
+    class Meta:
+        abstract = True
 
     def to_internal_value(self, data):
         data = sanitize_image(data)
-        value = ModelSerializer(self.converter(), self).to_internal_value(data)
+        value = super().to_internal_value(data)
         return value

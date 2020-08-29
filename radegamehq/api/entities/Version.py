@@ -11,3 +11,4 @@ class Version(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
 
     name = models.TextField()
+    description = models.TextField(blank=True, null=True)
