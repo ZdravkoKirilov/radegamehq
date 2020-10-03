@@ -1,8 +1,8 @@
 from django.db import models
-from ..mixins.EntityBase import EntityBase
+from ..mixins.EntityBase import EntityBase, WithModule
 
 
-class Animation(EntityBase):
+class Animation(EntityBase, WithModule):
     delay = models.IntegerField(null=True, blank=True)
     repeat = models.IntegerField(null=True, blank=True, default=0)
     bidirectional = models.BooleanField(null=True, blank=True)
@@ -14,7 +14,10 @@ class Animation(EntityBase):
 
 
 class AnimationStep(models.Model):
-    owner = models.ForeignKey(Animation, blank=True, null=True, on_delete=models.CASCADE, related_name='steps')
+    owner = models.ForeignKey(
+        Animation, blank=True, null=True, on_delete=models.CASCADE, related_name='steps')
+
+    name = models.TextField(null=True, blank=True)
 
     delay = models.IntegerField(null=True, blank=True)
     easing = models.CharField(max_length=255)

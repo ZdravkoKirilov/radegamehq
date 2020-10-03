@@ -19,6 +19,13 @@ class ImageAssetSerializer(serializers.ModelSerializer):
 
     image = HyperlinkedSorlImageField('1024')
 
+    def to_internal_value(self, data):
+        image = data['image']
+        if image is not None and type(image) == str and image.startswith('http'):
+            data.pop('image')
+        return super().to_internal_value(data)
+
+
     def to_representation(self, instance: Any) -> Any:
         representation = super().to_representation(instance)
         image: str = representation['image']

@@ -19,3 +19,5 @@ class ImageAssetDetailsView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return ImageAsset.objects.all()
+
+

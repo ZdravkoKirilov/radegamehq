@@ -1,8 +1,8 @@
 from django.db import models
-from ..mixins.EntityBase import EntityBase, WithStyle
+from ..mixins.EntityBase import EntityBase, WithStyle, WithModule
 
 
-class Text(EntityBase, WithStyle):
+class Text(EntityBase, WithStyle, WithModule):
     default_value = models.TextField()
 
     def __str__(self):

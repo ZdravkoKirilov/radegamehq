@@ -1,9 +1,9 @@
 from django.db import models
 
-from ..mixins.EntityBase import WithStyle, EntityBase
+from ..mixins.EntityBase import WithStyle, EntityBase, WithModule
 
 
-class Shape(WithStyle, EntityBase):
+class Shape(WithStyle, EntityBase, WithModule):
     type = models.TextField()
 
     construct_by = models.ForeignKey('Expression', on_delete=models.SET_NULL, blank=True, null=True)

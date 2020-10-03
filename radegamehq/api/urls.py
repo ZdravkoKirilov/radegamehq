@@ -1,9 +1,7 @@
 from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
-from .views.Choice import ChoiceView, ChoiceDetailsView
 from .views.Widget import WidgetView, WidgetDetailsView, NodeView, NodeDetailsView
 from .views.Module import ModuleView, ModuleDetailsView
-from .views.Condition import ConditionView, ConditionDetailsView
 from .views.Game import GameView, GameDetailsView, GameDataView
 from .views.Token import TokenView, TokenDetailsView
 from .views.ImageAsset import ImageAssetView, ImageAssetDetailsView
@@ -12,7 +10,6 @@ from .views.Sound import SoundDetailsView, SoundView
 from .views.Expression import ExpressionView, ExpressionDetailsView
 from .views.Animation import AnimationView, AnimationDetailsView
 from .views.Setup import SetupDetailsView, SetupView
-from .views.Transition import TransitionDetailsView, TransitionView
 from .views.Text import TextView, TextDetailsView
 from .views.Sonata import SonataView, SonataDetailsView
 from .views.Shape import ShapeView, ShapeDetailsView
@@ -36,30 +33,17 @@ urlpatterns = {
     url(r'games/(?P<pk>[0-9]+)/sandboxes/$',
         SandboxView.as_view(), name="sandbox.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/choices/(?P<pk>[0-9]+)/$', ChoiceDetailsView.as_view(),
-        name="choice.details"),
-    url(r'games/(?P<pk>[0-9]+)/choices/$',
-        ChoiceView.as_view(), name="choice.list"),
 
     url(r'games/(?P<gameid>[0-9]+)/modules/(?P<pk>[0-9]+)/$', ModuleDetailsView.as_view(),
         name="module.details"),
     url(r'games/(?P<pk>[0-9]+)/modules/$',
         ModuleView.as_view(), name="module.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/conditions/(?P<pk>[0-9]+)/$', ConditionDetailsView.as_view(),
-        name="condition.details"),
-    url(r'games/(?P<pk>[0-9]+)/conditions/$',
-        ConditionView.as_view(), name="condition.list"),
 
     url(r'games/(?P<gameid>[0-9]+)/shapes/(?P<pk>[0-9]+)/$', ShapeDetailsView.as_view(),
         name="shape.details"),
     url(r'games/(?P<pk>[0-9]+)/shapes/$',
         ShapeView.as_view(), name="shape.list"),
-
-    url(r'games/(?P<gameid>[0-9]+)/transitions/(?P<pk>[0-9]+)/$', TransitionDetailsView.as_view(),
-        name="location.details"),
-    url(r'games/(?P<pk>[0-9]+)/transitions/$',
-        TransitionView.as_view(), name="location.list"),
 
     url(r'games/(?P<gameid>[0-9]+)/sonatas/(?P<pk>[0-9]+)/$',
         SonataDetailsView.as_view(), name="sonata.details"),

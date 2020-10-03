@@ -1,9 +1,9 @@
 from django.db import models
 
-from ..mixins.EntityBase import EntityBase
+from ..mixins.EntityBase import EntityBase, WithModule
 
 
-class Style(EntityBase, models.Model):
+class Style(EntityBase, WithModule):
     rotation = models.TextField(null=True, blank=True)
     border_radius = models.TextField(null=True, blank=True)
     opacity = models.TextField(null=True, blank=True)

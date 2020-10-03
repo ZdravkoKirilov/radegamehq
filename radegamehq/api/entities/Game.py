@@ -15,6 +15,8 @@ class Game(models.Model):
 
     description = models.TextField(blank=True, null=True)
 
+    get_active_language = models.TextField(blank=True, null=True)
+
     menu = models.ForeignKey('Widget', blank=True, null=True, on_delete=models.SET_NULL, related_name='menu')
 
     def __str__(self):

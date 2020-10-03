@@ -16,8 +16,16 @@ class EntityBase(models.Model):
         abstract = True
 
 
+class WithModule(models.Model):
+    module = models.ForeignKey("Module", on_delete=models.CASCADE)
+
+    class Meta:
+        abstract = True
+
+
 class WithImage(models.Model):
-    image = models.ForeignKey('ImageAsset', blank=True, null=True, on_delete=models.SET_NULL)
+    image = models.ForeignKey('ImageAsset', blank=True,
+                              null=True, on_delete=models.SET_NULL)
 
     class Meta:
         abstract = True
@@ -59,7 +67,8 @@ class WithFrame(WithStyle):
 
     image = models.ForeignKey('ImageAsset', on_delete=models.CASCADE, blank=True, null=True,
                               related_name='image_%(class)ss')
-    widget = models.ForeignKey('Widget', on_delete=models.CASCADE, blank=True, null=True, related_name='widget_%(class)ss')
+    widget = models.ForeignKey('Widget', on_delete=models.CASCADE,
+                               blank=True, null=True, related_name='widget_%(class)ss')
 
     class Meta:
         abstract = True
@@ -67,7 +76,8 @@ class WithFrame(WithStyle):
 
 class WithText(WithStyle):
     name = models.TextField(blank=True, null=True)
-    text = models.ForeignKey('Text', on_delete=models.CASCADE, blank=True, null=True)
+    text = models.ForeignKey(
+        'Text', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         abstract = True

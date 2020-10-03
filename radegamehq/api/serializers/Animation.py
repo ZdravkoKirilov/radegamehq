@@ -14,7 +14,7 @@ class AnimationStepSerializer(serializers.ModelSerializer):
     {'name': 'steps', 'model': AnimationStep, 'm2m': False, 'serializer': AnimationStepSerializer},
 ])
 class AnimationSerializer(serializers.ModelSerializer):
-    steps = AnimationStepSerializer(many=True)
+    steps = AnimationStepSerializer(many=True, allow_null=True, default=[])
 
     class Meta:
         model = Animation

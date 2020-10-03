@@ -1,9 +1,9 @@
 from django.db import models
 
-from ..mixins.EntityBase import EntityBase
+from ..mixins.EntityBase import EntityBase, WithModule
 
 
-class Sonata(EntityBase):
+class Sonata(EntityBase, WithModule):
 
     type = models.TextField()
 
@@ -14,7 +14,10 @@ class Sonata(EntityBase):
 
 
 class SonataStep(models.Model):
-    owner = models.ForeignKey(Sonata, blank=True, null=True, on_delete=models.CASCADE, related_name='steps')
+    owner = models.ForeignKey(
+        Sonata, blank=True, null=True, on_delete=models.CASCADE, related_name='steps')
+
+    name = models.CharField(max_length=255, blank=False)
 
     sound = models.ForeignKey('Sound', on_delete=models.CASCADE)
 

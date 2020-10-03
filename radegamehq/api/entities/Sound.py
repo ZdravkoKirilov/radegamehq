@@ -1,8 +1,8 @@
 from ..helpers.custom_file import ContentTypeRestrictedFileField
-from ..mixins.EntityBase import EntityBase
+from ..mixins.EntityBase import EntityBase, WithModule
 
 
-class Sound(EntityBase):
+class Sound(EntityBase, WithModule):
     file = ContentTypeRestrictedFileField(
         upload_to='sounds',
         content_types=['application/ogg'],

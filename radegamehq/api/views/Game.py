@@ -5,10 +5,7 @@ from rest_framework.response import Response
 from ..entities.Game import Game
 from ..serializers.Game import GameSerializer
 
-from ..serializers.Condition import ConditionSerializer
-from ..serializers.Choice import ChoiceSerializer
 from ..serializers.Widget import WidgetSerializer
-from ..serializers.Module import ModuleSerializer
 from ..serializers.Token import TokenSerializer
 from ..serializers.ImageAsset import ImageAssetSerializer
 from ..serializers.Style import StyleSerializer
@@ -16,15 +13,12 @@ from ..serializers.Sound import SoundSerializer
 from ..serializers.Expression import ExpressionSerializer
 from ..serializers.Animation import AnimationSerializer
 from ..serializers.Setup import SetupSerializer
-from ..serializers.Transition import TransitionSerializer
 from ..serializers.Text import TextSerializer
 from ..serializers.Sonata import SonataSerializer
 from ..serializers.Shape import ShapeSerializer
+from ..serializers.Sandbox import SandboxSerializer
 
-from ..entities.Condition import Condition
-from ..entities.Choice import Choice
 from ..entities.Widget import Widget
-from ..entities.Module import Module
 from ..entities.Token import Token
 from ..entities.ImageAsset import ImageAsset
 from ..entities.Style import Style
@@ -32,10 +26,10 @@ from ..entities.Sound import Sound
 from ..entities.Expression import Expression
 from ..entities.Animation import Animation
 from ..entities.Setup import Setup
-from ..entities.Transition import Transition
 from ..entities.Text import Text
 from ..entities.Sonata import Sonata
 from ..entities.Shape import Shape
+from ..entities.Sandbox import Sandbox
 
 
 class GameView(generics.ListCreateAPIView):
@@ -64,14 +58,9 @@ class GameDataView(APIView):
         if keywords is not None and keywords is not []:
             query['keywords__contains'] = keywords
 
-        # actions = Action.objects.filter(**query)
-        conditions = Condition.objects.filter(game=kwargs['pk'])
-        choices = Choice.objects.filter(game=kwargs['pk'])
 
         widgets = Widget.objects.filter(game=kwargs['pk'])
         sonatas = Sonata.objects.filter(game=kwargs['pk'])
-
-        modules = Module.objects.filter(game=kwargs['pk'])
         tokens = Token.objects.filter(game=kwargs['pk'])
         images = ImageAsset.objects.filter(game=kwargs['pk'])
         styles = Style.objects.filter(game=kwargs['pk'])
@@ -79,19 +68,13 @@ class GameDataView(APIView):
         expressions = Expression.objects.filter(game=kwargs['pk'])
         animations = Animation.objects.filter(game=kwargs['pk'])
         setups = Setup.objects.filter(game=kwargs['pk'])
-        transitions = Transition.objects.filter(game=kwargs['pk'])
         texts = Text.objects.filter(game=kwargs['pk'])
         shapes = Shape.objects.filter(game=kwargs['pk'])
+        sandboxes = Sandbox.objects.filter(game=kwargs['pk'])
 
         return Response({
-            'conditions': ConditionSerializer(conditions, many=True).data,
-            'choices': ChoiceSerializer(choices, many=True).data,
-
             'widgets': WidgetSerializer(widgets, many=True).data,
             'sonatas': SonataSerializer(sonatas, many=True).data,
-
-            'modules': ModuleSerializer(modules, many=True).data,
-
             'tokens': TokenSerializer(tokens, many=True).data,
             'images': ImageAssetSerializer(images, many=True).data,
             'styles': StyleSerializer(styles, many=True).data,
@@ -99,7 +82,7 @@ class GameDataView(APIView):
             'expressions': ExpressionSerializer(expressions, many=True).data,
             'animations': AnimationSerializer(animations, many=True).data,
             'setups': SetupSerializer(setups, many=True).data,
-            'transitions': TransitionSerializer(transitions, many=True).data,
             'texts': TextSerializer(texts, many=True).data,
-            'shapes': ShapeSerializer(shapes, many=True).data
+            'shapes': ShapeSerializer(shapes, many=True).data,
+            'sandboxes': SandboxSerializer(sandboxes, many=True).data
         })
