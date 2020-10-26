@@ -4,25 +4,25 @@ from ..mixins.EntityBase import EntityBase, WithModule
 
 
 class Style(EntityBase, WithModule):
-    rotation = models.TextField(null=True, blank=True)
-    border_radius = models.TextField(null=True, blank=True)
-    opacity = models.TextField(null=True, blank=True)
-    skew = models.TextField(null=True, blank=True)
-    scale = models.TextField(null=True, blank=True)
+    rotation = models.IntegerField(null=True, blank=True)
+    border_radius = models.IntegerField(null=True, blank=True)
+    opacity = models.IntegerField(null=True, blank=True)
+    skew = models.IntegerField(null=True, blank=True)
+    scale = models.IntegerField(null=True, blank=True)
 
-    width = models.TextField(null=True, blank=True)
-    height = models.TextField(null=True, blank=True)
+    width = models.IntegerField(null=True, blank=True)
+    height = models.IntegerField(null=True, blank=True)
 
-    y = models.TextField(null=True, blank=True)
-    x = models.TextField(null=True, blank=True)
+    y = models.IntegerField(null=True, blank=True)
+    x = models.IntegerField(null=True, blank=True)
     z = models.IntegerField(null=True, blank=True)
 
     stroke_color = models.TextField(null=True, blank=True)
-    stroke_thickness = models.TextField(null=True, blank=True)
+    stroke_thickness = models.IntegerField(null=True, blank=True)
     fill = models.TextField(null=True, blank=True)
     tint = models.TextField(null=True, blank=True)
 
-    font_size = models.TextField(null=True, blank=True)
+    font_size = models.IntegerField(null=True, blank=True)
     font_family = models.TextField(null=True, blank=True)
     font_style = models.TextField(null=True, blank=True)
 

@@ -24,3 +24,7 @@ class SonataStep(models.Model):
     volume = models.FloatField(null=True, blank=True)
     loop = models.NullBooleanField()
     rate = models.FloatField(null=True, blank=True)
+
+    fade_from = models.FloatField(null=True, blank=True)
+    fade_to = models.FloatField(null=True, blank=True)
+    fade_duration = models.FloatField(null=True, blank=True)

@@ -1,28 +1,20 @@
 from rest_framework import serializers
 
-from ..entities.Token import Token, TokenFrame, TokenText
+from ..entities.Token import Token, TokenNode
 from ..mixins.NestedSerializing import with_nesting
 
 
-class TokenFrameSerializer(serializers.ModelSerializer):
+class TokenNodeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TokenFrame
-        fields = '__all__'
-
-
-class TokenTextSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TokenText
+        model = TokenNode
         fields = '__all__'
 
 
 @with_nesting([
-    {'name': 'frames', 'model': TokenFrame, 'm2m': False, 'serializer': TokenFrameSerializer},
-    {'name': 'texts', 'model': TokenText, 'm2m': False, 'serializer': TokenTextSerializer},
+    {'name': 'nodes', 'model': TokenNode, 'm2m': False, 'serializer': TokenNodeSerializer},
 ])
 class TokenSerializer(serializers.ModelSerializer):
-    frames = TokenFrameSerializer(many=True)
-    texts = TokenTextSerializer(many=True)
+    nodes = TokenNodeSerializer(many=True)
 
     class Meta:
         model = Token

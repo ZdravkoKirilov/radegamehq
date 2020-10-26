@@ -2,7 +2,7 @@ from rest_framework import serializers
 from mypy_extensions import TypedDict
 
 from ..mixins.NestedSerializing import with_nesting
-from ..entities.Widget import Widget, WidgetNode, NodeHandler, WidgetFrame, NodeLifecycle
+from ..entities.Widget import Widget, WidgetNode, NodeHandler, NodeLifecycle
 
 
 class NodeHandlerSerializer(serializers.ModelSerializer):
@@ -15,12 +15,6 @@ class NodeLifecycleSerializer(serializers.ModelSerializer):
     class Meta:
         model = NodeLifecycle
         exclude = ('owner',)
-
-
-class WidgetFrameSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = WidgetFrame
-        fields = '__all__'
 
 
 @with_nesting([
@@ -39,16 +33,12 @@ class NodeSerializer(serializers.ModelSerializer):
 
 
 @with_nesting([
-    {'name': 'frames', 'model': WidgetFrame, 'm2m': False,
-        'serializer': WidgetFrameSerializer},
     {'name': 'nodes', 'model': WidgetNode, 'm2m': False,
      'serializer': NodeSerializer},
 ])
 class WidgetSerializer(serializers.ModelSerializer):
     nodes = NodeSerializer(many=True, allow_null=True,
                            allow_empty=True, default=[])
-    frames = WidgetFrameSerializer(
-        many=True, allow_empty=True, allow_null=True, default=[])
 
     class Meta:
         model = Widget

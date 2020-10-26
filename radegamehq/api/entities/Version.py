@@ -1,14 +1,12 @@
 from django.db import models
 
+from ..mixins.EntityBase import WithGame, EntityBase
 
-class Version(models.Model):
-    def __str__(self):
-        return self.name
 
-    game = models.ForeignKey('Game', on_delete=models.CASCADE)
+class Version(EntityBase, WithGame):
 
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 
-    name = models.TextField()
-    description = models.TextField(blank=True, null=True)
+    menu = models.ForeignKey(
+        'Module', on_delete=models.SET_NULL, related_name='menu', null=True, blank=True)

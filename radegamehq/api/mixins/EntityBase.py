@@ -2,15 +2,26 @@ from django.db import models
 
 
 class EntityBase(models.Model):
-    game = models.ForeignKey('Game', on_delete=models.CASCADE)
 
     name = models.CharField(max_length=255, blank=False)
     description = models.TextField(blank=True, null=True)
 
-    keywords = models.TextField(null=True, blank=True)
-
     def __str__(self):
         return "{}".format(self.name)
+
+    class Meta:
+        abstract = True
+
+
+class WithGame(models.Model):
+    game = models.ForeignKey('Game', on_delete=models.CASCADE)
+
+    class Meta:
+        abstract = True
+
+
+class WithVersion(models.Model):
+    version = models.ForeignKey("Version", on_delete=models.CASCADE)
 
     class Meta:
         abstract = True
@@ -74,10 +85,22 @@ class WithFrame(WithStyle):
         abstract = True
 
 
-class WithText(WithStyle):
-    name = models.TextField(blank=True, null=True)
+class WithText(models.Model):
     text = models.ForeignKey(
         'Text', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         abstract = True
+
+
+class WithShape(models.Model):
+    text = models.ForeignKey(
+        'Shape', on_delete=models.CASCADE, blank=True, null=True)
+
+    class Meta:
+        abstract = True
+
+
+class WithWidget(models.Model):
+    widget = models.ForeignKey('Widget', on_delete=models.CASCADE,
+                               blank=True, null=True, related_name='widget_%(class)ss')

@@ -28,7 +28,7 @@ class AnimationStep(models.Model):
     from_value = models.TextField(null=True, blank=True)
     to_value = models.TextField(null=True, blank=True)
 
-    from_style_inline = models.TextField(null=True, blank=True)
-    to_style_inline = models.TextField(null=True, blank=True)
+    from_style = models.TextField(null=True, blank=True)
+    to_style = models.TextField(null=True, blank=True)
 
-    output_transformer = models.TextField(null=True, blank=True)
+    transform_result = models.TextField(null=True, blank=True)
