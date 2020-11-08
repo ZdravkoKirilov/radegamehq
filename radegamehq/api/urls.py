@@ -18,81 +18,79 @@ from .views.Version import VersionDetailsView, VersionView
 
 urlpatterns = {
 
-    url(r'games/(?P<gameid>[0-9]+)/widgets/(?P<widgetid>[0-9]+)/nodes/(?P<pk>[0-9]+)/$', NodeDetailsView.as_view(),
+    url(r'widgets/(?P<widgetid>[0-9]+)/nodes/(?P<pk>[0-9]+)/$', NodeDetailsView.as_view(),
         name="node.details"),
-    url(r'games/(?P<pk>[0-9]+)/widgets/(?P<widgetId>[0-9]+)/nodes/$',
+    url(r'widgets/(?P<widgetId>[0-9]+)/nodes/$',
         NodeView.as_view(), name="node.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/widgets/(?P<pk>[0-9]+)/$', WidgetDetailsView.as_view(),
+    url(r'modules/(?P<moduleid>[0-9]+)/widgets/(?P<pk>[0-9]+)/$', WidgetDetailsView.as_view(),
         name="widget.details"),
-    url(r'games/(?P<pk>[0-9]+)/widgets/$',
+    url(r'modules/(?P<moduleid>[0-9]+)/widgets/$',
         WidgetView.as_view(), name="widget.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/sandboxes/(?P<pk>[0-9]+)/$', SandboxDetailsView.as_view(),
+    url(r'modules/(?P<moduleid>[0-9]+)/sandboxes/(?P<pk>[0-9]+)/$', SandboxDetailsView.as_view(),
         name="sandbox.details"),
-    url(r'games/(?P<pk>[0-9]+)/sandboxes/$',
+    url(r'modules/(?P<moduleid>[0-9]+)/sandboxes/$',
         SandboxView.as_view(), name="sandbox.list"),
 
 
-    url(r'games/(?P<gameid>[0-9]+)/modules/(?P<pk>[0-9]+)/$', ModuleDetailsView.as_view(),
+    url(r'versions/(?P<versionid>[0-9]+)/modules/(?P<pk>[0-9]+)/$', ModuleDetailsView.as_view(),
         name="module.details"),
-    url(r'games/(?P<pk>[0-9]+)/modules/$',
+    url(r'versions/(?P<versionid>[0-9]+)/modules/$',
         ModuleView.as_view(), name="module.list"),
 
 
-    url(r'games/(?P<gameid>[0-9]+)/shapes/(?P<pk>[0-9]+)/$', ShapeDetailsView.as_view(),
+    url(r'modules/(?P<moduleid>[0-9]+)/shapes/(?P<pk>[0-9]+)/$', ShapeDetailsView.as_view(),
         name="shape.details"),
-    url(r'games/(?P<pk>[0-9]+)/shapes/$',
+    url(r'modules/(?P<moduleid>[0-9]+)/shapes/$',
         ShapeView.as_view(), name="shape.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/sonatas/(?P<pk>[0-9]+)/$',
+    url(r'modules/(?P<moduleid>[0-9]+)/sonatas/(?P<pk>[0-9]+)/$',
         SonataDetailsView.as_view(), name="sonata.details"),
-    url(r'games/(?P<pk>[0-9]+)/sonatas/$',
+    url(r'modules/(?P<moduleid>[0-9]+)/sonatas/$',
         SonataView.as_view(), name="sonata.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/tokens/(?P<pk>[0-9]+)/$', TokenDetailsView.as_view(),
+    url(r'modules/(?P<moduleid>[0-9]+)/tokens/(?P<pk>[0-9]+)/$', TokenDetailsView.as_view(),
         name="token.details"),
-    url(r'games/(?P<pk>[0-9]+)/tokens/$',
+    url(r'modules/(?P<moduleid>[0-9]+)/tokens/$',
         TokenView.as_view(), name="token.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/styles/(?P<pk>[0-9]+)/$', StyleDetailsView.as_view(),
+    url(r'modules/(?P<moduleid>[0-9]+)/styles/(?P<pk>[0-9]+)/$', StyleDetailsView.as_view(),
         name="style.details"),
-    url(r'games/(?P<pk>[0-9]+)/styles/$',
+    url(r'modules/(?P<moduleid>[0-9]+)/styles/$',
         StyleView.as_view(), name="style.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/sounds/(?P<pk>[0-9]+)/$', SoundDetailsView.as_view(),
+    url(r'modules/(?P<moduleid>[0-9]+)/sounds/(?P<pk>[0-9]+)/$', SoundDetailsView.as_view(),
         name="sound.details"),
-    url(r'games/(?P<pk>[0-9]+)/sounds/$',
+    url(r'modules/(?P<moduleid>[0-9]+)/sounds/$',
         SoundView.as_view(), name="sound.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/expressions/(?P<pk>[0-9]+)/$', ExpressionDetailsView.as_view(),
+    url(r'modules/(?P<moduleid>[0-9]+)/expressions/(?P<pk>[0-9]+)/$', ExpressionDetailsView.as_view(),
         name="expression.details"),
-    url(r'games/(?P<pk>[0-9]+)/expressions/$',
+    url(r'modules/(?P<moduleid>[0-9]+)/expressions/$',
         ExpressionView.as_view(), name="expression.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/animations/(?P<pk>[0-9]+)/$', AnimationDetailsView.as_view(),
+    url(r'modules/(?P<moduleid>[0-9]+)/animations/(?P<pk>[0-9]+)/$', AnimationDetailsView.as_view(),
         name="animation.details"),
-    url(r'games/(?P<pk>[0-9]+)/animations/$',
+    url(r'modules/(?P<moduleid>[0-9]+)/animations/$',
         AnimationView.as_view(), name="animation.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/setups/(?P<pk>[0-9]+)/$', SetupDetailsView.as_view(),
+    url(r'versions/(?P<versionid>[0-9]+)/setups/(?P<pk>[0-9]+)/$', SetupDetailsView.as_view(),
         name="setup.details"),
-    url(r'games/(?P<pk>[0-9]+)/setups/$',
+    url(r'versions/(?P<versionid>[0-9]+)/setups/$',
         SetupView.as_view(), name="setup.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/imageassets/(?P<pk>[0-9]+)/$', ImageAssetDetailsView.as_view(),
+    url(r'modules/(?P<moduleid>[0-9]+)/imageassets/(?P<pk>[0-9]+)/$', ImageAssetDetailsView.as_view(),
         name="imageasset.details"),
-    url(r'games/(?P<pk>[0-9]+)/imageassets/$',
+    url(r'modules/(?P<pk>[0-9]+)/imageassets/$',
         ImageAssetView.as_view(), name="imageasset.list"),
 
-    url(r'games/(?P<gameid>[0-9]+)/texts/(?P<pk>[0-9]+)/$', TextDetailsView.as_view(),
+    url(r'modules/(?P<moduleid>[0-9]+)/texts/(?P<pk>[0-9]+)/$', TextDetailsView.as_view(),
         name="text.details"),
-    url(r'games/(?P<pk>[0-9]+)/texts/$', TextView.as_view(), name="text.list"),
+    url(r'modules/(?P<moduleid>[0-9]+)/texts/$', TextView.as_view(), name="text.list"),
 
 
 
-
-    # path('games/<int:pk>/data/', GameDataView.as_view(), name="game.data"),
     url(r'games/(?P<pk>[0-9]+)/data/$',
         GameDataView.as_view(), name="game.data"),
     url(r'games/(?P<pk>[0-9]+)/$',

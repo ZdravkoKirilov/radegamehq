@@ -8,7 +8,7 @@ class ShapeView(generics.ListCreateAPIView):
     serializer_class = ShapeSerializer
 
     def get_queryset(self):
-        return Shape.objects.all().filter(game=self.kwargs['pk'])
+        return Shape.objects.all().filter(module=self.kwargs['moduleid'])
 
 
 class ShapeDetailsView(generics.RetrieveUpdateDestroyAPIView):

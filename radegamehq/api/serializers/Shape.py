@@ -14,7 +14,7 @@ class ShapePointSerializer(serializers.ModelSerializer):
     {'name': 'points', 'model': ShapePoint, 'm2m': False, 'serializer': ShapePointSerializer},
 ])
 class ShapeSerializer(serializers.ModelSerializer):
-    points = ShapePointSerializer(many=True)
+    points = ShapePointSerializer(many=True, default=[])
 
     class Meta:
         model = Shape

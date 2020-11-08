@@ -11,7 +11,7 @@ class SoundView(generics.ListCreateAPIView):
         serializer.save()
 
     def get_queryset(self):
-        return Sound.objects.all().filter(game=self.kwargs['pk'])
+        return Sound.objects.all().filter(module=self.kwargs['moduleid'])
 
 
 class SoundDetailsView(generics.RetrieveUpdateDestroyAPIView):

@@ -8,7 +8,7 @@ class SonataView(generics.ListCreateAPIView):
     serializer_class = SonataSerializer
 
     def get_queryset(self):
-        return Sonata.objects.all().filter(game=self.kwargs['pk'])
+        return Sonata.objects.all().filter(module=self.kwargs['moduleid'])
 
 
 class SonataDetailsView(generics.RetrieveUpdateDestroyAPIView):

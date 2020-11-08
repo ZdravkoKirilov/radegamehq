@@ -8,7 +8,7 @@ class TokenView(generics.ListCreateAPIView):
     serializer_class = TokenSerializer
 
     def get_queryset(self):
-        return Token.objects.all().filter(game=self.kwargs['pk'])
+        return Token.objects.all().filter(module=self.kwargs['moduleid'])
 
 
 class TokenDetailsView(generics.RetrieveUpdateDestroyAPIView):

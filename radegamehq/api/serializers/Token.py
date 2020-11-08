@@ -14,7 +14,7 @@ class TokenNodeSerializer(serializers.ModelSerializer):
     {'name': 'nodes', 'model': TokenNode, 'm2m': False, 'serializer': TokenNodeSerializer},
 ])
 class TokenSerializer(serializers.ModelSerializer):
-    nodes = TokenNodeSerializer(many=True)
+    nodes = TokenNodeSerializer(many=True, default=[])
 
     class Meta:
         model = Token

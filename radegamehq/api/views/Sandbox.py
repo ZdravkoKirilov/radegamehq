@@ -11,7 +11,7 @@ class SandboxView(generics.ListCreateAPIView):
         serializer.save()
 
     def get_queryset(self):
-        return Sandbox.objects.all().filter(game=self.kwargs['pk'])
+        return Sandbox.objects.all().filter(module=self.kwargs['moduleid'])
 
 
 class SandboxDetailsView(generics.RetrieveUpdateDestroyAPIView):

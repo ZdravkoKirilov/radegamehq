@@ -12,7 +12,7 @@ class WidgetView(generics.ListCreateAPIView):
         serializer.save()
 
     def get_queryset(self):
-        return Widget.objects.all().filter(game=self.kwargs['pk'])
+        return Widget.objects.all().filter(module=self.kwargs['moduleid'])
 
 
 class WidgetDetailsView(generics.RetrieveUpdateDestroyAPIView):

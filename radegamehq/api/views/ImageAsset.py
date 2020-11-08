@@ -11,7 +11,7 @@ class ImageAssetView(generics.ListCreateAPIView):
         serializer.save()
 
     def get_queryset(self):
-        return ImageAsset.objects.all().filter(game=self.kwargs['pk'])
+        return ImageAsset.objects.all().filter(module=self.kwargs['pk'])
 
 
 class ImageAssetDetailsView(generics.RetrieveUpdateDestroyAPIView):

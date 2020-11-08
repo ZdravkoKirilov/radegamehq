@@ -11,7 +11,7 @@ class ExpressionView(generics.ListCreateAPIView):
         serializer.save()
 
     def get_queryset(self):
-        return Expression.objects.all().filter(game=self.kwargs['pk'])
+        return Expression.objects.all().filter(module=self.kwargs['moduleid'])
 
 
 class ExpressionDetailsView(generics.RetrieveUpdateDestroyAPIView):

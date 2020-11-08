@@ -14,7 +14,7 @@ class SonataStepSerializer(serializers.ModelSerializer):
     {'name': 'steps', 'model': SonataStep, 'm2m': False, 'serializer': SonataStepSerializer},
 ])
 class SonataSerializer(serializers.ModelSerializer):
-    steps = SonataStepSerializer(many=True)
+    steps = SonataStepSerializer(many=True, default=[])
 
     class Meta:
         model = Sonata

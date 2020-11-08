@@ -13,11 +13,13 @@ class LanguageSerializer(serializers.ModelSerializer):
 
 
 @with_nesting([
-    {'name': 'languages', 'model': GameLanguage, 'm2m': False, 'serializer': LanguageSerializer},
+    {'name': 'languages', 'model': GameLanguage,
+        'm2m': False, 'serializer': LanguageSerializer},
 ])
 class GameSerializer(ImageHandler):
     image = Base64ImageField(use_url=True)
-    languages = LanguageSerializer(many=True)
+    languages = LanguageSerializer(many=True, allow_null=True,
+                                   allow_empty=True, default=[])
 
     class Meta:
         model = Game

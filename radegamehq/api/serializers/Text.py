@@ -14,7 +14,7 @@ class TranslationSerializer(serializers.ModelSerializer):
     {'name': 'translations', 'model': Translation, 'm2m': False, 'serializer': TranslationSerializer},
 ])
 class TextSerializer(serializers.ModelSerializer):
-    translations = TranslationSerializer(many=True)
+    translations = TranslationSerializer(many=True, allow_null=True, allow_empty=True, default=[])
 
     class Meta:
         model = Text

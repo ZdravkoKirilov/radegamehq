@@ -11,7 +11,7 @@ class ModuleView(generics.ListCreateAPIView):
         serializer.save()
 
     def get_queryset(self):
-        return Module.objects.all().filter(game=self.kwargs['pk'])
+        return Module.objects.all().filter(version=self.kwargs['versionid'])
 
 
 class ModuleDetailsView(generics.RetrieveUpdateDestroyAPIView):

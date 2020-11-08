@@ -51,26 +51,26 @@ class GameDetailsView(generics.RetrieveUpdateDestroyAPIView):
 
 class GameDataView(APIView):
     def get(self, request, *args, **kwargs):
-        keywords = request.query_params.get('keywords', None)
+        modules = request.query_params.getlist('modules', None)
         query = {
-            'game': kwargs['pk']
+            'module__in': []
         }
-        if keywords is not None and keywords is not []:
-            query['keywords__contains'] = keywords
+
+        if modules is not None and modules is not []:
+            query['module__in'] = modules
 
 
-        widgets = Widget.objects.filter(game=kwargs['pk'])
-        sonatas = Sonata.objects.filter(game=kwargs['pk'])
-        tokens = Token.objects.filter(game=kwargs['pk'])
-        images = ImageAsset.objects.filter(game=kwargs['pk'])
-        styles = Style.objects.filter(game=kwargs['pk'])
-        sounds = Sound.objects.filter(game=kwargs['pk'])
-        expressions = Expression.objects.filter(game=kwargs['pk'])
-        animations = Animation.objects.filter(game=kwargs['pk'])
-        setups = Setup.objects.filter(game=kwargs['pk'])
-        texts = Text.objects.filter(game=kwargs['pk'])
-        shapes = Shape.objects.filter(game=kwargs['pk'])
-        sandboxes = Sandbox.objects.filter(game=kwargs['pk'])
+        widgets = Widget.objects.filter(**query)
+        sonatas = Sonata.objects.filter(**query)
+        tokens = Token.objects.filter(**query)
+        images = ImageAsset.objects.filter(**query)
+        styles = Style.objects.filter(**query)
+        sounds = Sound.objects.filter(**query)
+        expressions = Expression.objects.filter(**query)
+        animations = Animation.objects.filter(**query)
+        texts = Text.objects.filter(**query)
+        shapes = Shape.objects.filter(**query)
+        sandboxes = Sandbox.objects.filter(**query)
 
         return Response({
             'widgets': WidgetSerializer(widgets, many=True).data,
@@ -81,7 +81,6 @@ class GameDataView(APIView):
             'sounds': SoundSerializer(sounds, many=True).data,
             'expressions': ExpressionSerializer(expressions, many=True).data,
             'animations': AnimationSerializer(animations, many=True).data,
-            'setups': SetupSerializer(setups, many=True).data,
             'texts': TextSerializer(texts, many=True).data,
             'shapes': ShapeSerializer(shapes, many=True).data,
             'sandboxes': SandboxSerializer(sandboxes, many=True).data

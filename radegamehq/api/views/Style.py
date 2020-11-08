@@ -11,7 +11,7 @@ class StyleView(generics.ListCreateAPIView):
         serializer.save()
 
     def get_queryset(self):
-        return Style.objects.all().filter(game=self.kwargs['pk'])
+        return Style.objects.all().filter(module=self.kwargs['moduleid'])
 
 
 class StyleDetailsView(generics.RetrieveUpdateDestroyAPIView):

@@ -8,7 +8,7 @@ class TextView(generics.ListCreateAPIView):
     serializer_class = TextSerializer
 
     def get_queryset(self):
-        return Text.objects.all().filter(game=self.kwargs['pk'])
+        return Text.objects.all().filter(module=self.kwargs['moduleid'])
 
 
 class TextDetailsView(generics.RetrieveUpdateDestroyAPIView):
