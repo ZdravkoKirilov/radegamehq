@@ -23,7 +23,7 @@ Django==2.1.1
 django-appconf==1.0.3
 django-cleanup==1.0.1
 django-cors-headers==2.1.0
-django-debug-toolbar==1.8
+django-debug-toolbar==1.11.1
 django-storages==1.8
 django-stubs==1.4.0
 djangorestframework==3.9.0
